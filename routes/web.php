@@ -19,4 +19,8 @@ Route::get('/', function () {
 Auth::routes();
 Route::group(['middleware' => ['auth']], function () {
     Route::get('/', 'HomeController@index')->name('home');
+
+    // Authors
+    Route::get('authors', 'AuthorController@index')->name('authors');
+    Route::post('/new_author', 'AuthorController@store')->name('authors.store');
 });

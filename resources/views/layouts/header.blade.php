@@ -57,10 +57,9 @@
 
 </head>
 <body>
-    <div id = "loader" class="loader">
+    <div id="loader" class="loader">
     </div>
     <div id="layout-wrapper">
-
         <header id="page-topbar">
             <div class="layout-width">
                 <div class="navbar-header">
@@ -99,8 +98,8 @@
                                 <span class="d-flex align-items-center">
                                     <img class="rounded-circle header-profile-user" src="{{asset(auth()->user()->avatar)}}" onerror="this.src='{{url('assets/images/marsu-logo.png')}}';" alt="Header Avatar">
                                     <span class="text-start ms-xl-2">
-                                        <span class="d-none d-xl-inline-block ms-1 fw-medium user-name-text">{{current(explode(' ',auth()->user()->name))}}</span>
-                                        {{-- <span class="d-none d-xl-block ms-1 fs-12 user-name-sub-text">Founder</span> --}}
+                                        <span class="d-none d-xl-inline-block ms-1 fw-medium user-name-text">{{ current(explode(' ',auth()->user()->name)) }}</span>
+                                        {{-- <span class="d-none d-xl-block ms-1 fs-12 user-name-sub-text">{{ current(explode(' ',auth()->user()->role)) }}</span> --}}
                                     </span>
                                 </span>
                             </button>
@@ -124,7 +123,7 @@
             </div>
         </header>
 
-<!-- /.modal -->
+
         <!-- ========== App Menu ========== -->
         <div class="app-menu navbar-menu">
             <!-- LOGO -->
@@ -141,10 +140,10 @@
                 <!-- Light Logo-->
                 <a href="{{url('/')}}" class="logo logo-light">
                     <span class="logo-sm">
-                        <img src="{{asset('images/marsu-logo.png')}}" alt="" height="50">
+                        <img src="{{asset('assets/images/marsu-logo.png')}}" alt="" height="50">
                     </span>
                     <span class="logo-lg">
-                        <img src="{{asset('images/marsu-logo.png')}}" alt="" height="50">
+                        <img src="{{asset('assets/images/marsu-logo.png')}}" alt="" height="50">
                     </span>
                 </a>
                 <button type="button" class="btn btn-sm p-0 fs-20 header-item float-end btn-vertical-sm-hover" id="vertical-hover">
@@ -159,12 +158,12 @@
                     <ul class="navbar-nav" id="navbar-nav">
                         <li class="menu-title"><span data-key="t-menu">Menu</span></li>
                 
-                        {{-- <li class="nav-item">
+                        <li class="nav-item">
                             <a class="nav-link menu-link" href="{{url('/')}}">
-                                <i class="ri-dashboard-2-line"></i> <span data-key="t-dashboards">Dashboard</span>
+                                <span class="mdi mdi-monitor-dashboard"></span>&nbsp;<span data-key="t-dashboards">Dashboard</span>
                             </a>
                         </li>
-                        <li class="nav-item">
+                        {{-- <li class="nav-item">
                             <a class="nav-link menu-link" href="{{url('/bdcp')}}">
                                 <i class="mdi mdi-account-search"></i> <span data-key="t-dashboards">BDCP Monitoring</span>
                             </a>
@@ -208,6 +207,11 @@
                         @if(auth()->user()->role == "Admin")
                             <li class="menu-title"><span data-key="t-menu">Admin</span></li>
                             <li class="nav-item">
+                                <a class="nav-link menu-link" href="{{url('/authors')}}">
+                                    <span class="mdi mdi-account-edit"></span>&nbsp;<span data-key="t-authors">Authors</span>
+                                </a>
+                            </li>
+                            <li class="nav-item">
                                 <a class="nav-link menu-link" href="{{url('/users')}}">
                                     <i class="ri-team-fill"></i> <span data-key="t-dashboards">Users</span>
                                 </a>
@@ -248,34 +252,34 @@
         <div class="vertical-overlay"></div>
         <div class="main-content">
 
-            <div class="page-content">
+        <div class="page-content">
+            <div class="container-fluid">
+                    <div class="row">
+                        <!-- <div class="col-12">
+                            <div class="page-title-box d-sm-flex align-items-center justify-content-between bg-galaxy-transparent">
+                                <h4 class="mb-sm-0">{{Route::current()->getName()}}</h4>
+                            </div>
+                        </div> -->
+                    </div>
+                    @yield('content')
+                </div>
+            </div>
+        
+            <footer class="footer">
                 <div class="container-fluid">
-                        <div class="row">
-                            <!-- <div class="col-12">
-                                <div class="page-title-box d-sm-flex align-items-center justify-content-between bg-galaxy-transparent">
-                                    <h4 class="mb-sm-0">{{Route::current()->getName()}}</h4>
-                                </div>
-                            </div> -->
+                    <div class="row">
+                        <div class="col-sm-6">
+                            {{date('Y')}} © ADCOP
                         </div>
-                        @yield('content')
+                        <div class="col-sm-6">
+                            <div class="text-sm-end d-none d-sm-block">
+                                Design & Develop by <span>.<</span>
+                            </div>
+                        </div>
                     </div>
                 </div>
-            
-                <footer class="footer">
-                    <div class="container-fluid">
-                        <div class="row">
-                            <div class="col-sm-6">
-                                {{date('Y')}} © ADCOP
-                            </div>
-                            <div class="col-sm-6">
-                                <div class="text-sm-end d-none d-sm-block">
-                                    Design & Develop by <span>.<</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </footer>
-            </div>
+            </footer>
+        </div>
     </div>
 
 
@@ -316,7 +320,7 @@
     <script src="{{asset('/assets/js/app.js')}}"></script>
  
     <script>
-            function show() {
+        function show() {
             document.getElementById("loader").style.display = "block";
         }
         function logout() {
