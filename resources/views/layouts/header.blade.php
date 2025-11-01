@@ -269,7 +269,7 @@
                 <div class="container-fluid">
                     <div class="row">
                         <div class="col-sm-6">
-                            {{date('Y')}} © ADCOP
+                            {{date('Y')}} © LiMS
                         </div>
                         <div class="col-sm-6">
                             <div class="text-sm-end d-none d-sm-block">
@@ -303,7 +303,7 @@
     <!-- Theme Settings -->
     @include('layouts.change_password')
     {{-- @include('change_avatar') --}}
-    {{-- @include('sweetalert::alert') --}}
+    @include('sweetalert::alert')
     <!-- JAVASCRIPT -->
     <script src="{{asset('/assets/libs/bootstrap/js/bootstrap.bundle.min.js')}}"></script>
     <script src="{{asset('/assets/libs/simplebar/simplebar.min.js')}}"></script>

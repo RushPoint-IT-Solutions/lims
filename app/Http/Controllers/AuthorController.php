@@ -46,14 +46,24 @@ class AuthorController extends Controller
      */
     public function store(Request $request)
     {
+        $request->validate([
+            'name' => 'required|string|max:255',
+        ]);
+
+        if (Author::where('name', $request->name)->exists()) {
+            Alert::error('Duplicate Entry', 'Author with this name already exists!')->persistent('Dismiss');
+            return back();
+        }
+
         $author = new Author();
         $author->name = $request->name;
         $author->created_by = auth()->user()->id;
         $author->status = 'Active';
-        $author->save(); 
-        
-        Alert::success('Successfully Saved')->persistent('Dismiss');
+        $author->save();
+
+        Alert::success('Success', 'Successfully Saved!')->persistent('Dismiss');
         return back();
+
     }
 
     /**
@@ -85,19 +95,23 @@ class AuthorController extends Controller
      * @param  \App\Author  $author
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Author $author)
+    public function active(Request $request)
     {
-        //
+        $data = Author::findOrFail($request->id);
+        $data->status = 'Active';
+        $data->save();
+
+        Alert::success('Success', 'Successfully Activated!')->persistent('Dismiss');
+        return back();
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Author  $author
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Author $author)
+    public function inactive(Request $request)
     {
-        //
+        $data = Author::findOrFail($request->id);
+        $data->status = 'Inactive';
+        $data->save();
+
+        Alert::success('Success', 'Successfully Inactive!')->persistent('Dismiss');
+        return back();
     }
 }

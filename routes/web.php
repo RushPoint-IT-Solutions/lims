@@ -23,4 +23,6 @@ Route::group(['middleware' => ['auth']], function () {
     // Authors
     Route::get('authors', 'AuthorController@index')->name('authors');
     Route::post('/new_author', 'AuthorController@store')->name('authors.store');
+    Route::post('/active/{id}', 'AuthorController@active')->name('authors.active');
+    Route::post('/inactive/{id}', 'AuthorController@inactive')->name('authors.inactive');
 });

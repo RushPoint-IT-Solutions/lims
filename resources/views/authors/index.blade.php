@@ -26,29 +26,41 @@
                     <tr>
                         <th width="12%">Action</th>
                         <th width="25%">Name</th>
+                        <th width="20%">Status</th>
                         <th width="23%">Date Created</th>
-                        <th width="25%">Created By</th>
+                        <th width="20%">Created By</th>
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach ($authors as $author)
+                    @forelse ($authors as $author)
                         <tr>
                             <td>
-                                <button class="btn btn-outline-info btn-sm" title="Edit Barangay" data-bs-toggle="modal" data-bs-target="#editBarangay{{$author->id}}">
-                                    <i class="mdi mdi-pencil"></i>
-                                </button>
-                                 <form method="POST" class="d-inline-block" action="{{url('delete_barangay/'.$author->id)}}" onsubmit="show()" enctype="multipart/form-data">
+                                @if($author->status == 'Inactive')
+                                <form method="POST" class="d-inline-block" action="{{ url('active/'.$author->id) }}" onsubmit="show()" enctype="multipart/form-data">
                                     @csrf
-                                    <button type="button" class="btn btn-sm btn-outline-danger deleteBtn">
-                                        <i class="mdi mdi-trash-can"></i>
+                                    <button type="submit" class="btn btn-sm btn-outline-success">
+                                        <i class="mdi mdi-check"></i>
                                     </button>
                                 </form>
+                                @else
+                                 <form method="POST" class="d-inline-block" action="{{ url('inactive/'.$author->id) }}" onsubmit="show()" enctype="multipart/form-data">
+                                    @csrf
+                                    <button type="submit" class="btn btn-sm btn-outline-danger">
+                                        <i class="mdi mdi-close"></i>
+                                    </button>
+                                </form>
+                                @endif
                             </td>
                             <td>{{ $author->name }}</td>
+                            <td>{{ $author->status }}</td>
                             <td>{{ $author->created_at }}</td>
                             <td>{{ $author->createdBy->name }}</td>
                         </tr>
-                    @endforeach
+                    @empty
+                        <tr>
+                            <td colspan="5" class="text-center">No Authors Found.</td>
+                        </tr>
+                    @endforelse
                 </tbody>
             </table>
 
@@ -95,9 +107,4 @@
     }
 </style>
 
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-
-<!-- include SweetAlert2 (must be included BEFORE you call Swal) -->
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 @endsection
