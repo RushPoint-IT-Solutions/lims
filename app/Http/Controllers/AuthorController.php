@@ -8,11 +8,6 @@ use Illuminate\Http\Request;
 
 class AuthorController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index(Request $request)
     {
         $query = Author::query();
@@ -27,23 +22,7 @@ class AuthorController extends Controller
         $authors = $query->paginate(10)->appends($request->all()); 
         return view('authors.index', compact('authors'));
     }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
+    
     public function store(Request $request)
     {
         $request->validate([
@@ -66,35 +45,11 @@ class AuthorController extends Controller
 
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Author  $author
-     * @return \Illuminate\Http\Response
-     */
     public function show(Author $author)
     {
         //
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Author  $author
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Author $author)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Author  $author
-     * @return \Illuminate\Http\Response
-     */
     public function active(Request $request)
     {
         $data = Author::findOrFail($request->id);

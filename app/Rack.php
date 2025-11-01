@@ -4,7 +4,7 @@ namespace App;
 use OwenIt\Auditing\Contracts\Auditable;
 use Illuminate\Database\Eloquent\Model;
 
-class Author extends Model implements Auditable
+class Rack extends Model implements Auditable
 {
     use \OwenIt\Auditing\Auditable;
     public function createdBy()

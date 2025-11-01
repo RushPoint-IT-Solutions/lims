@@ -207,18 +207,23 @@
                         @if(auth()->user()->role == "Admin")
                             <li class="menu-title"><span data-key="t-menu">Admin</span></li>
                             <li class="nav-item">
+                                <a class="nav-link menu-link" href="{{url('/racks')}}">
+                                    <span class="mdi mdi-file-cabinet"></span>&nbsp;<span data-key="t-racks">Racks</span>
+                                </a>
+                            </li>
+                            <li class="nav-item">
                                 <a class="nav-link menu-link" href="{{url('/authors')}}">
                                     <span class="mdi mdi-account-edit"></span>&nbsp;<span data-key="t-authors">Authors</span>
                                 </a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link menu-link" href="{{url('/users')}}">
-                                    <i class="ri-team-fill"></i> <span data-key="t-dashboards">Users</span>
+                                    <i class="ri-team-fill"></i> <span data-key="t-users">Users</span>
                                 </a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link menu-link" href="{{url('/reports')}}">
-                                    <i class="ri-file-list-3-fill"></i> <span data-key="t-dashboards">Reports</span>
+                                    <i class="ri-file-list-3-fill"></i> <span data-key="t-reports">Reports</span>
                                 </a>
                             </li>
                         @endif

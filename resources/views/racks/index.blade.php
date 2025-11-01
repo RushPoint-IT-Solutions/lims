@@ -4,9 +4,9 @@
     <div class="card">
         <div class="card-body">
             <h4 class="card-title d-flex justify-content-between mb-3">
-                Authors List
-                <button type="button" class="btn btn-md btn-primary" id="addBarangayBtn" data-bs-toggle="modal" data-bs-target="#formAuthors">
-                    Add Author
+                Racks List
+                <button type="button" class="btn btn-md btn-primary" id="addRackBtn" data-bs-toggle="modal" data-bs-target="#formRacks">
+                    Add Rack
                 </button>
             </h4>
             <div class="col-md-6 offset-md-6">
@@ -14,7 +14,7 @@
                     <div class="row height d-flex justify-content-end align-items-end">
                         <div class="col-md-9">
                             <div class="search">
-                                <input type="text" class="form-control" placeholder="Search Authors" name="search" value="{{ request('search') }}"> 
+                                <input type="text" class="form-control" placeholder="Search Racks" name="search" value="{{ request('search') }}"> 
                                 <button class="btn btn-sm btn-primary">Search</button>
                             </div>
                         </div>
@@ -26,56 +26,43 @@
                     <tr>
                         <th width="12%">Action</th>
                         <th width="25%">Name</th>
-                        <th width="20%">Status</th>
                         <th width="23%">Date Created</th>
                         <th width="20%">Created By</th>
                     </tr>
                 </thead>
                 <tbody>
-                    @forelse ($authors as $author)
+                    @forelse ($racks as $rack)
                         <tr>
                             <td>
-                                @if($author->status == 'Inactive')
-                                <form method="POST" class="d-inline-block" action="{{ url('active/'.$author->id) }}" onsubmit="show()" enctype="multipart/form-data">
-                                    @csrf
-                                    <button type="submit" class="btn btn-sm btn-outline-success">
-                                        <i class="mdi mdi-check"></i>
-                                    </button>
-                                </form>
-                                @else
-                                 <form method="POST" class="d-inline-block" action="{{ url('inactive/'.$author->id) }}" onsubmit="show()" enctype="multipart/form-data">
-                                    @csrf
-                                    <button type="submit" class="btn btn-sm btn-outline-danger">
-                                        <i class="mdi mdi-close"></i>
-                                    </button>
-                                </form>
-                                @endif
+                                <button class="btn btn-outline-info btn-sm" title="Edit Rack" data-bs-toggle="modal" data-bs-target="#editRack{{$rack->id}}">
+                                    <i class="mdi mdi-pencil"></i>
+                                </button>
                             </td>
-                            <td>{{ $author->name }}</td>
-                            <td>{{ $author->status }}</td>
-                            <td>{{ $author->created_at }}</td>
-                            <td>{{ $author->createdBy->name }}</td>
+                            <td>{{ $rack->name }}</td>
+                            <td>{{ $rack->created_at }}</td>
+                            <td>{{ $rack->createdBy->name }}</td>
                         </tr>
+                        @include('racks.edit')
                     @empty
                         <tr>
-                            <td colspan="5" class="text-center">No Authors Found.</td>
+                            <td colspan="5" class="text-center">No Racks Found.</td>
                         </tr>
                     @endforelse
                 </tbody>
             </table>
 
-            {{ $authors->appends(request()->query())->links() }}
+            {{-- {{ $racks->appends(request()->query())->links() }} --}}
         </div>
     </div>
 </div>
-<div class="modal fade" id="formAuthors" tabindex="-1" role="dialog" aria-labelledby="addAuthorData" aria-hidden="true">
+<div class="modal fade" id="formRacks" tabindex="-1" role="dialog" aria-labelledby="addRackData" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Add New Author</h5>
+                <h5 class="modal-title">Add New Rack</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <form method="POST" action="{{ url('/new_author') }}" onsubmit="show()" enctype="multipart/form-data">
+            <form method="POST" action="{{ url('/new_rack') }}" onsubmit="show()" enctype="multipart/form-data">
                 @csrf
                 <div class="modal-body">
                     <div class="row">
