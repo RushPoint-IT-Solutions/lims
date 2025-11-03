@@ -30,6 +30,13 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('racks', 'RackController@index')->name('racks');
     Route::post('/new_rack', 'RackController@store')->name('racks.store');
     Route::post('update_rack/{id}', 'RackController@update');
+    Route::post('delete_rack/{id}', 'RackController@destroy')->name('delete_rack');
+
+    //branch
+    Route::get('/branches', 'BranchController@index')->name('branches');
+    Route::post('/new_branch', 'BranchController@store')->name('branches.store');
+    Route::post('update_branch/{id}', 'BranchController@update');
+    Route::post('delete_branch/{id}', 'BranchController@destroy')->name('delete_branch');
 });
 
 
@@ -83,5 +90,4 @@ Route::get('/reports', 'ReportsController@index')->name('reports');
 //e-resources
 Route::get('/e_resources', 'EResourcesController@index')->name('e_resources');
 
-//branch
-Route::get('/branch', 'BranchController@index')->name('branch');
+

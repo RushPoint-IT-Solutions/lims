@@ -200,12 +200,7 @@
                             </a>
                         </li>
 
-                        <li class="nav-item">
-                            <a class="nav-link menu-link" href="{{ url('report_analytics') }}">
-                                <i class="ri-bar-chart-2-line"></i>
-                                <span data-key="t-dashboards">Report Analytics</span>
-                            </a>
-                        </li>
+                        
 
                         <li class="nav-item">
                             <a class="nav-link menu-link" href="{{ url('penalty_computation') }}">
@@ -221,12 +216,7 @@
                             </a>
                         </li>
 
-                        <li class="nav-item">
-                            <a class="nav-link menu-link" href="{{ url('reports') }}">
-                                <i class="ri-file-chart-line"></i>
-                                <span data-key="t-dashboards">Reports</span>
-                            </a>
-                        </li>
+                       
 
                         <li class="nav-item">
                             <a class="nav-link menu-link" href="{{ url('e_resources') }}">
@@ -234,81 +224,41 @@
                                 <span data-key="t-dashboards">E-Resources Access</span>
                             </a>
                         </li>
-
-                        <li class="nav-item">
-                            <a class="nav-link menu-link" href="{{ url('branch') }}">
-                                <i class="ri-building-line"></i>
-                                <span data-key="t-dashboards">Branches</span>
-                            </a>
-                        </li>
-
-                
-                        {{-- <li class="nav-item">
-                            <a class="nav-link menu-link" href="{{url('/')}}">
-                                <i class="ri-dashboard-2-line"></i> <span data-key="t-dashboards">Dashboard</span>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link menu-link" href="{{url('/bdcp')}}">
-                                <i class="mdi mdi-account-search"></i> <span data-key="t-dashboards">BDCP Monitoring</span>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link menu-link" href="{{ url('/bkd') }}">
-                                <i class="mdi mdi-alert"></i> <span data-key="t-maps">Barkada Kontra Droga</span>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link menu-link" href="{{ url('/pdl') }}">
-                                <i class="mdi mdi-view-list"></i> <span data-key="t-maps">PDL Masterlist</span>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link menu-link" href="{{ url('/aftercare') }}">
-                                <i class="mdi mdi-heart"></i> <span data-key="t-maps">Aftercare</span>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link menu-link" href="{{ url('/bdac') }}">
-                                <i class="mdi mdi-file-multiple"></i> <span data-key="t-maps">BDAC Programs</span>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link menu-link" href="{{ url('/bdc') }}">
-                                <i class="mdi mdi-city"></i> <span data-key="t-maps">Barangay Drug Clearing Program</span>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link menu-link" href="{{ url('/tour') }}">
-                                <i class="mdi mdi-map"></i> <span data-key="t-maps">Campus Tour for Kids</span>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link menu-link" href="{{ url('/treatment') }}">
-                                <i class="mdi mdi-home"></i> <span data-key="t-maps">Treatment & Rehab Program</span>
-                            </a>
-                        </li> --}}
-                        
                         @if(auth()->user()->role == "Admin")
                             <li class="menu-title"><span data-key="t-menu">Admin</span></li>
                             <li class="nav-item">
-                                <a class="nav-link menu-link" href="{{url('/racks')}}">
-                                    <span class="mdi mdi-file-cabinet"></span>&nbsp;<span data-key="t-racks">Racks</span>
+                                <a class="nav-link menu-link collapsed" href="#sidebarSettings" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarSettings">
+                                    <i class="ri-rocket-line"></i> <span data-key="t-settings">Settings</span>
                                 </a>
+                                <div class="menu-dropdown collapse" id="sidebarSettings" style="">
+                                    <ul class="nav nav-sm flex-column">
+                                        <li class="nav-item">
+                                            <a href="{{ url('branches') }}" class="nav-link" data-key="t-branches">Branches</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a href="{{url('/racks')}}" class="nav-link" data-key="t-racks">Racks</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a href="{{url('/authors')}}" class="nav-link" data-key="t-authors">Authors</a>
+                                        </li>
+                                    </ul>
+                                </div>
                             </li>
-                            <li class="nav-item">
-                                <a class="nav-link menu-link" href="{{url('/authors')}}">
-                                    <span class="mdi mdi-account-edit"></span>&nbsp;<span data-key="t-authors">Authors</span>
-                                </a>
-                            </li>
-                            <li class="nav-item">
+                            {{-- <li class="nav-item">
                                 <a class="nav-link menu-link" href="{{url('/users')}}">
                                     <i class="ri-team-fill"></i> <span data-key="t-users">Users</span>
                                 </a>
+                            </li> --}}
+                            <li class="nav-item">
+                                <a class="nav-link menu-link" href="{{ url('reports') }}">
+                                    <i class="ri-file-chart-line"></i>
+                                    <span data-key="t-dashboards">Reports</span>
+                                </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link menu-link" href="{{url('/reports')}}">
-                                    <i class="ri-file-list-3-fill"></i> <span data-key="t-reports">Reports</span>
+                                <a class="nav-link menu-link" href="{{ url('report_analytics') }}">
+                                    <i class="ri-bar-chart-2-line"></i>
+                                    <span data-key="t-dashboards">Report Analytics</span>
                                 </a>
                             </li>
                         @endif

@@ -5,7 +5,7 @@
         <div class="card-body">
             <h4 class="card-title d-flex justify-content-between mb-3">
                 Authors List
-                <button type="button" class="btn btn-md btn-primary" id="addBarangayBtn" data-bs-toggle="modal" data-bs-target="#formAuthors">
+                <button type="button" class="btn btn-md btn-primary" id="addAuthorBtn" data-bs-toggle="modal" data-bs-target="#formAuthors">
                     Add Author
                 </button>
             </h4>
