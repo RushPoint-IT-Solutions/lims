@@ -1,126 +1,266 @@
 @extends('layouts.app')
 
 @section('content')
-<!-- <div class="container">
-    <div class="row justify-content-center">
-        <div class="col-md-8">
-            <div class="card">
-                <div class="card-header">{{ __('Login') }}</div>
-
-                <div class="card-body">
-                    <form method="POST" action="{{ route('login') }}">
-                        @csrf
-
-                        <div class="form-group row">
-                            <label for="email" class="col-md-4 col-form-label text-md-right">{{ __('E-Mail Address') }}</label>
-
-                            <div class="col-md-6">
-                                <input id="email" type="email" class="form-control{{ $errors->has('email') ? ' is-invalid' : '' }}" name="email" value="{{ old('email') }}" required autofocus>
-
-                                @if ($errors->has('email'))
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $errors->first('email') }}</strong>
-                                    </span>
-                                @endif
-                            </div>
-                        </div>
-
-                        <div class="form-group row">
-                            <label for="password" class="col-md-4 col-form-label text-md-right">{{ __('Password') }}</label>
-
-                            <div class="col-md-6">
-                                <input id="password" type="password" class="form-control{{ $errors->has('password') ? ' is-invalid' : '' }}" name="password" required>
-
-                                @if ($errors->has('password'))
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $errors->first('password') }}</strong>
-                                    </span>
-                                @endif
-                            </div>
-                        </div>
-
-                        <div class="form-group row">
-                            <div class="col-md-6 offset-md-4">
-                                <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" name="remember" id="remember" {{ old('remember') ? 'checked' : '' }}>
-
-                                    <label class="form-check-label" for="remember">
-                                        {{ __('Remember Me') }}
-                                    </label>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="form-group row mb-0">
-                            <div class="col-md-8 offset-md-4">
-                                <button type="submit" class="btn btn-primary">
-                                    {{ __('Login') }}
-                                </button>
-
-                                @if (Route::has('password.request'))
-                                    <a class="btn btn-link" href="{{ route('password.request') }}">
-                                        {{ __('Forgot Your Password?') }}
-                                    </a>
-                                @endif
-                            </div>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
-</div> -->
-
-<form method="POST" action="{{ route('login') }}" aria-label="{{ __('Login') }}" onsubmit='show()'>
-    @csrf
-    <div class="row justify-content-center">
-        <div class="col-md-8 col-lg-6 col-xl-5">
-            <div class="card mt-4 card-bg-fill">
-                <div class="card-body p-4">
-                    <div class="text-center mt-2">
-                        <h5 class="text-primary">Welcome Back !</h5>
-                        <p class="text-muted">Sign in to continue to {{ config('app.name', 'LiMS') }}.</p>
-                    </div>
-                    <div class="p-2 mt-4">
-                        <div class="mb-3">
-                            <label for="email" class="form-label">Email</label>
-                            <input  class="form-control" id="email" type="email" class="form-control{{ $errors->has('email') ? ' is-invalid' : '' }}" name="email" value="{{ old('email') }}" placeholder="Email Address" required autofocus>
-                        </div>
-                        <div class="mb-3">
-                            <div class="float-end">
-                                <a href="{{ route('password.request') }}" class="text-muted">Forgot password?</a>
-                            </div>
-                            <label class="form-label" for="password-input">Password</label>
-                            <div class="position-relative auth-pass-inputgroup mb-3">
-                                <input id="password-input" type="password" class="form-control pe-5 password-input form-control{{ $errors->has('password') ? ' is-invalid' : '' }}" placeholder="********" name="password" required>
-                                <button class="btn btn-link position-absolute end-0 top-0 text-decoration-none text-muted password-addon material-shadow-none" type="button" id="password-addon"><i class="ri-eye-fill align-middle"></i></button>
-                            </div>
-                        </div>
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" value="" id="auth-remember-check">
-                            <label class="form-check-label" for="auth-remember-check">Remember me</label>
-                        </div>
-                        <div class="mt-4">
-                            <button class="btn btn-success w-100" type="submit">Sign In</button>
-                        </div>
-                        @if($errors->any())
-                            <div class="mt-3 form-group alert alert-danger alert-dismissable">
-                                {{-- <button aria-hidden="true" data-dismiss="alert" class="close" type="button">×</button> --}}
-                                <strong>{{$errors->first()}}</strong>
-                            </div>
-                        @endif
-                    </div>
-                    <p align="center" class="mt-3 mb-1"><small>Copyright © RushPoint IT Solutions. 2025</small></p>
-                    <hr style="margin: 0">
-                    <p align="center" class="mt-1"><small>Need help with system or support concerns? Click <a href="https://rushpoint.com.ph/" target="_blank" style="font-weigh:600">here</a></small></p>
-                </div>
-            </div>
-        </div>
-    </div>
-</form>
 <style>
-    .auth-one-bg {
-        background-image: url(assets/images/library-bg.jpg) !important;
+    .login-container {
+        display: flex;
+        height: 100vh;
+        width: 100%;
+        font-family: 'Montserrat', sans-serif;
+    }
+    
+    .login-left {
+        flex: 1;
+        background: #ffffff;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        padding: 40px;
+    }
+    
+    .login-right {
+        flex: 1;
+        background: linear-gradient(135deg, #6b1a1a 0%, #4a0e0e 100%);
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        padding: 40px;
+        color: white;
+        border-top-left-radius: 50px;
+        border-bottom-left-radius: 50px;
+    }
+
+    
+    .logo-placeholder {
+        width: 100px;
+        height: 100px;
+        background: #f0f0f0;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 12px;
+        color: #999;
+        text-align: center;
+    }
+    
+    .welcome-title {
+        font-size: 36px;
+        font-weight: 600;
+        margin-bottom: 25px;
+        color: #333;
+    }
+    
+    .welcome-subtitle {
+        font-size: 14px;
+        color: #666;
+        margin-bottom: 50px;
+    }
+    
+    .login-form {
+        width: 100%;
+        max-width: 350px;
+    }
+    
+    .form-input {
+        width: 100%;
+        padding: 15px 20px;
+        border: 2px solid #e0e0e0;
+        border-radius: 8px;
+        margin-bottom: 20px;
+        font-size: 14px;
+        transition: border-color 0.3s;
+        box-sizing: border-box;
+        font-family: 'Montserrat', sans-serif;
+    }
+    
+    .form-input:focus {
+        outline: none;
+        border-color: #6b1a1a;
+    }
+    
+    .form-input.is-invalid {
+        border-color: #dc3545;
+    }
+    
+    .invalid-feedback {
+        color: #dc3545;
+        font-size: 12px;
+        margin-top: -15px;
+        margin-bottom: 15px;
+        display: block;
+    }
+    
+    .forgot-password {
+        font-size: 14px;
+        color: #333;
+        text-decoration: none;
+        margin-bottom: 25px;
+        display: inline-block;
+    }
+    
+    .forgot-password:hover {
+        text-decoration: underline;
+        color: #6b1a1a;
+    }
+    
+    .btn-signin {
+        width: 100%;
+        padding: 15px;
+        background: #6b1a1a;
+        color: white;
+        border: none;
+        border-radius: 15px;
+        font-size: 16px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: background 0.3s;
+    }
+    
+    .btn-signin:hover {
+        background: #4a0e0e;
+    }
+    
+    .right-logo-placeholder {
+        width: 120px;
+        height: 120px;
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 12px;
+        color: rgba(255, 255, 255, 0.5);
+        text-align: center;
+    }
+    
+    .system-title {
+        font-size: 35px;
+        font-weight: 700;
+        letter-spacing: 2px;
+        margin-bottom: 35px;
+    }
+    
+    .system-subtitle {
+        font-size: 35px;
+        font-weight: 700;
+        margin-top: -30px;
+    }
+    
+    .signup-text {
+        font-size: 22px;
+        margin-bottom: 20px;
+        font-weight: 300 !important;
+        text-align: center;
+    }
+    
+    .btn-signup {
+        padding: 12px 60px;
+        background: white;
+        color: #6b1a1a;
+        border: none;
+        border-radius: 15px;
+        font-size: 16px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: background 0.3s;
+        text-decoration: none;
+        display: inline-block;
+    }
+    
+    .btn-signup:hover {
+        background: #f0f0f0;
+        color: #6b1a1a;
+        text-decoration: none;
+    }
+    
+    @media (max-width: 768px) {
+        .login-container {
+            flex-direction: column;
+        }
+        
+        .login-right {
+            order: -1;
+            min-height: 300px;
+        }
+        
+        .system-title {
+            font-size: 32px;
+        }
+        
+        .system-subtitle {
+            font-size: 20px;
+        }
     }
 </style>
+
+<div class="login-container">
+    <div class="login-left">
+        <div class="logo-placeholder">
+            <img src="{{asset('assets/images/marsu-logo.png')}}" alt="" height="120">
+        </div>
+        
+        <h1 class="welcome-title">Welcome Back !!</h1>
+        <p class="welcome-subtitle">Please enter your credentials to log in</p>
+        
+        <form method="POST" action="{{ route('login') }}" class="login-form">
+            @csrf
+            
+            <input 
+                id="email" 
+                type="email" 
+                class="form-input{{ $errors->has('email') ? ' is-invalid' : '' }}" 
+                name="email" 
+                value="{{ old('email') }}" 
+                placeholder="Username"
+                required 
+                autofocus
+            >
+            
+            @if ($errors->has('email'))
+                <span class="invalid-feedback" role="alert">
+                    <strong>{{ $errors->first('email') }}</strong>
+                </span>
+            @endif
+            
+            <input 
+                id="password" 
+                type="password" 
+                class="form-input{{ $errors->has('password') ? ' is-invalid' : '' }}" 
+                name="password" 
+                placeholder="Password"
+                required
+            >
+            
+            @if ($errors->has('password'))
+                <span class="invalid-feedback" role="alert">
+                    <strong>{{ $errors->first('password') }}</strong>
+                </span>
+            @endif
+            
+            @if (Route::has('password.request'))
+                <a class="forgot-password" href="{{ route('password.request') }}">
+                    Forgot password?
+                </a>
+            @endif
+            
+            <button type="submit" class="btn-signin">
+                SIGN IN
+            </button>
+        </form>
+    </div>
+    
+    <div class="login-right">
+        <div class="right-logo-placeholder">
+            <img src="{{asset('assets/images/marsu-logo.png')}}" alt="" height="120">
+        </div>
+        
+        <h2 class="system-title">MARSU</h2>
+        <h3 class="system-subtitle">Library Management System</h3>
+        
+        <p class="signup-text">"Your premier digital library <br> for borrowing and reading <br> books"</p>
+    </div>
+</div>
 @endsection

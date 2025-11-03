@@ -1,9 +1,8 @@
-{{-- email.blade.php --}}
 @extends('layouts.app')
 
 @section('content')
 <style>
-    .forgot-password-container {
+    .otp-container {
         display: flex;
         height: 100vh;
         width: 100%;
@@ -14,20 +13,20 @@
     .back-button {
         position: absolute;
         top: 30px;
-        right: 0;
+        left: 0;
         padding: 10px 30px;
         background: white;
         color: #6b1a1a;
         border: 2px solid #6b1a1a;
-        border-right: none;
+        border-left: none;
         font-size: 14px;
         font-weight: 600;
         cursor: pointer;
         transition: all 0.3s;
         text-decoration: none;
         z-index: 10;
-        border-bottom-left-radius: 20px;
-        border-top-left-radius: 20px;
+        border-bottom-right-radius: 20px;
+        border-top-right-radius: 20px;
     }
 
     .back-button:hover {
@@ -36,20 +35,7 @@
         text-decoration: none;
     }
     
-    .forgot-left {
-        flex: 1;
-        background: linear-gradient(135deg, #6b1a1a 0%, #4a0e0e 100%);
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        padding: 40px;
-        color: white;
-        border-top-right-radius: 50px;
-        border-bottom-right-radius: 50px;
-    }
-    
-    .forgot-right {
+    .otp-left {
         flex: 1;
         background: #ffffff;
         display: flex;
@@ -59,16 +45,30 @@
         padding: 40px;
     }
     
-    .left-logo-placeholder {
-        width: 120px;
-        height: 120px;
-        background: rgba(255, 255, 255, 0.1);
+    .otp-right {
+        flex: 1;
+        background: linear-gradient(135deg, #6b1a1a 0%, #4a0e0e 100%);
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        padding: 40px;
+        color: white;
+        border-top-left-radius: 50px;
+        border-bottom-left-radius: 50px;
+    }
+    
+    .logo-placeholder {
+        width: 100px;
+        height: 100px;
+        background: #f0f0f0;
         border-radius: 50%;
+        margin-bottom: 30px;
         display: flex;
         align-items: center;
         justify-content: center;
         font-size: 12px;
-        color: rgba(255, 255, 255, 0.5);
+        color: #999;
         text-align: center;
     }
     
@@ -77,52 +77,25 @@
         font-weight: 700;
         letter-spacing: 2px;
         margin-bottom: 35px;
+        color: #333;
     }
     
     .system-subtitle {
         font-size: 35px;
         font-weight: 700;
         margin-top: -30px;
-    }
-    
-    .system-description {
-        font-size: 22px;
-        font-weight: 300;
-        text-align: center;
-        line-height: 1.6;
-    }
-    
-    .logo-placeholder {
-        width: 100px;
-        height: 100px;
-        background: #f0f0f0;
-        border-radius: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 12px;
-        color: #999;
-        text-align: center;
-        margin-bottom: 30px;
-    }
-    
-    .forgot-title {
-        font-size: 36px;
-        font-weight: 600;
-        margin-bottom: 15px;
         color: #333;
     }
     
-    .forgot-subtitle {
+    .otp-instruction {
         font-size: 14px;
         color: #666;
-        margin-bottom: 40px;
-        text-align: center;
+        margin-bottom: 30px;
     }
     
-    .forgot-form {
+    .otp-form {
         width: 100%;
-        max-width: 380px;
+        max-width: 350px;
     }
     
     .form-input {
@@ -154,7 +127,7 @@
         display: block;
     }
     
-    .btn-reset {
+    .btn-verify {
         width: 100%;
         padding: 15px;
         background: #6b1a1a;
@@ -169,79 +142,116 @@
         font-family: 'Montserrat', sans-serif;
     }
     
-    .btn-reset:hover {
+    .btn-verify:hover {
         background: #4a0e0e;
     }
     
+    .right-logo-placeholder {
+        width: 120px;
+        height: 120px;
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 50%;
+        margin-bottom: 30px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 12px;
+        color: rgba(255, 255, 255, 0.5);
+        text-align: center;
+    }
+    
+    .right-title {
+        font-size: 35px;
+        font-weight: 700;
+        margin-bottom: 35px;
+        letter-spacing: 2px;
+    }
+    
+    .right-subtitle {
+        font-size: 35px;
+        font-weight: 700;
+        margin-top: -30px;
+    }
+    
+    .tagline {
+        font-size: 22px;
+        font-weight: 300;
+        text-align: center;
+        line-height: 1.6;
+    }
+    
     @media (max-width: 768px) {
-        .forgot-password-container {
+        .otp-container {
             flex-direction: column;
         }
         
-        .forgot-left {
+        .otp-right {
             order: -1;
             min-height: 300px;
             border-radius: 0;
         }
         
-        .back-button {
-            top: 15px;
-            left: 15px;
-        }
-        
-        .system-title {
+        .system-title, .right-title {
             font-size: 28px;
         }
         
-        .system-subtitle {
+        .system-subtitle, .right-subtitle {
             font-size: 24px;
         }
         
-        .system-description {
+        .tagline {
             font-size: 18px;
+        }
+        
+        .back-button {
+            top: 15px;
+            right: 15px;
+            border-radius: 20px;
         }
     }
 </style>
 
-<div class="forgot-password-container">
-    <a href="{{ route('login') }}" class="back-button">
-        BACK
-    </a>
+<div class="otp-container">
+    <a href="{{ route('password.request') }}" class="back-button">BACK</a>
     
-    <div class="forgot-left">
-        <div class="left-logo-placeholder">
-            <img src="{{asset('assets/images/marsu-logo.png')}}" alt="" height="120">
-        </div>
-        
-        <h2 class="system-title">MARSU</h2>
-        <h3 class="system-subtitle">Library Management System</h3>
-        
-        <p class="system-description">"Your premier digital library <br> for borrowing and reading <br> books"</p>
-    </div>
-    
-    <div class="forgot-right">
+    <div class="otp-left">
         <div class="logo-placeholder">
-            <img src="{{asset('assets/images/marsu-logo.png')}}" alt="" height="120">
+            <img src="{{asset('assets/images/marsu-logo.png')}}" alt="MARSU Logo" height="100">
         </div>
         
-        <h1 class="forgot-title">Forgot Password</h1>
-        <p class="forgot-subtitle">Please enter your username</p>
+        <h1 class="system-title">Verify OTP</h1>
         
-        <form method="POST" class="forgot-form" onsubmit="event.preventDefault(); window.location.href='{{ route('password.otp') }}';">
+        <p class="otp-instruction">Please enter the OTP to proceed</p>
+        
+       <form method="POST" class="otp-form">
             @csrf
             <input 
-                id="email" 
-                type="email" 
-                class="form-input" 
-                name="email" 
-                placeholder="Username" 
+                id="otp" 
+                type="text" 
+                class="form-input{{ $errors->has('otp') ? ' is-invalid' : '' }}" 
+                name="otp" 
+                placeholder="OTP"
                 required
                 autofocus
+                maxlength="6"
             >
-            <button type="submit" class="btn-reset">
-                Reset Password
+            <button type="submit" class="btn-verify">
+                Verify OTP
             </button>
         </form>
+    </div>
+    
+    <div class="otp-right">
+        <div class="right-logo-placeholder">
+            <img src="{{asset('assets/images/marsu-logo.png')}}" alt="MARSU Logo" height="120">
+        </div>
+        
+        <h2 class="right-title">MARSU</h2>
+        <h3 class="right-subtitle">Library Management System</h3>
+        
+        <p class="tagline">
+            "Your premier digital library <br> for borrowing and reading <br> books"
+        </p>
     </div>
 </div>
 @endsection

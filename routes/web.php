@@ -31,3 +31,57 @@ Route::group(['middleware' => ['auth']], function () {
     Route::post('/new_rack', 'RackController@store')->name('racks.store');
     Route::post('update_rack/{id}', 'RackController@update');
 });
+
+
+Route::get('password/reset', function () {
+    return view('auth.passwords.email');
+})->name('password.request');
+
+Route::post('password/reset', function () {
+    return redirect()->route('password.otp');
+})->name('password.email');
+
+Route::get('password/otp', function () {
+    return view('auth.passwords.otp');
+})->name('password.otp');
+
+Route::post('password/otp', function () {
+    return redirect()->route('password.customreset');
+})->name('password.verify');
+
+Route::get('password/custom-reset', function () {
+    return view('auth.passwords.reset');
+})->name('password.customreset');
+
+//acquisition
+Route::get('/acquisition', 'AcquisitionController@index')->name('acquisition');
+
+//cataloging and metadata
+Route::get('/catalog_metadata', 'CatalogMetadataController@index')->name('catalog_metadata');
+
+//circulation
+Route::get('/circulation', 'CirculationController@index')->name('circulation');
+
+//membership
+Route::get('/membership', 'MembershipController@index')->name('membership');
+
+//report and analytics
+Route::get('/report_analytics', 'ReportAnalyticsController@index')->name('report_analytics');
+
+//penalty computation
+Route::get('/penalty_computation', 'PenaltyComputationController@index')->name('penalty_computation');
+
+//reservation
+Route::get('/reservation', 'ReservationController@index')->name('reservation');
+
+//admin configuration
+Route::get('/admin_configuration', 'AdminConfigurationController@index')->name('admin_configuration');
+
+//reports
+Route::get('/reports', 'ReportsController@index')->name('reports');
+
+//e-resources
+Route::get('/e_resources', 'EResourcesController@index')->name('e_resources');
+
+//branch
+Route::get('/branch', 'BranchController@index')->name('branch');
