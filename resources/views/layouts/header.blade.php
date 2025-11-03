@@ -50,16 +50,17 @@
             color: #FFF !important;
         }
         .navbar-menu {
-            background: #25306d !important;
+            background: #420906 !important;
         }
         
         </style>
 
 </head>
 <body>
-    <div id="loader" class="loader">
+    <div id = "loader" class="loader">
     </div>
     <div id="layout-wrapper">
+
         <header id="page-topbar">
             <div class="layout-width">
                 <div class="navbar-header">
@@ -99,7 +100,7 @@
                                     <img class="rounded-circle header-profile-user" src="{{asset(auth()->user()->avatar)}}" onerror="this.src='{{url('assets/images/marsu-logo.png')}}';" alt="Header Avatar">
                                     <span class="text-start ms-xl-2">
                                         <span class="d-none d-xl-inline-block ms-1 fw-medium user-name-text">{{ current(explode(' ',auth()->user()->name)) }}</span>
-                                        {{-- <span class="d-none d-xl-block ms-1 fs-12 user-name-sub-text">{{ current(explode(' ',auth()->user()->role)) }}</span> --}}
+                                        {{-- <span class="d-none d-xl-block ms-1 fs-12 user-name-sub-text">Founder</span> --}}
                                     </span>
                                 </span>
                             </button>
@@ -123,7 +124,7 @@
             </div>
         </header>
 
-
+<!-- /.modal -->
         <!-- ========== App Menu ========== -->
         <div class="app-menu navbar-menu">
             <!-- LOGO -->
@@ -156,14 +157,98 @@
                 <div class="container-fluid">
                     <div id="two-column-menu"></div>
                     <ul class="navbar-nav" id="navbar-nav">
-                        <li class="menu-title"><span data-key="t-menu">Menu</span></li>
-                
+                        {{-- <li class="menu-title"><span data-key="t-menu">Menu</span></li> --}}
+
                         <li class="nav-item">
                             <a class="nav-link menu-link" href="{{url('/')}}">
-                                <span class="mdi mdi-monitor-dashboard"></span>&nbsp;<span data-key="t-dashboards">Dashboard</span>
+                                <i class="ri-dashboard-2-line"></i> <span data-key="t-dashboards">Dashboard</span>
                             </a>
                         </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link menu-link" href="{{ url('reservation') }}">
+                                <i class="ri-calendar-check-line"></i>
+                                <span data-key="t-dashboards">Reservation</span>
+                            </a>
+                        </li>
+
+
+                        <li class="nav-item">
+                            <a class="nav-link menu-link" href="{{ url('acquisition') }}">
+                                <i class="ri-hand-coin-line"></i> <span data-key="t-dashboards">Acquisition</span>
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link menu-link" href="{{ url('catalog_metadata') }}">
+                                <i class="ri-folder-2-line"></i> 
+                                <span data-key="t-dashboards">Cataloging/Metadata</span>
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link menu-link" href="{{ url('circulation') }}">
+                                <i class="ri-book-2-line"></i>
+                                <span data-key="t-dashboards">Circulation/Borrowing</span>
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link menu-link" href="{{ url('membership') }}">
+                                <i class="ri-team-line"></i>
+                                <span data-key="t-dashboards">Membership Management</span>
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link menu-link" href="{{ url('report_analytics') }}">
+                                <i class="ri-bar-chart-2-line"></i>
+                                <span data-key="t-dashboards">Report Analytics</span>
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link menu-link" href="{{ url('penalty_computation') }}">
+                                <i class="ri-money-dollar-circle-line"></i>
+                                <span data-key="t-dashboards">Penalty Computation</span>
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link menu-link" href="{{ url('admin_configuration') }}">
+                                <i class="ri-settings-3-line"></i>
+                                <span data-key="t-dashboards">Admin Configuration</span>
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link menu-link" href="{{ url('reports') }}">
+                                <i class="ri-file-chart-line"></i>
+                                <span data-key="t-dashboards">Reports</span>
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link menu-link" href="{{ url('e_resources') }}">
+                                <i class="ri-book-2-line"></i>
+                                <span data-key="t-dashboards">E-Resources Access</span>
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link menu-link" href="{{ url('branch') }}">
+                                <i class="ri-building-line"></i>
+                                <span data-key="t-dashboards">Branches</span>
+                            </a>
+                        </li>
+
+                
                         {{-- <li class="nav-item">
+                            <a class="nav-link menu-link" href="{{url('/')}}">
+                                <i class="ri-dashboard-2-line"></i> <span data-key="t-dashboards">Dashboard</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
                             <a class="nav-link menu-link" href="{{url('/bdcp')}}">
                                 <i class="mdi mdi-account-search"></i> <span data-key="t-dashboards">BDCP Monitoring</span>
                             </a>
