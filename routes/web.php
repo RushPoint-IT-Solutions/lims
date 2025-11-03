@@ -32,11 +32,17 @@ Route::group(['middleware' => ['auth']], function () {
     Route::post('update_rack/{id}', 'RackController@update');
     Route::post('delete_rack/{id}', 'RackController@destroy')->name('delete_rack');
 
-    //branch
+    // Branches
     Route::get('/branches', 'BranchController@index')->name('branches');
     Route::post('/new_branch', 'BranchController@store')->name('branches.store');
     Route::post('update_branch/{id}', 'BranchController@update');
     Route::post('delete_branch/{id}', 'BranchController@destroy')->name('delete_branch');
+
+    // Types
+    Route::get('/types', 'TypeController@index')->name('types');
+    Route::post('/new_type', 'TypeController@store')->name('types.store');
+    Route::post('update_type/{id}', 'TypeController@update');
+    Route::post('delete_type/{id}', 'TypeController@destroy')->name('delete_type');
 });
 
 

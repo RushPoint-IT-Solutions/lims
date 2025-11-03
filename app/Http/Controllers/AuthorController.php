@@ -20,7 +20,7 @@ class AuthorController extends Controller
         }
 
         $authors = $query->paginate(10)->appends($request->all()); 
-        return view('authors.index', compact('authors'));
+        return view('settings.authors.index', compact('authors'));
     }
     
     public function store(Request $request)

@@ -48,7 +48,7 @@
                             <td>{{ $rack->created_at }}</td>
                             <td>{{ $rack->createdBy->name }}</td>
                         </tr>
-                        @include('racks.edit')
+                        @include('settings.racks.edit')
                     @empty
                         <tr>
                             <td colspan="5" class="text-center">No Racks Found.</td>

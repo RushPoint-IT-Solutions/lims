@@ -20,7 +20,7 @@ class RackController extends Controller
         }
 
         $racks = $query->paginate(10)->appends($request->all()); 
-        return view('racks.index', compact('racks'));
+        return view('settings.racks.index', compact('racks'));
     }
 
     public function store(Request $request)

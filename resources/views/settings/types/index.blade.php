@@ -181,13 +181,13 @@
 
 @section('content')
 <div class="page-header">
-    <h4>Branch Management</h4>
+    <h4>Item Types</h4>
     <div class="header-actions">
-        <a href="#" class="add-branch-btn" data-bs-toggle="modal" data-bs-target="#addBranchModal">
-            <i class="ri-add-circle-line"></i> Add Branch
+        <a href="#" class="add-branch-btn" data-bs-toggle="modal" data-bs-target="#addTypeModal">
+            <i class="ri-add-circle-line"></i> Add Item type
         </a>
         <!-- <input type="text" class="search-input" placeholder="Search by ID or Name"> -->
-        <form method="GET" action="{{ route('branches') }}" class="custom_form mb-3" enctype="multipart/form-data" onsubmit="show()">
+        <form method="GET" action="{{ route('types') }}" class="custom_form mb-3" enctype="multipart/form-data" onsubmit="show()">
             <input type="text" class="search-input" placeholder="Search by ID or Name" name="search" value="{{ request('search') }}"> 
         </form>
     </div>
@@ -197,26 +197,32 @@
     <table class="branch-table">
         <thead>
             <tr>
-                <th>Name</th>
-                <th>Contact No</th>
-                <th>Contact Person</th>
-                <th>Location</th>
+                <th>Code</th>
+                <th>Description</th>
+                <th>Not for Loan</th>
+                <th>Charges</th>
                 <th>Action</th>
             </tr>
         </thead>
         <tbody>
-            @forelse ($branches as $branch)
+            @forelse ($types as $type)
                 <tr>
-                    <td>{{ $branch->branch_name }}</td>
-                    <td>{{ $branch->contact_no }}</td>
-                    <td>{{ $branch->contact_person }}</td>
-                    <td>{{ $branch->location }}</td>
+                    <td>{{ $type->code }}</td>
+                    <td>{{ $type->description }}</td>
+                    <td>
+                        @if($type->loan == 'Yes')
+                            Yes
+                        @else
+                            No
+                        @endif
+                    </td>
+                    <td>{{ $type->charge ?? '0.00' }}</td>
                     <td>
                         <div class="action-icons">
-                            <button title="Edit Branch" data-bs-toggle="modal" data-bs-target="#editBranch{{$branch->id}}">
+                            <button title="Edit Type" data-bs-toggle="modal" data-bs-target="#editType{{$type->id}}">
                                 <i class="ri-edit-line"></i>
                             </button>
-                            <form method="POST" class="d-inline-block" action="{{url('delete_branch/'.$branch->id)}}" onsubmit="show()" enctype="multipart/form-data">
+                            <form method="POST" class="d-inline-block" action="{{url('delete_type/'.$type->id)}}" onsubmit="show()" enctype="multipart/form-data">
                                 @csrf
                                 <button type="button" class="btn btn-sm btn-outline-danger deleteBtn">
                                     <i class="ri-delete-bin-line"></i>
@@ -228,62 +234,66 @@
                         </div>
                     </td>
                 </tr>
-                @include('branches.edit')
+                @include('settings.types.edit')
             @empty
                 <tr>
-                    <td colspan="5" class="text-center">No Branches Found.</td>
+                    <td colspan="5" class="text-center">No Item Types Found.</td>
                 </tr>
-            @endforelse
+            @endforelse 
         </tbody>
     </table>
-    {{ $branches->appends(request()->query())->links() }}
+    {{-- {{ $branches->appends(request()->query())->links() }} --}}
 </div>
 
-<div class="modal fade" id="addBranchModal" tabindex="-1">
+<div class="modal fade" id="addTypeModal" tabindex="-1">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header modal-header-branch">
-                <h5 class="modal-title">Add New Branch</h5>
+                <h5 class="modal-title">Add Item Type</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
             <div class="modal-body">
-                <form id="addBranchForm" method="POST" action="{{ url('/new_branch') }}" onsubmit="show()" enctype="multipart/form-data">
+                <form id="addTypeForm" method="POST" action="{{ url('/new_type') }}" onsubmit="show()" enctype="multipart/form-data">
                     @csrf
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label>Branch Name&nbsp;<span class="text-danger">*</span></label>
-                                <input type="text" name="branch_name" class="form-control" placeholder="Enter branch name" required>
+                                <label>Code&nbsp;<span class="text-danger">*</span></label>
+                                <input type="text" name="code" class="form-control" placeholder="Enter Code" required>
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label>Contact Number&nbsp;<span class="text-danger">*</span></label>
-                                <input type="text" name="contact_no" class="form-control" placeholder="Enter contact number" required>
+                                <label>Description&nbsp;<span class="text-danger">*</span></label>
+                                <input type="text" name="description" class="form-control" placeholder="Enter Description" required>
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label>Location <span class="text-danger">*</span></label>
-                                <input type="text" name="location" class="form-control" placeholder="Enter location" required>
+                                <label>Charge</label>
+                                <input type="text" name="charge" class="form-control" placeholder="0.00">
                             </div>
                         </div>
                         <div class="col-md-6">
-                            <div class="form-group">
-                                <label>Contact Person</label>
-                                <input type="text" name="contact_person" class="form-control" placeholder="Enter manager name">
+                            <div class="form-check mb-2">
+                                <input type="hidden" name="loan" value="No" checked>
+                                <input class="form-check-input" type="checkbox" name="loan" id="formCheckboxRight1" value="Yes">
+                                <label class="form-check-label" for="formCheckboxRight1">
+                                    Not for Loan
+                                </label><br>
+                                <span>(if checked, no item of this type can be issued. If not checked, every item of this type can be issued unless notforloan is set for a specific item)</span>   
                             </div>
                         </div>
                         <div class="form-group">
-                            <label>Address</label>
-                            <textarea name="address" class="form-control" placeholder="Enter Full Address"></textarea>
+                            <label>Summary</label>
+                            <textarea name="summary" class="form-control" placeholder="Enter Summary"></textarea>
                         </div>
                     </div>
                 </form>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                <button type="submit" class="btn btn-submit" onclick="submitBranch()">Add Branch</button>
+                <button type="submit" class="btn btn-submit" onclick="submitBranch()">Add Item Type</button>
             </div>
         </div>
     </div>
@@ -293,7 +303,7 @@
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
     function submitBranch() {
-        const form = document.getElementById('addBranchForm');
+        const form = document.getElementById('addTypeForm');
         if (form.checkValidity()) {
             form.submit();
         } else {
