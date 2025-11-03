@@ -24,7 +24,7 @@ class BranchController extends Controller
         }
 
         $branches = $query->paginate(10)->appends($request->all()); 
-        return view('branches.index', compact('branches'));
+        return view('settings.branches.index', compact('branches'));
     }
 
     public function store(Request $request)

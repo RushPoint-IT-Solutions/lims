@@ -236,6 +236,9 @@
                                             <a href="{{ url('branches') }}" class="nav-link" data-key="t-branches">Branches</a>
                                         </li>
                                         <li class="nav-item">
+                                            <a href="{{ url('types') }}" class="nav-link" data-key="t-types">Item Types</a>
+                                        </li>
+                                        <li class="nav-item">
                                             <a href="{{url('/racks')}}" class="nav-link" data-key="t-racks">Racks</a>
                                         </li>
                                         <li class="nav-item">
