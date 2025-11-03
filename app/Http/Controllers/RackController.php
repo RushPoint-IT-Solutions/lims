@@ -29,8 +29,8 @@ class RackController extends Controller
             'name' => 'required|string|max:255',
         ]);
 
-        if (Rack::where('name', $request->name)->exists()) {
-            Alert::error('Duplicate Entry', 'Rack with this name already exists!')->persistent('Dismiss');
+        if (Rack::where('name', $request->name)->where('deleted_at', NULL)->exists()) {
+            Alert::error('Duplicate Entry', 'Branch with this name already exists!')->persistent('Dismiss');
             return back();
         }
 
@@ -41,7 +41,6 @@ class RackController extends Controller
 
         Alert::success('Success', 'Successfully Saved!')->persistent('Dismiss');
         return back();
-
     }
 
     public function update(Request $request, $id)
@@ -51,6 +50,15 @@ class RackController extends Controller
         $data->save();
 
         Alert::success('Success', 'Successfully Saved!')->persistent('Dismiss');
+        return back();
+    }
+
+    public function destroy(Request $request)
+    {
+        $data = Rack::findOrFail($request->id);
+        $data->delete();
+
+        Alert::success('Successfully Deleted')->persistent('Dismiss');
         return back();
     }
 

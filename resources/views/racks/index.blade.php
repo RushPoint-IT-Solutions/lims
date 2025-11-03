@@ -10,7 +10,7 @@
                 </button>
             </h4>
             <div class="col-md-6 offset-md-6">
-                <form method="GET" action="{{ route('authors') }}" class="custom_form mb-3" enctype="multipart/form-data" onsubmit="show()">
+                <form method="GET" action="{{ route('racks') }}" class="custom_form mb-3" enctype="multipart/form-data" onsubmit="show()">
                     <div class="row height d-flex justify-content-end align-items-end">
                         <div class="col-md-9">
                             <div class="search">
@@ -37,6 +37,12 @@
                                 <button class="btn btn-outline-info btn-sm" title="Edit Rack" data-bs-toggle="modal" data-bs-target="#editRack{{$rack->id}}">
                                     <i class="mdi mdi-pencil"></i>
                                 </button>
+                                <form method="POST" class="d-inline-block" action="{{url('delete_rack/'.$rack->id)}}" onsubmit="show()" enctype="multipart/form-data">
+                                    @csrf
+                                    <button type="button" class="btn btn-sm btn-outline-danger deleteBtn">
+                                        <i class="mdi mdi-trash-can"></i>
+                                    </button>
+                                </form>
                             </td>
                             <td>{{ $rack->name }}</td>
                             <td>{{ $rack->created_at }}</td>
@@ -51,7 +57,7 @@
                 </tbody>
             </table>
 
-            {{-- {{ $racks->appends(request()->query())->links() }} --}}
+            {{ $racks->appends(request()->query())->links() }}
         </div>
     </div>
 </div>
@@ -80,4 +86,28 @@
         </div>
     </div>
 </div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+    $(document).ready(function() {
+        $(".deleteBtn").on('click', function() {
+            var form = $(this).closest('form')
+
+            Swal.fire({
+                title: "Are you sure?",
+                text: "You won't be able to revert this!",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Yes, delete it!"
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    form.submit()
+                }
+            });
+        })
+    });
+</script>
 @endsection
