@@ -24,6 +24,8 @@
     <!-- custom Css-->
     <link href="{{asset('/assets/css/custom.min.css')}}" rel="stylesheet" type="text/css" />
 
+    <link href="{{asset('/assets/css/style.css')}}" rel="stylesheet" type="text/css" />
+
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
  
     {{-- <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet" type="text/css"> --}}
@@ -160,12 +162,6 @@
                         {{-- <li class="menu-title"><span data-key="t-menu">Menu</span></li> --}}
 
                         <li class="nav-item">
-                            <a class="nav-link menu-link" href="{{url('/')}}">
-                                <i class="ri-dashboard-2-line"></i> <span data-key="t-dashboards">Dashboard</span>
-                            </a>
-                        </li>
-
-                        <li class="nav-item">
                             <a class="nav-link menu-link" href="{{ url('reservation') }}">
                                 <i class="ri-calendar-check-line"></i>
                                 <span data-key="t-dashboards">Reservation</span>
@@ -202,12 +198,12 @@
 
                         
 
-                        <li class="nav-item">
+                        {{-- <li class="nav-item">
                             <a class="nav-link menu-link" href="{{ url('penalty_computation') }}">
                                 <i class="ri-money-dollar-circle-line"></i>
                                 <span data-key="t-dashboards">Penalty Computation</span>
                             </a>
-                        </li>
+                        </li> --}}
 
                         <li class="nav-item">
                             <a class="nav-link menu-link" href="{{ url('admin_configuration') }}">
@@ -226,6 +222,12 @@
                         </li>
                         @if(auth()->user()->role == "Admin")
                             <li class="menu-title"><span data-key="t-menu">Admin</span></li>
+                            <li class="nav-item">
+                                <a class="nav-link menu-link" href="{{url('/')}}">
+                                    <i class="ri-dashboard-2-line"></i> <span data-key="t-dashboards">Dashboard</span>
+                                </a>
+                            </li>
+                            
                             <li class="nav-item">
                                 <a class="nav-link menu-link collapsed" href="#sidebarSettings" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarSettings">
                                     <i class="ri-rocket-line"></i> <span data-key="t-settings">Settings</span>
@@ -261,6 +263,7 @@
                                     <span data-key="t-dashboards">Reports</span>
                                 </a>
                             </li>
+
                             <li class="nav-item">
                                 <a class="nav-link menu-link" href="{{ url('report_analytics') }}">
                                     <i class="ri-bar-chart-2-line"></i>

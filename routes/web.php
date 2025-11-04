@@ -81,8 +81,8 @@ Route::get('/catalog_metadata', 'CatalogMetadataController@index')->name('catalo
 //circulation
 Route::get('/circulation', 'CirculationController@index')->name('circulation');
 
-//membership
-Route::get('/membership', 'MembershipController@index')->name('membership');
+//user
+Route::get('/users', 'UserController@index')->name('users');
 
 //report and analytics
 Route::get('/report_analytics', 'ReportAnalyticsController@index')->name('report_analytics');
