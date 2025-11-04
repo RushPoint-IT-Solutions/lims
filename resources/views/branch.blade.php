@@ -54,7 +54,7 @@
     
     .table-container {
         background: white;
-        border-radius: 10px;
+        border-radius: 5px;
         padding: 0;
         box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         overflow: hidden;
@@ -157,110 +157,6 @@
                     <td>BookWorm Colombo</td>
                     <td>0412410985</td>
                     <td>Colombo</td>
-                    <td>
-                        <div class="action-icons">
-                            <i class="ri-edit-line" title="Edit"></i>
-                            <i class="ri-file-list-line" title="View Details"></i>
-                            <i class="ri-delete-bin-line" title="Delete"></i>
-                        </div>
-                    </td>
-                </tr>
-                <tr>
-                    <td>3</td>
-                    <td>BookWorm Galle</td>
-                    <td>0412410986</td>
-                    <td>Galle</td>
-                    <td>
-                        <div class="action-icons">
-                            <i class="ri-edit-line" title="Edit"></i>
-                            <i class="ri-file-list-line" title="View Details"></i>
-                            <i class="ri-delete-bin-line" title="Delete"></i>
-                        </div>
-                    </td>
-                </tr>
-                <tr>
-                    <td>4</td>
-                    <td>BookWorm Kandy</td>
-                    <td>0412410987</td>
-                    <td>Kandy</td>
-                    <td>
-                        <div class="action-icons">
-                            <i class="ri-edit-line" title="Edit"></i>
-                            <i class="ri-file-list-line" title="View Details"></i>
-                            <i class="ri-delete-bin-line" title="Delete"></i>
-                        </div>
-                    </td>
-                </tr>
-                <tr>
-                    <td>5</td>
-                    <td>BookWorm Negombo</td>
-                    <td>0412410988</td>
-                    <td>Negombo</td>
-                    <td>
-                        <div class="action-icons">
-                            <i class="ri-edit-line" title="Edit"></i>
-                            <i class="ri-file-list-line" title="View Details"></i>
-                            <i class="ri-delete-bin-line" title="Delete"></i>
-                        </div>
-                    </td>
-                </tr>
-                <tr>
-                    <td>6</td>
-                    <td>BookWorm Jaffna</td>
-                    <td>0412410989</td>
-                    <td>Jaffna</td>
-                    <td>
-                        <div class="action-icons">
-                            <i class="ri-edit-line" title="Edit"></i>
-                            <i class="ri-file-list-line" title="View Details"></i>
-                            <i class="ri-delete-bin-line" title="Delete"></i>
-                        </div>
-                    </td>
-                </tr>
-                <tr>
-                    <td>7</td>
-                    <td>BookWorm Trincomalee</td>
-                    <td>0412410990</td>
-                    <td>Trincomalee</td>
-                    <td>
-                        <div class="action-icons">
-                            <i class="ri-edit-line" title="Edit"></i>
-                            <i class="ri-file-list-line" title="View Details"></i>
-                            <i class="ri-delete-bin-line" title="Delete"></i>
-                        </div>
-                    </td>
-                </tr>
-                <tr>
-                    <td>8</td>
-                    <td>BookWorm Anuradhapura</td>
-                    <td>0412410991</td>
-                    <td>Anuradhapura</td>
-                    <td>
-                        <div class="action-icons">
-                            <i class="ri-edit-line" title="Edit"></i>
-                            <i class="ri-file-list-line" title="View Details"></i>
-                            <i class="ri-delete-bin-line" title="Delete"></i>
-                        </div>
-                    </td>
-                </tr>
-                <tr>
-                    <td>9</td>
-                    <td>BookWorm Batticaloa</td>
-                    <td>0412410992</td>
-                    <td>Batticaloa</td>
-                    <td>
-                        <div class="action-icons">
-                            <i class="ri-edit-line" title="Edit"></i>
-                            <i class="ri-file-list-line" title="View Details"></i>
-                            <i class="ri-delete-bin-line" title="Delete"></i>
-                        </div>
-                    </td>
-                </tr>
-                <tr>
-                    <td>10</td>
-                    <td>BookWorm Kurunegala</td>
-                    <td>0412410993</td>
-                    <td>Kurunegala</td>
                     <td>
                         <div class="action-icons">
                             <i class="ri-edit-line" title="Edit"></i>

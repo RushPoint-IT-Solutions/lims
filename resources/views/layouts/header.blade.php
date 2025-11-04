@@ -24,6 +24,8 @@
     <!-- custom Css-->
     <link href="{{asset('/assets/css/custom.min.css')}}" rel="stylesheet" type="text/css" />
 
+    <link href="{{asset('/assets/css/style.css')}}" rel="stylesheet" type="text/css" />
+
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
  
     {{-- <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet" type="text/css"> --}}
@@ -160,73 +162,25 @@
                         {{-- <li class="menu-title"><span data-key="t-menu">Menu</span></li> --}}
 
                         <li class="nav-item">
-                            <a class="nav-link menu-link" href="{{url('/')}}">
-                                <i class="ri-dashboard-2-line"></i> <span data-key="t-dashboards">Dashboard</span>
-                            </a>
-                        </li>
-
-                        <li class="nav-item">
                             <a class="nav-link menu-link" href="{{ url('reservation') }}">
                                 <i class="ri-calendar-check-line"></i>
                                 <span data-key="t-dashboards">Reservation</span>
                             </a>
                         </li>
 
-
-                        <li class="nav-item">
-                            <a class="nav-link menu-link" href="{{ url('acquisition') }}">
-                                <i class="ri-hand-coin-line"></i> <span data-key="t-dashboards">Acquisition</span>
-                            </a>
-                        </li>
-
-                        <li class="nav-item">
-                            <a class="nav-link menu-link" href="{{ url('catalog_metadata') }}">
-                                <i class="ri-folder-2-line"></i> 
-                                <span data-key="t-dashboards">Cataloging/Metadata</span>
-                            </a>
-                        </li>
-
-                        <li class="nav-item">
-                            <a class="nav-link menu-link" href="{{ url('circulation') }}">
-                                <i class="ri-book-2-line"></i>
-                                <span data-key="t-dashboards">Circulation/Borrowing</span>
-                            </a>
-                        </li>
-
-                        <li class="nav-item">
-                            <a class="nav-link menu-link" href="{{ url('membership') }}">
-                                <i class="ri-team-line"></i>
-                                <span data-key="t-dashboards">Membership Management</span>
-                            </a>
-                        </li>
-
-                        <li class="nav-item">
+                        {{-- <li class="nav-item">
                             <a class="nav-link menu-link" href="{{ url('report_analytics') }}">
                                 <i class="ri-bar-chart-2-line"></i>
                                 <span data-key="t-dashboards">Report Analytics</span>
                             </a>
-                        </li>
+                        </li> --}}
 
-                        <li class="nav-item">
+                        {{-- <li class="nav-item">
                             <a class="nav-link menu-link" href="{{ url('penalty_computation') }}">
                                 <i class="ri-money-dollar-circle-line"></i>
                                 <span data-key="t-dashboards">Penalty Computation</span>
                             </a>
-                        </li>
-
-                        <li class="nav-item">
-                            <a class="nav-link menu-link" href="{{ url('admin_configuration') }}">
-                                <i class="ri-settings-3-line"></i>
-                                <span data-key="t-dashboards">Admin Configuration</span>
-                            </a>
-                        </li>
-
-                        <li class="nav-item">
-                            <a class="nav-link menu-link" href="{{ url('reports') }}">
-                                <i class="ri-file-chart-line"></i>
-                                <span data-key="t-dashboards">Reports</span>
-                            </a>
-                        </li>
+                        </li> --}}
 
                         <li class="nav-item">
                             <a class="nav-link menu-link" href="{{ url('e_resources') }}">
@@ -292,23 +246,68 @@
                         @if(auth()->user()->role == "Admin")
                             <li class="menu-title"><span data-key="t-menu">Admin</span></li>
                             <li class="nav-item">
+                                <a class="nav-link menu-link" href="{{url('/')}}">
+                                    <i class="ri-dashboard-2-line"></i> <span data-key="t-dashboards">Dashboard</span>
+                                </a>
+                            </li>
+                            
+                            <li class="nav-item">
                                 <a class="nav-link menu-link" href="{{url('/racks')}}">
                                     <span class="mdi mdi-file-cabinet"></span>&nbsp;<span data-key="t-racks">Racks</span>
                                 </a>
                             </li>
+
                             <li class="nav-item">
                                 <a class="nav-link menu-link" href="{{url('/authors')}}">
                                     <span class="mdi mdi-account-edit"></span>&nbsp;<span data-key="t-authors">Authors</span>
                                 </a>
                             </li>
-                            <li class="nav-item">
+
+                            {{-- <li class="nav-item">
                                 <a class="nav-link menu-link" href="{{url('/users')}}">
                                     <i class="ri-team-fill"></i> <span data-key="t-users">Users</span>
                                 </a>
-                            </li>
+                            </li> --}}
+
                             <li class="nav-item">
-                                <a class="nav-link menu-link" href="{{url('/reports')}}">
-                                    <i class="ri-file-list-3-fill"></i> <span data-key="t-reports">Reports</span>
+                                <a class="nav-link menu-link" href="{{ url('catalog_metadata') }}">
+                                    <i class="ri-folder-2-line"></i> 
+                                    <span data-key="t-dashboards">Catalog</span>
+                                </a>
+                            </li>
+
+                            <li class="nav-item">
+                                <a class="nav-link menu-link" href="{{ url('acquisition') }}">
+                                    <i class="ri-hand-coin-line"></i> <span data-key="t-dashboards">Acquisition</span>
+                                </a>
+                            </li>
+
+                            <li class="nav-item">
+                                <a class="nav-link menu-link" href="{{ url('reports') }}">
+                                    <i class="ri-file-chart-line"></i>
+                                    <span data-key="t-dashboards">Reports</span>
+                                </a>
+                            </li>
+                            
+
+                            <li class="nav-item">
+                                <a class="nav-link menu-link" href="{{ url('circulation') }}">
+                                    <i class="ri-book-2-line"></i>
+                                    <span data-key="t-dashboards">Circulation Management</span>
+                                </a>
+                            </li>
+
+                            <li class="nav-item">
+                                <a class="nav-link menu-link" href="{{ url('users') }}">
+                                    <i class="ri-team-line"></i>
+                                    <span data-key="t-dashboards">Users Management</span>
+                                </a>
+                            </li>
+
+                            <li class="nav-item">
+                                <a class="nav-link menu-link" href="{{ url('admin_configuration') }}">
+                                    <i class="ri-settings-3-line"></i>
+                                    <span data-key="t-dashboards">Admin Configuration</span>
                                 </a>
                             </li>
                         @endif

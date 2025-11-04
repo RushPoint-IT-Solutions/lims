@@ -2,61 +2,9 @@
 
 @section('css')
 <style>
-    .dashboard-card {
-        border-radius: 10px;
-        padding: 20px;
-        background: white;
-        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        position: relative;
-        overflow: hidden;
-    }
-    
-    .dashboard-card .icon-circle {
-        position: absolute;
-        right: 20px;
-        top: 20px;
-        width: 45px;
-        height: 45px;
-        border-radius: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        background: #d07e0a;
-    }
-    
-    .dashboard-card .icon-circle i {
-        color: white;
-        font-size: 20px;
-    }
-    
-    .dashboard-card h2 {
-        font-size: 32px;
-        font-weight: 700;
-        margin-bottom: 5px;
-    }
-    
-    .dashboard-card p {
-        color: #6c757d;
-        margin: 0;
-        font-size: 14px;
-    }
-    
-    .section-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 20px;
-    }
-    
-    .section-header h5 {
-        font-size: 18px;
-        font-weight: 600;
-        margin: 0;
-    }
-    
     .table-responsive {
         background: white;
-        border-radius: 10px;
+        border-radius: 5px;
         padding: 20px;
         box-shadow: 0 2px 4px rgba(0,0,0,0.1);
     }
@@ -82,7 +30,7 @@
     
     .resource-card {
         background: white;
-        border-radius: 10px;
+        border-radius: 5px;
         padding: 20px;
         box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         margin-bottom: 15px;
