@@ -1,6 +1,7 @@
 @extends('layouts.header')
 
 @section('css')
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
 <style>
     .page-header {
         display: flex;
@@ -181,48 +182,39 @@
 
 @section('content')
 <div class="page-header">
-    <h4>Item Types</h4>
+    <h4>Rooms</h4>
     <div class="header-actions">
-        <a href="#" class="add-branch-btn" data-bs-toggle="modal" data-bs-target="#addTypeModal">
-            <i class="ri-add-circle-line"></i> Add Item type
+        <a href="#" class="add-branch-btn" data-bs-toggle="modal" data-bs-target="#addRoomModal">
+            <i class="ri-add-circle-line"></i> Add Room
         </a>
         <!-- <input type="text" class="search-input" placeholder="Search by ID or Name"> -->
-        <form method="GET" action="{{ route('types') }}" class="custom_form mb-3" enctype="multipart/form-data" onsubmit="show()">
+        <form method="GET" action="{{ route('rooms') }}" class="custom_form mb-3" enctype="multipart/form-data" onsubmit="show()">
             <input type="text" class="search-input" placeholder="Search by ID or Name" name="search" value="{{ request('search') }}"> 
         </form>
     </div>
 </div>
-
 <div class="table-responsive">
     <table class="branch-table">
         <thead>
             <tr>
-                <th>Code</th>
+                <th>Name</th>
                 <th>Description</th>
-                <th>Not for Loan</th>
-                <th>Charges</th>
+                <th>Floor</th>
                 <th>Action</th>
             </tr>
         </thead>
         <tbody>
-            @forelse ($types as $type)
+            @forelse ($rooms as $room)
                 <tr>
-                    <td>{{ $type->code }}</td>
-                    <td>{{ $type->description }}</td>
-                    <td>
-                        @if($type->loan == 'Yes')
-                            Yes
-                        @else
-                            No
-                        @endif
-                    </td>
-                    <td>{{ $type->charge ?? '0.00' }}</td>
+                    <td>{{ $room->name }}</td>
+                    <td>{{ $room->description }}</td>
+                    <td>{{ $room->floor }}</td>
                     <td>
                         <div class="action-icons">
-                            <button title="Edit Type" data-bs-toggle="modal" data-bs-target="#editType{{$type->id}}">
+                            <button title="Edit Room" data-bs-toggle="modal" data-bs-target="#editRoom{{$room->id}}">
                                 <i class="ri-edit-line"></i>
                             </button>
-                            <form method="POST" class="d-inline-block" action="{{url('delete_type/'.$type->id)}}" onsubmit="show()" enctype="multipart/form-data">
+                            <form method="POST" class="d-inline-block" action="{{url('delete_room/'.$room->id)}}" onsubmit="show()" enctype="multipart/form-data">
                                 @csrf
                                 <button type="button" class="btn btn-sm btn-outline-danger deleteBtn">
                                     <i class="ri-delete-bin-line"></i>
@@ -234,82 +226,80 @@
                         </div>
                     </td>
                 </tr>
-                @include('settings.types.edit')
+                @include('settings.rooms.edit') 
             @empty
                 <tr>
-                    <td colspan="5" class="text-center">No Item Types Found.</td>
+                    <td colspan="5" class="text-center">No Rooms Found.</td>
                 </tr>
             @endforelse 
         </tbody>
     </table>
-    {{ $types->appends(request()->query())->links() }} 
+    {{ $rooms->appends(request()->query())->links() }} 
 </div>
 
-<div class="modal fade" id="addTypeModal" tabindex="-1">
+<div class="modal fade select2-modal" id="addRoomModal" tabindex="-1">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header modal-header-branch">
-                <h5 class="modal-title">Add Item Type</h5>
+                <h5 class="modal-title">Add Room</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
             <div class="modal-body">
-                <form id="addTypeForm" method="POST" action="{{ url('/new_type') }}" onsubmit="show()" enctype="multipart/form-data">
+                <form id="addRoomForm" method="POST" action="{{ url('/new_room') }}" onsubmit="show()" enctype="multipart/form-data">
                     @csrf
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label>Code&nbsp;<span class="text-danger">*</span></label>
-                                <input type="text" name="code" class="form-control" placeholder="Enter Code" required>
+                                <label>Name&nbsp;<span class="text-danger">*</span></label>
+                                <input type="text" name="name" class="form-control" placeholder="Enter Room" required>
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label>Description&nbsp;<span class="text-danger">*</span></label>
-                                <input type="text" name="description" class="form-control" placeholder="Enter Description" required>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label>Charge</label>
-                                <input type="text" name="charge" class="form-control" placeholder="0.00">
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-check mb-2">
-                                <input type="hidden" name="loan" value="No" checked>
-                                <input class="form-check-input" type="checkbox" name="loan" id="formCheckboxRight1" value="Yes">
-                                <label class="form-check-label" for="formCheckboxRight1">
-                                    Not for Loan
-                                </label><br>
-                                <span>(if checked, no item of this type can be issued. If not checked, every item of this type can be issued unless notforloan is set for a specific item)</span>   
+                                <label>Floor&nbsp;<span class="text-danger">*</span></label>
+                                <select name="floor" id="floor" class="form-control select2" required>
+                                    <option value="">-- Select Floor --</option>
+                                    <option value="1st Floor">1st Floor</option>
+                                    <option value="2nd Floor">2nd Floor</option>
+                                    <option value="3rd Floor">3rd Floor</option>
+                                </select>
                             </div>
                         </div>
                         <div class="form-group">
-                            <label>Summary</label>
-                            <textarea name="summary" class="form-control" placeholder="Enter Summary"></textarea>
+                            <label>Description</label>
+                            <textarea name="description" class="form-control" placeholder="Enter Description"></textarea>
                         </div>
                     </div>
                 </form>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                <button type="submit" class="btn btn-submit" onclick="submitBranch()">Add Item Type</button>
+                <button type="submit" class="btn btn-submit" onclick="submitBranch()">Add Room</button>
             </div>
         </div>
     </div>
 </div>
+
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
     function submitBranch() {
-        const form = document.getElementById('addTypeForm');
+        const form = document.getElementById('addRoomForm');
         if (form.checkValidity()) {
             form.submit();
         } else {
             form.reportValidity();
         }
     }
+
+    $(document).on('shown.bs.modal', '.select2-modal', function () {
+        const $modal = $(this);
+        $modal.find('.select2').select2({
+            dropdownParent: $modal
+        });
+    });
 
     $(document).ready(function() {
         $(".deleteBtn").on('click', function() {
@@ -332,4 +322,3 @@
     });
 </script>    
 @endsection
-
