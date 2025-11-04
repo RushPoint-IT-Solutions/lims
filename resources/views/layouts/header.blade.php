@@ -239,6 +239,9 @@
                                             <a href="{{ url('types') }}" class="nav-link" data-key="t-types">Item Types</a>
                                         </li>
                                         <li class="nav-item">
+                                            <a href="{{url('/rooms')}}" class="nav-link" data-key="t-rooms">Rooms</a>
+                                        </li>
+                                        <li class="nav-item">
                                             <a href="{{url('/racks')}}" class="nav-link" data-key="t-racks">Racks</a>
                                         </li>
                                         <li class="nav-item">

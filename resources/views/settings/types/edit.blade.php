@@ -2,7 +2,7 @@
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header modal-header-branch">
-                <h5 class="modal-title">Edit Branch</h5>
+                <h5 class="modal-title">Edit Item Type</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
             <form id="editBranchForm" method="POST" action="{{url('update_type/'.$type->id)}}" onsubmit="show()" enctype="multipart/form-data">

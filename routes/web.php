@@ -43,6 +43,12 @@ Route::group(['middleware' => ['auth']], function () {
     Route::post('/new_type', 'TypeController@store')->name('types.store');
     Route::post('update_type/{id}', 'TypeController@update');
     Route::post('delete_type/{id}', 'TypeController@destroy')->name('delete_type');
+
+    // Types
+    Route::get('/rooms', 'RoomController@index')->name('rooms');
+    Route::post('/new_room', 'RoomController@store')->name('rooms.store');
+    Route::post('update_room/{id}', 'RoomController@update');
+    Route::post('delete_room/{id}', 'RoomController@destroy')->name('delete_room');
 });
 
 
