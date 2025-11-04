@@ -159,34 +159,66 @@
                 <div class="container-fluid">
                     <div id="two-column-menu"></div>
                     <ul class="navbar-nav" id="navbar-nav">
-                        {{-- <li class="menu-title"><span data-key="t-menu">Menu</span></li> --}}
-
+                        <li class="menu-title"><span data-key="t-menu">Menu</span></li>
                         <li class="nav-item">
-                            <a class="nav-link menu-link" href="{{ url('reservation') }}">
-                                <i class="ri-calendar-check-line"></i>
-                                <span data-key="t-dashboards">Reservation</span>
+                            <a class="nav-link menu-link" href="{{url('/')}}">
+                                <i class="ri-dashboard-2-line"></i> <span data-key="t-dashboards">Dashboard</span>
                             </a>
                         </li>
+                        
 
 
-                        <li class="nav-item">
+                        {{-- <li class="nav-item">
                             <a class="nav-link menu-link" href="{{ url('acquisition') }}">
                                 <i class="ri-hand-coin-line"></i> <span data-key="t-dashboards">Acquisition</span>
                             </a>
-                        </li>
+                        </li> --}}
 
-                        <li class="nav-item">
+                        {{-- <li class="nav-item">
                             <a class="nav-link menu-link" href="{{ url('catalog_metadata') }}">
                                 <i class="ri-folder-2-line"></i> 
-                                <span data-key="t-dashboards">Cataloging/Metadata</span>
+                                <span data-key="t-dashboards">Cataloging/ Metadata</span>
                             </a>
-                        </li>
-
+                        </li> --}}
                         <li class="nav-item">
+                            <a class="nav-link menu-link collapsed" href="#sidebarMetadata" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarMetadata">
+                                <i class="ri-folder-2-line"></i><span data-key="t-metadata">Cataloging/ Metadata</span>
+                            </a>
+                            <div class="menu-dropdown collapse" id="sidebarMetadata">
+                                <ul class="nav nav-sm flex-column">
+                                    <li class="nav-item">
+                                        <a href="{{ url('catalog_metadata') }}" class="nav-link" data-key="t-cataloging">Cataloging</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="{{ url('frameworks') }}" class="nav-link" data-key="t-frameworks">MARC Frameworks</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </li>
+                        {{-- <li class="nav-item">
                             <a class="nav-link menu-link" href="{{ url('circulation') }}">
                                 <i class="ri-book-2-line"></i>
                                 <span data-key="t-dashboards">Circulation/Borrowing</span>
                             </a>
+                        </li> --}}
+
+                        <li class="nav-item">
+                            <a class="nav-link menu-link collapsed" href="#sidebarCirculation" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarCirculation">
+                                <i class="ri-folder-2-line"></i><span data-key="t-circulation">Circulation/ Borrowing</span>
+                            </a>
+                            <div class="menu-dropdown collapse" id="sidebarCirculation">
+                                <ul class="nav nav-sm flex-column">
+                                    <li class="nav-item">
+                                        <a href="{{ url('circulation') }}" class="nav-link" data-key="t-borrowing">Borrowing</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="{{ url('reservation') }}" class="nav-link" data-key="t-reservation">Reserve Books</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="{{ url('reservation') }}" class="nav-link" data-key="t-reservation">Reserve Rooms</a>
+                                    </li>
+                                </ul>
+                            </div>
                         </li>
 
                         <li class="nav-item">
@@ -221,18 +253,12 @@
                             </a>
                         </li>
                         @if(auth()->user()->role == "Admin")
-                            <li class="menu-title"><span data-key="t-menu">Admin</span></li>
-                            <li class="nav-item">
-                                <a class="nav-link menu-link" href="{{url('/')}}">
-                                    <i class="ri-dashboard-2-line"></i> <span data-key="t-dashboards">Dashboard</span>
-                                </a>
-                            </li>
-                            
+                            <li class="menu-title"><span data-key="t-menu">Admin</span></li>                            
                             <li class="nav-item">
                                 <a class="nav-link menu-link collapsed" href="#sidebarSettings" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarSettings">
                                     <i class="ri-rocket-line"></i> <span data-key="t-settings">Settings</span>
                                 </a>
-                                <div class="menu-dropdown collapse" id="sidebarSettings" style="">
+                                <div class="menu-dropdown collapse" id="sidebarSettings">
                                     <ul class="nav nav-sm flex-column">
                                         <li class="nav-item">
                                             <a href="{{ url('branches') }}" class="nav-link" data-key="t-branches">Branches</a>
