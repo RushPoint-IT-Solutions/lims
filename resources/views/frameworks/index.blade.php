@@ -1,7 +1,6 @@
 @extends('layouts.header')
 
 @section('css')
-<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
 <style>
     .page-header {
         display: flex;
@@ -182,10 +181,10 @@
 
 @section('content')
 <div class="page-header">
-    <h4>Rooms</h4>
+    <h4>MARC Frameworks</h4>
     <div class="header-actions">
-        <a href="#" class="add-branch-btn" data-bs-toggle="modal" data-bs-target="#addRoomModal">
-            <i class="ri-add-circle-line"></i> Add Room
+        <a href="#" class="add-branch-btn" data-bs-toggle="modal" data-bs-target="#addFrameworkModal">
+            <i class="ri-add-circle-line"></i> Add Framework
         </a>
         <!-- <input type="text" class="search-input" placeholder="Search by ID or Name"> -->
         <form method="GET" action="{{ route('frameworks') }}" class="custom_form mb-3" enctype="multipart/form-data" onsubmit="show()">
@@ -197,109 +196,85 @@
     <table class="branch-table">
         <thead>
             <tr>
-                <th>Name</th>
+                <th>Code</th>
                 <th>Description</th>
-                <th>Floor</th>
                 <th>Action</th>
             </tr>
         </thead>
         <tbody>
-            @forelse ($rooms as $room)
+            @forelse ($frameworks as $framework)
                 <tr>
-                    <td>{{ $room->name }}</td>
-                    <td>{{ $room->description }}</td>
-                    <td>{{ $room->floor }}</td>
+                    <td>{{ $framework->code }}</td>
+                    <td>{{ $framework->description }}</td>
                     <td>
                         <div class="action-icons">
-                            <button title="Edit Room" data-bs-toggle="modal" data-bs-target="#editRoom{{$room->id}}">
+                            <button title="Edit Framework" data-bs-toggle="modal" data-bs-target="#editFramework{{$framework->id}}">
                                 <i class="ri-edit-line"></i>
                             </button>
-                            <form method="POST" class="d-inline-block" action="{{url('delete_room/'.$room->id)}}" onsubmit="show()" enctype="multipart/form-data">
+                            <form method="POST" class="d-inline-block" action="{{url('delete_framework/'.$framework->id)}}" onsubmit="show()" enctype="multipart/form-data">
                                 @csrf
                                 <button type="button" class="btn btn-sm btn-outline-danger deleteBtn">
                                     <i class="ri-delete-bin-line"></i>
                                 </button>
                             </form>
-                            <!-- <i class="ri-edit-line" title="Edit"></i> -->
-                            <!-- <i class="ri-file-list-line" title="View Details"></i>
-                            <i class="ri-delete-bin-line" title="Delete"></i> -->
                         </div>
                     </td>
                 </tr>
-                @include('settings.rooms.edit') 
+                @include('frameworks.edit')
             @empty
                 <tr>
-                    <td colspan="5" class="text-center">No Rooms Found.</td>
+                    <td colspan="5" class="text-center">No Frameworks Found.</td>
                 </tr>
             @endforelse 
         </tbody>
     </table>
-    {{ $rooms->appends(request()->query())->links() }} 
+    {{ $frameworks->appends(request()->query())->links() }} 
 </div>
 
-<div class="modal fade select2-modal" id="addRoomModal" tabindex="-1">
+<div class="modal fade select2-modal" id="addFrameworkModal" tabindex="-1">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header modal-header-branch">
-                <h5 class="modal-title">Add Room</h5>
+                <h5 class="modal-title">Add Framework</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
             <div class="modal-body">
-                <form id="addRoomForm" method="POST" action="{{ url('/new_room') }}" onsubmit="show()" enctype="multipart/form-data">
+                <form id="addFrameworkForm" method="POST" action="{{ url('/new_framework') }}" onsubmit="show()" enctype="multipart/form-data">
                     @csrf
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label>Name&nbsp;<span class="text-danger">*</span></label>
-                                <input type="text" name="name" class="form-control" placeholder="Enter Room" required>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label>Floor&nbsp;<span class="text-danger">*</span></label>
-                                <select name="floor" id="floor" class="form-control select2" required>
-                                    <option value="">-- Select Floor --</option>
-                                    <option value="1st Floor">1st Floor</option>
-                                    <option value="2nd Floor">2nd Floor</option>
-                                    <option value="3rd Floor">3rd Floor</option>
-                                </select>
+                                <label>Code&nbsp;<span class="text-danger">*</span></label>
+                                <input type="text" name="code" class="form-control" placeholder="Enter code" required>
                             </div>
                         </div>
                         <div class="form-group">
-                            <label>Description</label>
-                            <textarea name="description" class="form-control" placeholder="Enter Description"></textarea>
+                            <label>Description&nbsp;<span class="text-danger">*</span></label>
+                            <textarea name="description" class="form-control" placeholder="Enter Description" required></textarea>
                         </div>
                     </div>
                 </form>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                <button type="submit" class="btn btn-submit" onclick="submitBranch()">Add Room</button>
+                <button type="submit" class="btn btn-submit" onclick="submitFramework()">Add Framework</button>
             </div>
         </div>
     </div>
 </div>
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
-    function submitBranch() {
-        const form = document.getElementById('addRoomForm');
+    function submitFramework() {
+        const form = document.getElementById('addFrameworkForm');
         if (form.checkValidity()) {
             form.submit();
         } else {
             form.reportValidity();
         }
     }
-
-    $(document).on('shown.bs.modal', '.select2-modal', function () {
-        const $modal = $(this);
-        $modal.find('.select2').select2({
-            dropdownParent: $modal
-        });
-    });
 
     $(document).ready(function() {
         $(".deleteBtn").on('click', function() {
@@ -320,5 +295,5 @@
             });
         })
     });
-</script>    
+</script>  
 @endsection

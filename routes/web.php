@@ -44,11 +44,17 @@ Route::group(['middleware' => ['auth']], function () {
     Route::post('update_type/{id}', 'TypeController@update');
     Route::post('delete_type/{id}', 'TypeController@destroy')->name('delete_type');
 
-    // Types
+    // Rooms
     Route::get('/rooms', 'RoomController@index')->name('rooms');
     Route::post('/new_room', 'RoomController@store')->name('rooms.store');
     Route::post('update_room/{id}', 'RoomController@update');
     Route::post('delete_room/{id}', 'RoomController@destroy')->name('delete_room');
+
+    // Frameworks 
+    Route::get('/frameworks', 'FrameworkController@index')->name('frameworks');
+    Route::post('/new_framework', 'FrameworkController@store')->name('frameworks.store');
+    Route::post('update_framework/{id}', 'FrameworkController@update');
+    Route::post('delete_framework/{id}', 'FrameworkController@destroy')->name('delete_framework');
 });
 
 
@@ -81,8 +87,8 @@ Route::get('/catalog_metadata', 'CatalogMetadataController@index')->name('catalo
 //circulation
 Route::get('/circulation', 'CirculationController@index')->name('circulation');
 
-//membership
-Route::get('/membership', 'MembershipController@index')->name('membership');
+//user
+Route::get('/users', 'UserController@index')->name('users');
 
 //report and analytics
 Route::get('/report_analytics', 'ReportAnalyticsController@index')->name('report_analytics');

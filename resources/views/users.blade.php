@@ -2,58 +2,6 @@
 
 @section('css')
 <style>
-    .dashboard-card {
-        border-radius: 10px;
-        padding: 20px;
-        background: white;
-        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        position: relative;
-        overflow: hidden;
-    }
-    
-    .dashboard-card .icon-circle {
-        position: absolute;
-        right: 20px;
-        top: 20px;
-        width: 45px;
-        height: 45px;
-        border-radius: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        background: #d07e0a;
-    }
-    
-    .dashboard-card .icon-circle i {
-        color: white;
-        font-size: 20px;
-    }
-    
-    .dashboard-card h2 {
-        font-size: 32px;
-        font-weight: 700;
-        margin-bottom: 5px;
-    }
-    
-    .dashboard-card p {
-        color: #6c757d;
-        margin: 0;
-        font-size: 14px;
-    }
-    
-    .section-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 20px;
-    }
-    
-    .section-header h5 {
-        font-size: 18px;
-        font-weight: 600;
-        margin: 0;
-    }
-    
     .add-new-btn {
         background: #4a90e2;
         color: white;
@@ -72,7 +20,7 @@
     
     .table-responsive {
         background: white;
-        border-radius: 10px;
+        border-radius: 5px;
         padding: 20px;
         box-shadow: 0 2px 4px rgba(0,0,0,0.1);
     }
@@ -263,9 +211,9 @@
                 <div class="section-header">
                     <h5>Member Records</h5>
                     <div>
-                        <a href="#" class="add-new-btn" data-bs-toggle="modal" data-bs-target="#registerModal">
+                        {{-- <a href="#" class="add-new-btn" data-bs-toggle="modal" data-bs-target="#registerModal">
                             <i class="ri-user-add-line"></i> REGISTER MEMBER
-                        </a>
+                        </a> --}}
                         {{-- It's for synchronizing member data between the campus system and the library system. 
                         for example it pulls updated information from the campus SSO (like new students, faculty changes, department updates) --}}
                         <a href="#" class="add-new-btn ms-2" style="background: #27ae60;" data-bs-toggle="modal" data-bs-target="#ssoSyncModal">
