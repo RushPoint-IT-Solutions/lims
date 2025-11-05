@@ -244,7 +244,12 @@
                             </a>
                         </li>
 
-                       
+                       <li class="nav-item">
+                            <a class="nav-link menu-link" href="{{ url('e-books') }}">
+                                <i class="ri-book-open-line"></i>
+                                <span data-key="t-dashboards">E-Books</span>
+                            </a>
+                        </li>
 
                         <li class="nav-item">
                             <a class="nav-link menu-link" href="{{ url('e_resources') }}">
@@ -252,6 +257,8 @@
                                 <span data-key="t-dashboards">E-Resources Access</span>
                             </a>
                         </li>
+                    
+
                         @if(auth()->user()->role == "Admin")
                             <li class="menu-title"><span data-key="t-menu">Admin</span></li>                            
                             <li class="nav-item">

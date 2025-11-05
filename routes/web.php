@@ -108,4 +108,7 @@ Route::get('/reports', 'ReportsController@index')->name('reports');
 //e-resources
 Route::get('/e_resources', 'EResourcesController@index')->name('e_resources');
 
+//e-resources
+Route::get('/e-books', 'EBooksController@index')->name('e-books');
+
 
