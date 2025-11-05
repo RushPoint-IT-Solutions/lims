@@ -15,7 +15,7 @@
                         <div class="col-md-9">
                             <div class="search">
                                 <input type="text" class="form-control" placeholder="Search Racks" name="search" value="{{ request('search') }}"> 
-                                <button class="btn btn-sm btn-primary">Search</button>
+                                <button class="btn btn-sm btn-search btn-primary">Search</button>
                             </div>
                         </div>
                     </div>
