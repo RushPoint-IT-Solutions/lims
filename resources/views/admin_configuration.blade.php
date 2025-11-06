@@ -2,20 +2,8 @@
 
 @section('css')
 <style>
-    .add-new-btn {
-        background: #4a90e2;
-        color: white;
-        border: none;
-        padding: 8px 20px;
-        border-radius: 5px;
-        font-size: 14px;
-        text-decoration: none;
-        display: inline-block;
-    }
-    
-    .add-new-btn:hover {
-        background: #357abd;
-        color: white;
+    .btn-md {
+        border: none !important;
     }
     
     .config-card {
@@ -38,7 +26,7 @@
         border-radius: 5px;
         padding: 20px;
         box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        height: 100%;
+        height: 63%;
         display: flex;
         flex-direction: column;
     }
@@ -212,39 +200,6 @@
         gap: 8px;
     }
     
-    .action-btn {
-        padding: 6px 12px;
-        border-radius: 4px;
-        border: none;
-        background: #f8f9fa;
-        color: #6c757d;
-        cursor: pointer;
-        font-size: 13px;
-    }
-    
-    .action-btn:hover {
-        background: #e9ecef;
-        color: #495057;
-    }
-    
-    .action-btn.primary {
-        background: #4a90e2;
-        color: white;
-    }
-    
-    .action-btn.primary:hover {
-        background: #357abd;
-    }
-    
-    .action-btn.danger {
-        background: #dc3545;
-        color: white;
-    }
-    
-    .action-btn.danger:hover {
-        background: #c82333;
-    }
-    
     .status-active {
         background: #d1e7dd;
         color: #0f5132;
@@ -284,6 +239,59 @@
         flex: 1;
         overflow-y: auto;
         max-height: 400px;
+    }
+
+    /* Pagination Styles */
+    .pagination-wrapper {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-top: 20px;
+        padding-top: 15px;
+        border-top: 1px solid #e9ecef;
+    }
+
+    .pagination-info {
+        color: #6c757d;
+        font-size: 14px;
+    }
+
+    .pagination {
+        margin: 0;
+        display: flex;
+        list-style: none;
+        padding: 0;
+    }
+
+    .pagination .page-item {
+        margin: 0 2px;
+    }
+
+    .pagination .page-link {
+        color: #5a6c7d;
+        border: 1px solid #dee2e6;
+        padding: 6px 12px;
+        border-radius: 4px;
+        text-decoration: none;
+        display: block;
+    }
+
+    .pagination .page-item.active .page-link {
+        background-color: #0d6efd;
+        border-color: #0d6efd;
+        color: white;
+    }
+
+    .pagination .page-link:hover {
+        background-color: #e9ecef;
+        color: #0d6efd;
+    }
+
+    .pagination .page-item.disabled .page-link {
+        color: #6c757d;
+        background-color: #fff;
+        border-color: #dee2e6;
+        cursor: not-allowed;
     }
 </style>
 @endsection
@@ -339,82 +347,136 @@
     <!-- User Roles & Privileges -->
     <div class="row g-3 mb-4">
         <div class="col-xl-8">
-            <div class="previlages table-responsive">
-                <div class="section-header">
-                    <h5>User Roles & Privileges</h5>
-                    <a href="#" class="add-new-btn" data-bs-toggle="modal" data-bs-target="#addRoleModal">
-                        <i class="ri-add-line"></i> ADD NEW ROLE
-                    </a>
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="card-title d-flex justify-content-between mb-3">
+                        User Roles & Privileges
+                        <button type="button" class="btn btn-md btn-primary" data-bs-toggle="modal" data-bs-target="#addRoleModal">
+                            <i class="ri-add-line"></i> Add New Role
+                        </button>
+                    </h4>
+                    
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <div class="d-flex align-items-center gap-2">
+                            <span>Show</span>
+                            <select class="form-select form-select-sm" style="width: auto;">
+                                <option value="10">10</option>
+                                <option value="25">25</option>
+                                <option value="50">50</option>
+                                <option value="100">100</option>
+                            </select>
+                            <span>entries</span>
+                        </div>
+                        <div class="col-md-4">
+                            <form method="GET" action="#" class="custom_form" enctype="multipart/form-data">
+                                <div class="search">
+                                    <input type="text" class="form-control" placeholder="Search roles..." name="search" value="{{ request('search') }}"> 
+                                    <button class="btn btn-sm btn-primary">Search</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Role Name</th>
+                                    <th>Users Count</th>
+                                    <th>Permissions</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        <span class="role-badge role-admin">Admin</span>
+                                    </td>
+                                    <td><strong>3</strong></td>
+                                    <td><small class="text-muted">Full Access</small></td>
+                                    <td><span class="status-active">Active</span></td>
+                                    <td>
+                                        <button class="btn btn-outline-info btn-sm" title="Edit Permissions">
+                                            <i class="mdi mdi-pencil"></i>
+                                        </button>
+                                        <button class="btn btn-outline-primary btn-sm" title="View Users">
+                                            <i class="mdi mdi-account-group"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <span class="role-badge role-librarian">Librarian</span>
+                                    </td>
+                                    <td><strong>8</strong></td>
+                                    <td><small class="text-muted">Catalog, Circulation, Reports</small></td>
+                                    <td><span class="status-active">Active</span></td>
+                                    <td>
+                                        <button class="btn btn-outline-info btn-sm" title="Edit Permissions">
+                                            <i class="mdi mdi-pencil"></i>
+                                        </button>
+                                        <button class="btn btn-outline-primary btn-sm" title="View Users">
+                                            <i class="mdi mdi-account-group"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <span class="role-badge role-faculty">Faculty</span>
+                                    </td>
+                                    <td><strong>245</strong></td>
+                                    <td><small class="text-muted">Borrow, Reserve, View Catalog</small></td>
+                                    <td><span class="status-active">Active</span></td>
+                                    <td>
+                                        <button class="btn btn-outline-info btn-sm" title="Edit Permissions">
+                                            <i class="mdi mdi-pencil"></i>
+                                        </button>
+                                        <button class="btn btn-outline-primary btn-sm" title="View Users">
+                                            <i class="mdi mdi-account-group"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <span class="role-badge role-student">Student</span>
+                                    </td>
+                                    <td><strong>2,591</strong></td>
+                                    <td><small class="text-muted">Borrow, Reserve, View Catalog</small></td>
+                                    <td><span class="status-active">Active</span></td>
+                                    <td>
+                                        <button class="btn btn-outline-info btn-sm" title="Edit Permissions">
+                                            <i class="mdi mdi-pencil"></i>
+                                        </button>
+                                        <button class="btn btn-outline-primary btn-sm" title="View Users">
+                                            <i class="mdi mdi-account-group"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Pagination -->
+                    <div class="pagination-wrapper">
+                        <div class="pagination-info">
+                            Showing 1 to 4 of 4 entries
+                        </div>
+                        <nav>
+                            <ul class="pagination">
+                                <li class="page-item disabled">
+                                    <a class="page-link" href="#" tabindex="-1">Previous</a>
+                                </li>
+                                <li class="page-item active">
+                                    <a class="page-link" href="#">1</a>
+                                </li>
+                                <li class="page-item disabled">
+                                    <a class="page-link" href="#">Next</a>
+                                </li>
+                            </ul>
+                        </nav>
+                    </div>
                 </div>
-                <table class="table table-hover">
-                    <thead>
-                        <tr>
-                            <th>Role Name</th>
-                            <th>Users Count</th>
-                            <th>Permissions</th>
-                            <th>Status</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>
-                                <div>
-                                    <span class="role-badge role-admin">Admin</span>
-                                </div>
-                            </td>
-                            <td><strong>3</strong></td>
-                            <td><small class="text-muted">Full Access</small></td>
-                            <td><span class="status-active">Active</span></td>
-                            <td>
-                                <button class="action-btn" title="Edit Permissions"><i class="ri-edit-line"></i></button>
-                                <button class="action-btn" title="View Users"><i class="ri-group-line"></i></button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <div>
-                                    <span class="role-badge role-librarian">Librarian</span>
-                                </div>
-                            </td>
-                            <td><strong>8</strong></td>
-                            <td><small class="text-muted">Catalog, Circulation, Reports</small></td>
-                            <td><span class="status-active">Active</span></td>
-                            <td>
-                                <button class="action-btn" title="Edit Permissions"><i class="ri-edit-line"></i></button>
-                                <button class="action-btn" title="View Users"><i class="ri-group-line"></i></button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <div>
-                                    <span class="role-badge role-faculty">Faculty</span>
-                                </div>
-                            </td>
-                            <td><strong>245</strong></td>
-                            <td><small class="text-muted">Borrow, Reserve, View Catalog</small></td>
-                            <td><span class="status-active">Active</span></td>
-                            <td>
-                                <button class="action-btn" title="Edit Permissions"><i class="ri-edit-line"></i></button>
-                                <button class="action-btn" title="View Users"><i class="ri-group-line"></i></button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <div>
-                                    <span class="role-badge role-student">Student</span>
-                                </div>
-                            </td>
-                            <td><strong>2,591</strong></td>
-                            <td><small class="text-muted">Borrow, Reserve, View Catalog</small></td>
-                            <td><span class="status-active">Active</span></td>
-                            <td>
-                                <button class="action-btn" title="Edit Permissions"><i class="ri-edit-line"></i></button>
-                                <button class="action-btn" title="View Users"><i class="ri-group-line"></i></button>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
             </div>
         </div>
 
@@ -560,56 +622,126 @@
     <!-- Backup & Security -->
     <div class="row g-3 mb-4">
         <div class="col-xl-7">
-            <div class="config-card backup-history-wrapper">
-                <div class="section-header">
-                    <h5>Backup History</h5>
-                    <button class="action-btn primary">
-                        <i class="ri-play-line"></i> Run Backup Now
-                    </button>
-                </div>
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="card-title d-flex justify-content-between mb-3">
+                        Backup History
+                        <button type="button" class="btn btn-md btn-success">
+                            <i class="ri-play-line"></i> Run Backup Now
+                        </button>
+                    </h4>
 
-                <div class="backup-list">
-                    <div class="backup-item">
-                        <div class="backup-info">
-                            <div class="backup-name">backup_2025_11_01_02_00.sql</div>
-                            <div class="backup-details">Nov 01, 2025 - 2:00 AM • Size: 45.3 MB • Automatic</div>
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <div class="d-flex align-items-center gap-2">
+                            <span>Show</span>
+                            <select class="form-select form-select-sm" style="width: auto;">
+                                <option value="10">10</option>
+                                <option value="25">25</option>
+                                <option value="50">50</option>
+                                <option value="100">100</option>
+                            </select>
+                            <span>entries</span>
                         </div>
-                        <div class="backup-actions">
-                            <button class="action-btn primary" title="Restore"><i class="ri-upload-line"></i> Restore</button>
-                            <button class="action-btn" title="Download"><i class="ri-download-line"></i></button>
-                            <button class="action-btn danger" title="Delete"><i class="ri-delete-bin-line"></i></button>
+                        <div class="col-md-4">
+                            <form method="GET" action="#" class="custom_form" enctype="multipart/form-data">
+                                <div class="search">
+                                    <input type="text" class="form-control" placeholder="Search backups..." name="search" value="{{ request('search') }}"> 
+                                    <button class="btn btn-sm btn-primary">Search</button>
+                                </div>
+                            </form>
                         </div>
                     </div>
 
-                    <div class="backup-item">
-                        <div class="backup-info">
-                            <div class="backup-name">backup_2025_10_31_02_00.sql</div>
-                            <div class="backup-details">Oct 31, 2025 - 2:00 AM • Size: 44.8 MB • Automatic</div>
+                    <div class="backup-list">
+                        <div class="backup-item">
+                            <div class="backup-info">
+                                <div class="backup-name">backup_2025_11_01_02_00.sql</div>
+                                <div class="backup-details">Nov 01, 2025 - 2:00 AM • Size: 45.3 MB • Automatic</div>
+                            </div>
+                            <div class="backup-actions">
+                                <button class="btn btn-outline-success btn-sm" title="Restore">
+                                    <i class="mdi mdi-upload"></i>
+                                </button>
+                                <button class="btn btn-outline-info btn-sm" title="Download">
+                                    <i class="mdi mdi-download"></i>
+                                </button>
+                                <button class="btn btn-outline-danger btn-sm" title="Delete">
+                                    <i class="mdi mdi-delete"></i>
+                                </button>
+                            </div>
                         </div>
-                        <div class="backup-actions">
-                            <button class="action-btn primary" title="Restore"><i class="ri-upload-line"></i> Restore</button>
-                            <button class="action-btn" title="Download"><i class="ri-download-line"></i></button>
-                            <button class="action-btn danger" title="Delete"><i class="ri-delete-bin-line"></i></button>
+
+                        <div class="backup-item">
+                            <div class="backup-info">
+                                <div class="backup-name">backup_2025_10_31_02_00.sql</div>
+                                <div class="backup-details">Oct 31, 2025 - 2:00 AM • Size: 44.8 MB • Automatic</div>
+                            </div>
+                            <div class="backup-actions">
+                                <button class="btn btn-outline-success btn-sm" title="Restore">
+                                    <i class="mdi mdi-upload"></i>
+                                </button>
+                                <button class="btn btn-outline-info btn-sm" title="Download">
+                                    <i class="mdi mdi-download"></i>
+                                </button>
+                                <button class="btn btn-outline-danger btn-sm" title="Delete">
+                                    <i class="mdi mdi-delete"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="backup-item">
+                            <div class="backup-info">
+                                <div class="backup-name">backup_2025_10_30_02_00.sql</div>
+                                <div class="backup-details">Oct 30, 2025 - 2:00 AM • Size: 44.5 MB • Automatic</div>
+                            </div>
+                            <div class="backup-actions">
+                                <button class="btn btn-outline-success btn-sm" title="Restore">
+                                    <i class="mdi mdi-upload"></i>
+                                </button>
+                                <button class="btn btn-outline-info btn-sm" title="Download">
+                                    <i class="mdi mdi-download"></i>
+                                </button>
+                                <button class="btn btn-outline-danger btn-sm" title="Delete">
+                                    <i class="mdi mdi-delete"></i>
+                                </button>
+                            </div>
                         </div>
                     </div>
 
-                    <div class="backup-item">
-                        <div class="backup-info">
-                            <div class="backup-name">backup_2025_10_30_02_00.sql</div>
-                            <div class="backup-details">Oct 30, 2025 - 2:00 AM • Size: 44.5 MB • Automatic</div>
+                    <!-- Pagination -->
+                    <div class="pagination-wrapper">
+                        <div class="pagination-info">
+                            Showing 1 to 3 of 12 entries
                         </div>
-                        <div class="backup-actions">
-                            <button class="action-btn primary" title="Restore"><i class="ri-upload-line"></i> Restore</button>
-                            <button class="action-btn" title="Download"><i class="ri-download-line"></i></button>
-                            <button class="action-btn danger" title="Delete"><i class="ri-delete-bin-line"></i></button>
-                        </div>
+                        <nav>
+                            <ul class="pagination">
+                                <li class="page-item disabled">
+                                    <a class="page-link" href="#" tabindex="-1">Previous</a>
+                                </li>
+                                <li class="page-item active">
+                                    <a class="page-link" href="#">1</a>
+                                </li>
+                                <li class="page-item">
+                                    <a class="page-link" href="#">2</a>
+                                </li>
+                                <li class="page-item">
+                                    <a class="page-link" href="#">3</a>
+                                </li>
+                                <li class="page-item">
+                                    <a class="page-link" href="#">4</a>
+                                </li>
+                                <li class="page-item">
+                                    <a class="page-link" href="#">Next</a>
+                                </li>
+                            </ul>
+                        </nav>
                     </div>
                 </div>
             </div>
         </div>
 
         <div class="col-xl-5">
-            <div class="config-card">
+            <div class="config-card backup">
                 <div class="section-header">
                     <h5>Backup Schedule</h5>
                 </div>
@@ -629,14 +761,14 @@
                     <label>Retention Period (Days)</label>
                     <input type="number" value="30" placeholder="Keep backups for">
                 </div>
-                <div class="permission-toggle">
+                <div class="permission-toggle mb-1">
                     <span class="permission-label">Email Notification</span>
                     <label class="toggle-switch">
                         <input type="checkbox" checked>
                         <span class="toggle-slider"></span>
                     </label>
                 </div>
-                <button class="save-btn w-100">
+                <button class="save-btn w-100 mt-2">
                     <i class="ri-save-line"></i> Save Schedule
                 </button>
             </div>

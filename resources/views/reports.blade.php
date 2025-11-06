@@ -490,6 +490,12 @@
     .modal-body::-webkit-scrollbar-thumb:hover {
         background: #a8a8a8;
     }
+
+    @media (max-width: 480px) {
+        .tab-btn {
+            font-size: 7px;
+        }
+    }
 </style>
 @endsection
 
