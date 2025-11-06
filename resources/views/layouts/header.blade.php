@@ -103,7 +103,7 @@
             to { opacity: 1; }
         }
 
-        @keyframes slideUp {
+        @keyframes slideUps {
             from { 
                 opacity: 0;
                 transform: translate(-50%, -40%) scale(0.9);
@@ -124,7 +124,7 @@
             width: 90%;
             max-width: 420px;
             min-width: 320px;
-            animation: slideUp 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+            animation: slideUps 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
         }
 
         .library-modal-header {
@@ -722,7 +722,7 @@
                         
                         <li class="nav-item">
                             <a class="nav-link menu-link collapsed" href="#sidebarMetadata" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarMetadata">
-                                <i class="ri-folder-2-line"></i><span data-key="t-metadata">Cataloging/ Metadata</span>
+                                <i class="ri-folder-2-line"></i><span data-key="t-metadata">Catalog</span>
                             </a>
                             <div class="menu-dropdown collapse" id="sidebarMetadata">
                                 <ul class="nav nav-sm flex-column">
@@ -738,7 +738,7 @@
 
                         <li class="nav-item">
                             <a class="nav-link menu-link collapsed" href="#sidebarCirculation" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarCirculation">
-                                <i class="ri-folder-2-line"></i><span data-key="t-circulation">Circulation/ Borrowing</span>
+                                <i class="ri-folder-2-line"></i><span data-key="t-circulation">Circulation</span>
                             </a>
                             <div class="menu-dropdown collapse" id="sidebarCirculation">
                                 <ul class="nav nav-sm flex-column">
@@ -756,9 +756,9 @@
                         </li>
 
                         <li class="nav-item">
-                            <a class="nav-link menu-link" href="{{ url('membership') }}">
+                            <a class="nav-link menu-link" href="{{ url('users') }}">
                                 <i class="ri-team-line"></i>
-                                <span data-key="t-dashboards">Membership Management</span>
+                                <span data-key="t-dashboards">User Management</span>
                             </a>
                         </li>
 

@@ -2,6 +2,10 @@
 
 @section('css')
 <style>
+    .btn-md {
+        border: none !important;
+    }
+    
     .add-new-btn {
         background: #4a90e2;
         color: white;
@@ -79,63 +83,6 @@
         color: #c92a2a;
     }
     
-    .table-controls {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 15px;
-        flex-wrap: wrap;
-        gap: 10px;
-    }
-    
-    .entries-control {
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        font-size: 14px;
-    }
-    
-    .entries-control select {
-        padding: 5px 10px;
-        border: 1px solid #dee2e6;
-        border-radius: 5px;
-        font-size: 14px;
-    }
-    
-    .search-control {
-        position: relative;
-    }
-    
-    .search-control input {
-        padding: 5px 35px 5px 15px;
-        border: 1px solid #dee2e6;
-        border-radius: 5px;
-        font-size: 14px;
-        width: 250px;
-    }
-    
-    .search-control i {
-        position: absolute;
-        right: 12px;
-        top: 50%;
-        transform: translateY(-50%);
-        color: #6c757d;
-    }
-    
-    .table-footer {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-top: 15px;
-        flex-wrap: wrap;
-        gap: 10px;
-    }
-    
-    .pagination-info {
-        color: #6c757d;
-        font-size: 14px;
-    }
-    
     .action-btn {
         padding: 4px 8px;
         border-radius: 4px;
@@ -161,6 +108,59 @@
         color: #1976d2;
         display: inline-block;
         margin-left: 5px;
+    }
+
+    /* Pagination Styles */
+    .pagination-wrapper {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-top: 20px;
+        padding-top: 15px;
+        border-top: 1px solid #e9ecef;
+    }
+
+    .pagination-info {
+        color: #6c757d;
+        font-size: 14px;
+    }
+
+    .pagination {
+        margin: 0;
+        display: flex;
+        list-style: none;
+        padding: 0;
+    }
+
+    .pagination .page-item {
+        margin: 0 2px;
+    }
+
+    .pagination .page-link {
+        color: #5a6c7d;
+        border: 1px solid #dee2e6;
+        padding: 6px 12px;
+        border-radius: 4px;
+        text-decoration: none;
+        display: block;
+    }
+
+    .pagination .page-item.active .page-link {
+        background-color: #0d6efd;
+        border-color: #0d6efd;
+        color: white;
+    }
+
+    .pagination .page-link:hover {
+        background-color: #e9ecef;
+        color: #0d6efd;
+    }
+
+    .pagination .page-item.disabled .page-link {
+        color: #6c757d;
+        background-color: #fff;
+        border-color: #dee2e6;
+        cursor: not-allowed;
     }
 </style>
 @endsection
@@ -205,27 +205,25 @@
     </div>
 
     <!-- Main Members Section -->
-    <div class="row g-3 mb-4">
-        <div class="col-12">
-            <div class="table-responsive">
-                <div class="section-header">
-                    <h5>Member Records</h5>
+    <div class="col-lg-12 grid-margin stretch-card">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title d-flex justify-content-between mb-3">
+                    Member Records
                     <div>
-                        {{-- <a href="#" class="add-new-btn" data-bs-toggle="modal" data-bs-target="#registerModal">
-                            <i class="ri-user-add-line"></i> REGISTER MEMBER
-                        </a> --}}
-                        {{-- It's for synchronizing member data between the campus system and the library system. 
-                        for example it pulls updated information from the campus SSO (like new students, faculty changes, department updates) --}}
-                        <a href="#" class="add-new-btn ms-2" style="background: #27ae60;" data-bs-toggle="modal" data-bs-target="#ssoSyncModal">
-                            <i class="ri-refresh-line"></i> SYNC SSO
-                        </a>
+                        {{-- <button type="button" class="btn btn-md btn-primary" data-bs-toggle="modal" data-bs-target="#registerModal">
+                            <i class="ri-user-add-line"></i> Register Member
+                        </button> --}}
+                        <button type="button" class="btn btn-md btn-success ms-2" data-bs-toggle="modal" data-bs-target="#ssoSyncModal">
+                            <i class="ri-refresh-line"></i> Sync SSO
+                        </button>
                     </div>
-                </div>
+                </h4>
                 
-                <div class="table-controls">
-                    <div class="entries-control">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <div class="d-flex align-items-center gap-2">
                         <span>Show</span>
-                        <select>
+                        <select class="form-select form-select-sm" style="width: auto;">
                             <option value="10">10</option>
                             <option value="25">25</option>
                             <option value="50">50</option>
@@ -233,122 +231,167 @@
                         </select>
                         <span>entries</span>
                     </div>
-                    <div class="search-control">
-                        <input type="text" placeholder="Search by name, ID, email...">
-                        <i class="ri-search-line"></i>
+                    <div class="col-md-4">
+                        <form method="GET" action="#" class="custom_form" enctype="multipart/form-data">
+                            <div class="search">
+                                <input type="text" class="form-control" placeholder="Search by name, ID, email..." name="search" value="{{ request('search') }}"> 
+                                <button class="btn btn-sm btn-primary">Search</button>
+                            </div>
+                        </form>
                     </div>
                 </div>
-                
-                <table class="table table-hover">
-                    <thead>
-                        <tr>
-                            <th>Member ID</th>
-                            <th>Name</th>
-                            <th>Email</th>
-                            <th>Role</th>
-                            <th>Department</th>
-                            <th>Status</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td><strong>STU-2024-001</strong></td>
-                            <td>
-                                <div>
-                                    <div class="fw-bold">
-                                        John Martinez
-                                        <span class="sso-badge">SSO</span>
+
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Member ID</th>
+                                <th>Name</th>
+                                <th>Email</th>
+                                <th>Role</th>
+                                <th>Department</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>STU-2024-001</strong></td>
+                                <td>
+                                    <div>
+                                        <div class="fw-bold">
+                                            John Martinez
+                                            <span class="sso-badge">SSO</span>
+                                        </div>
+                                        <small class="text-muted">Student</small>
                                     </div>
-                                    <small class="text-muted">Student</small>
-                                </div>
-                            </td>
-                            <td>john.martinez@campus.edu</td>
-                            <td><span class="role-badge role-student">Student</span></td>
-                            <td>Computer Science</td>
-                            <td><span class="status-badge status-active">Active</span></td>
-                            <td>
-                                <button class="action-btn" title="Edit"><i class="ri-edit-line"></i></button>
-                                <button class="action-btn" title="Permissions"><i class="ri-key-line"></i></button>
-                                <button class="action-btn" title="View Profile"><i class="ri-user-line"></i></button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td><strong>FAC-2024-042</strong></td>
-                            <td>
-                                <div>
-                                    <div class="fw-bold">
-                                        Dr. Maria Santos
-                                        <span class="sso-badge">SSO</span>
+                                </td>
+                                <td>john.martinez@campus.edu</td>
+                                <td><span class="role-badge role-student">Student</span></td>
+                                <td>Computer Science</td>
+                                <td><span class="status-badge status-active">Active</span></td>
+                                <td>
+                                    <button class="btn btn-outline-info btn-sm" title="Edit">
+                                        <i class="mdi mdi-pencil"></i>
+                                    </button>
+                                    <button class="btn btn-outline-warning btn-sm" title="Permissions">
+                                        <i class="mdi mdi-key"></i>
+                                    </button>
+                                    <button class="btn btn-outline-primary btn-sm" title="View Profile">
+                                        <i class="mdi mdi-eye"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><strong>FAC-2024-042</strong></td>
+                                <td>
+                                    <div>
+                                        <div class="fw-bold">
+                                            Dr. Maria Santos
+                                            <span class="sso-badge">SSO</span>
+                                        </div>
+                                        <small class="text-muted">Faculty Member</small>
                                     </div>
-                                    <small class="text-muted">Faculty Member</small>
-                                </div>
-                            </td>
-                            <td>maria.santos@campus.edu</td>
-                            <td><span class="role-badge role-faculty">Faculty</span></td>
-                            <td>Engineering</td>
-                            <td><span class="status-badge status-active">Active</span></td>
-                            <td>
-                                <button class="action-btn" title="Edit"><i class="ri-edit-line"></i></button>
-                                <button class="action-btn" title="Permissions"><i class="ri-key-line"></i></button>
-                                <button class="action-btn" title="View Profile"><i class="ri-user-line"></i></button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td><strong>STF-2024-089</strong></td>
-                            <td>
-                                <div>
-                                    <div class="fw-bold">
-                                        Carlos Rivera
-                                        <span class="sso-badge">SSO</span>
+                                </td>
+                                <td>maria.santos@campus.edu</td>
+                                <td><span class="role-badge role-faculty">Faculty</span></td>
+                                <td>Engineering</td>
+                                <td><span class="status-badge status-active">Active</span></td>
+                                <td>
+                                    <button class="btn btn-outline-info btn-sm" title="Edit">
+                                        <i class="mdi mdi-pencil"></i>
+                                    </button>
+                                    <button class="btn btn-outline-warning btn-sm" title="Permissions">
+                                        <i class="mdi mdi-key"></i>
+                                    </button>
+                                    <button class="btn btn-outline-primary btn-sm" title="View Profile">
+                                        <i class="mdi mdi-eye"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><strong>STF-2024-089</strong></td>
+                                <td>
+                                    <div>
+                                        <div class="fw-bold">
+                                            Carlos Rivera
+                                            <span class="sso-badge">SSO</span>
+                                        </div>
+                                        <small class="text-muted">Staff Member</small>
                                     </div>
-                                    <small class="text-muted">Staff Member</small>
-                                </div>
-                            </td>
-                            <td>carlos.rivera@campus.edu</td>
-                            <td><span class="role-badge role-staff">Staff</span></td>
-                            <td>Administration</td>
-                            <td><span class="status-badge status-active">Active</span></td>
-                            <td>
-                                <button class="action-btn" title="Edit"><i class="ri-edit-line"></i></button>
-                                <button class="action-btn" title="Permissions"><i class="ri-key-line"></i></button>
-                                <button class="action-btn" title="View Profile"><i class="ri-user-line"></i></button>
-                            </td>
-                        </tr>
-                        <tr style="background: #fffbf0;">
-                            <td><strong>STU-2024-156</strong></td>
-                            <td>
-                                <div>
-                                    <div class="fw-bold">Ana Lopez</div>
-                                    <small class="text-muted">Student</small>
-                                </div>
-                            </td>
-                            <td>ana.lopez@campus.edu</td>
-                            <td><span class="role-badge role-student">Student</span></td>
-                            <td>Business Admin</td>
-                            <td><span class="status-badge status-pending">Pending Verification</span></td>
-                            <td>
-                                <button class="action-btn" title="Verify"><i class="ri-check-line"></i></button>
-                                <button class="action-btn" title="Reject"><i class="ri-close-line"></i></button>
-                                <button class="action-btn" title="View Details"><i class="ri-eye-line"></i></button>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-                
-                <div class="table-footer">
+                                </td>
+                                <td>carlos.rivera@campus.edu</td>
+                                <td><span class="role-badge role-staff">Staff</span></td>
+                                <td>Administration</td>
+                                <td><span class="status-badge status-active">Active</span></td>
+                                <td>
+                                    <button class="btn btn-outline-info btn-sm" title="Edit">
+                                        <i class="mdi mdi-pencil"></i>
+                                    </button>
+                                    <button class="btn btn-outline-warning btn-sm" title="Permissions">
+                                        <i class="mdi mdi-key"></i>
+                                    </button>
+                                    <button class="btn btn-outline-primary btn-sm" title="View Profile">
+                                        <i class="mdi mdi-eye"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                            <tr style="background: #fffbf0;">
+                                <td><strong>STU-2024-156</strong></td>
+                                <td>
+                                    <div>
+                                        <div class="fw-bold">Ana Lopez</div>
+                                        <small class="text-muted">Student</small>
+                                    </div>
+                                </td>
+                                <td>ana.lopez@campus.edu</td>
+                                <td><span class="role-badge role-student">Student</span></td>
+                                <td>Business Admin</td>
+                                <td><span class="status-badge status-pending">Pending Verification</span></td>
+                                <td>
+                                    <button class="btn btn-outline-success btn-sm" title="Verify">
+                                        <i class="mdi mdi-check"></i>
+                                    </button>
+                                    <button class="btn btn-outline-danger btn-sm" title="Reject">
+                                        <i class="mdi mdi-close"></i>
+                                    </button>
+                                    <button class="btn btn-outline-primary btn-sm" title="View Details">
+                                        <i class="mdi mdi-eye"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Pagination -->
+                <div class="pagination-wrapper">
                     <div class="pagination-info">
                         Showing 1 to 4 of 2,847 entries
                     </div>
                     <nav>
-                        <ul class="pagination mb-0">
-                            <li class="page-item disabled"><a class="page-link" href="#">‹</a></li>
-                            <li class="page-item active"><a class="page-link" href="#">1</a></li>
-                            <li class="page-item"><a class="page-link" href="#">2</a></li>
-                            <li class="page-item"><a class="page-link" href="#">3</a></li>
-                            <li class="page-item"><a class="page-link" href="#">...</a></li>
-                            <li class="page-item"><a class="page-link" href="#">712</a></li>
-                            <li class="page-item"><a class="page-link" href="#">›</a></li>
+                        <ul class="pagination">
+                            <li class="page-item disabled">
+                                <a class="page-link" href="#" tabindex="-1">Previous</a>
+                            </li>
+                            <li class="page-item active">
+                                <a class="page-link" href="#">1</a>
+                            </li>
+                            <li class="page-item">
+                                <a class="page-link" href="#">2</a>
+                            </li>
+                            <li class="page-item">
+                                <a class="page-link" href="#">3</a>
+                            </li>
+                            <li class="page-item">
+                                <a class="page-link" href="#">...</a>
+                            </li>
+                            <li class="page-item">
+                                <a class="page-link" href="#">712</a>
+                            </li>
+                            <li class="page-item">
+                                <a class="page-link" href="#">Next</a>
+                            </li>
                         </ul>
                     </nav>
                 </div>
