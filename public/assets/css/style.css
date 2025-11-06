@@ -1,4 +1,4 @@
-.dashboard-card {
+    .dashboard-card {
         border-radius: 5px;
         padding: 20px;
         background: white;
@@ -173,4 +173,16 @@
     .add-new-btn:hover {
         background: #c17409;
         color: white;
+    }
+
+    .btn-md, .btn-search
+    {
+        background-color: rgb(136, 0, 0) !important;
+        color: #fff;
+    }
+
+    .btn-md:hover, .btn-search:hover
+    {
+        background-color: rgb(104, 0, 0) !important;
+        color: #fff;
     }

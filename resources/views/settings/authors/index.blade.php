@@ -5,7 +5,7 @@
         <div class="card-body">
             <h4 class="card-title d-flex justify-content-between mb-3">
                 Authors List
-                <button type="button" class="btn btn-md btn-primary" id="addAuthorBtn" data-bs-toggle="modal" data-bs-target="#formAuthors">
+                <button type="button" class="btn btn-md" id="addAuthorBtn" data-bs-toggle="modal" data-bs-target="#formAuthors">
                     Add Author
                 </button>
             </h4>
@@ -15,7 +15,7 @@
                         <div class="col-md-9">
                             <div class="search">
                                 <input type="text" class="form-control" placeholder="Search Authors" name="search" value="{{ request('search') }}"> 
-                                <button class="btn btn-sm btn-primary">Search</button>
+                                <button class="btn btn-sm btn-search btn-primary">Search</button>
                             </div>
                         </div>
                     </div>
