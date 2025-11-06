@@ -30,9 +30,10 @@
                 <thead>
                     <tr>
                         <th width="12%">Action</th>
-                        <th width="25%">Name</th>
-                        <th width="40%">Description</th>
-                        <th width="23%">Floor</th>
+                        <th width="10%">Image</th>
+                        <th width="35%">Name</th>
+                        <th width="25%">Description</th>
+                        <th width="20%">Floor</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -49,8 +50,15 @@
                                     </button>
                                 </form>
                             </td>
+                            <td>
+                                @if(!empty($room->image) && file_exists(public_path($room->image)))
+                                    <img src="{{ asset($room->image) }}" alt="Room Image" width="50" height="50">
+                                @else
+                                    -
+                                @endif
+                            </td>
                             <td>{{ $room->name }}</td>
-                            <td>{{ $room->description }}</td>
+                            <td>{{ $room->description ?? '-'}}</td>
                             <td>{{ $room->floor }}</td>
                         </tr>
                         @include('settings.rooms.edit')
@@ -94,6 +102,10 @@
                         <div class="col-md-12 form-group mb-2">
                             <label>Description</label>
                             <textarea name="description" class="form-control" placeholder="Enter description"></textarea>
+                        </div>
+                        <div class="col-md-12 form-group mb-2">
+                            <label>Image</label>
+                            <input type="file" name="image" class="form-control">
                         </div>
                     </div>
                 </div>
