@@ -749,7 +749,7 @@
                                         <a href="{{ url('reservation') }}" class="nav-link" data-key="t-reservation">Reserve Books</a>
                                     </li>
                                     <li class="nav-item">
-                                        <a href="{{ url('reservation') }}" class="nav-link" data-key="t-reservation">Reserve Rooms</a>
+                                        <a href="{{ url('rooms_reservation') }}" class="nav-link" data-key="t-room-reservation">Reserve Rooms</a>
                                     </li>
                                 </ul>
                             </div>

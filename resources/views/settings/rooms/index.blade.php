@@ -93,44 +93,45 @@
                     </form>
                 </div>
             </div>
-            <table class="table table-responsive">
-                <thead>
-                    <tr>
-                        <th width="12%">Action</th>
-                        <th width="10%">Image</th>
-                        <th width="35%">Name</th>
-                        <th width="25%">Description</th>
-                        <th width="20%">Floor</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @forelse ($rooms as $room)
+            <div class="table-responsive">
+                <table class="table">
+                    <thead>
                         <tr>
-                            <td>
-                                <button class="btn btn-outline-info btn-sm" title="Edit Room" data-bs-toggle="modal" data-bs-target="#editRoom{{$room->id}}">
-                                    <i class="mdi mdi-pencil"></i>
-                                </button>
-                                <form method="POST" class="d-inline-block" action="{{url('delete_room/'.$room->id)}}" onsubmit="show()" enctype="multipart/form-data">
-                                    @csrf
-                                    <button type="button" class="btn btn-sm btn-outline-danger deleteBtn">
-                                        <i class="mdi mdi-trash-can"></i>
-                                    </button>
-                                </form>
-                            </td>
-                            <td>
-                                @if(!empty($room->image) && file_exists(public_path($room->image)))
-                                    <img src="{{ asset($room->image) }}" alt="Room Image" width="50" height="50">
-                                @else
-                                    -
-                                @endif
-                            </td>
-                            <td>{{ $room->name }}</td>
-                            <td>{{ $room->description ?? '-'}}</td>
-                            <td>{{ $room->floor }}</td>
+                            <th width="12%">Action</th>
+                            <th width="10%">Image</th>
+                            <th width="35%">Name</th>
+                            <th width="25%">Description</th>
+                            <th width="20%">Floor</th>
                         </tr>
-                        @include('settings.rooms.edit')
-                    @empty
-                          <tr>
+                    </thead>
+                    <tbody>
+                        @forelse ($rooms as $room)
+                            <tr>
+                                <td>
+                                    <button class="btn btn-outline-info btn-sm" title="Edit Room" data-bs-toggle="modal" data-bs-target="#editRoom{{$room->id}}">
+                                        <i class="mdi mdi-pencil"></i>
+                                    </button>
+                                    <form method="POST" class="d-inline-block" action="{{url('delete_room/'.$room->id)}}" onsubmit="show()" enctype="multipart/form-data">
+                                        @csrf
+                                        <button type="button" class="btn btn-sm btn-outline-danger deleteBtn">
+                                            <i class="mdi mdi-trash-can"></i>
+                                        </button>
+                                    </form>
+                                </td>
+                                <td>
+                                    @if(!empty($room->image) && file_exists(public_path($room->image)))
+                                        <img src="{{ asset($room->image) }}" alt="Room Image" width="50" height="50">
+                                    @else
+                                        -
+                                    @endif
+                                </td>
+                                <td>{{ $room->name }}</td>
+                                <td>{{ $room->description ?? '-'}}</td>
+                                <td>{{ $room->floor }}</td>
+                            </tr>
+                            @include('settings.rooms.edit')
+                        @empty
+                            <tr>
                                 <td colspan="4" class="text-center py-4">
                                     <i class="ri-inbox-line" style="font-size: 48px; color: #ccc;"></i>
                                     <p class="text-muted mt-2">No Rooms Found</p>

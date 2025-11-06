@@ -55,6 +55,9 @@ Route::group(['middleware' => ['auth']], function () {
     Route::post('/new_framework', 'FrameworkController@store')->name('frameworks.store');
     Route::post('update_framework/{id}', 'FrameworkController@update');
     Route::post('delete_framework/{id}', 'FrameworkController@destroy')->name('delete_framework');
+
+    // Rooms Reservation
+    Route::get('/rooms_reservation', 'RoomReservationController@index')->name('rooms_reservation');
 });
 
 
