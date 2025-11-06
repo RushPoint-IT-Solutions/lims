@@ -51,7 +51,7 @@
     }
     
     .book-card .book-reserve-btn {
-        background: #4a90e2;
+        background: rgb(136, 0, 0);
         color: white;
         border: none;
         padding: 6px 12px;
@@ -80,13 +80,6 @@
     .add-new-btn:hover {
         background: #357abd;
         color: white;
-    }
-    
-    .table-responsive {
-        background: white;
-        border-radius: 5px;
-        padding: 20px;
-        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
     }
     
     .status-badge {
@@ -131,79 +124,6 @@
     .avail-borrowed {
         background: #ffe5e5;
         color: #c92a2a;
-    }
-    
-    .table-controls {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 15px;
-        flex-wrap: wrap;
-        gap: 10px;
-    }
-    
-    .entries-control {
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        font-size: 14px;
-    }
-    
-    .entries-control select {
-        padding: 5px 10px;
-        border: 1px solid #dee2e6;
-        border-radius: 5px;
-        font-size: 14px;
-    }
-    
-    .search-control {
-        position: relative;
-    }
-    
-    .search-control input {
-        padding: 5px 35px 5px 15px;
-        border: 1px solid #dee2e6;
-        border-radius: 5px;
-        font-size: 14px;
-        width: 250px;
-    }
-    
-    .search-control i {
-        position: absolute;
-        right: 12px;
-        top: 50%;
-        transform: translateY(-50%);
-        color: #6c757d;
-    }
-    
-    .table-footer {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-top: 15px;
-        flex-wrap: wrap;
-        gap: 10px;
-    }
-    
-    .pagination-info {
-        color: #6c757d;
-        font-size: 14px;
-    }
-    
-    .action-btn {
-        padding: 4px 8px;
-        border-radius: 4px;
-        border: none;
-        background: #f8f9fa;
-        color: #6c757d;
-        cursor: pointer;
-        font-size: 14px;
-        margin-right: 5px;
-    }
-    
-    .action-btn:hover {
-        background: #e9ecef;
-        color: #495057;
     }
     
     .book-search-card {
@@ -259,7 +179,7 @@
     }
     
     .reserve-btn {
-        background: #4a90e2;
+        background: #842029;
         color: white;
         border: none;
         padding: 8px 16px;
@@ -278,6 +198,59 @@
         color: #6c757d;
         cursor: not-allowed;
     }
+
+    /* Pagination Styles from Circulation */
+    .pagination-wrapper {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-top: 20px;
+        padding-top: 15px;
+        border-top: 1px solid #e9ecef;
+    }
+
+    .pagination-info {
+        color: #6c757d;
+        font-size: 14px;
+    }
+
+    .pagination {
+        margin: 0;
+        display: flex;
+        list-style: none;
+        padding: 0;
+    }
+
+    .pagination .page-item {
+        margin: 0 2px;
+    }
+
+    .pagination .page-link {
+        color: #5a6c7d;
+        border: 1px solid #dee2e6;
+        padding: 6px 12px;
+        border-radius: 4px;
+        text-decoration: none;
+        display: block;
+    }
+
+    .pagination .page-item.active .page-link {
+        background-color: #0d6efd;
+        border-color: #0d6efd;
+        color: white;
+    }
+
+    .pagination .page-link:hover {
+        background-color: #e9ecef;
+        color: #0d6efd;
+    }
+
+    .pagination .page-item.disabled .page-link {
+        color: #6c757d;
+        background-color: #fff;
+        border-color: #dee2e6;
+        cursor: not-allowed;
+    }
 </style>
 @endsection
 
@@ -293,7 +266,6 @@
     <div class="row g-3 mb-4">
         <div class="col-xl-4 col-md-6">
             <div class="dashboard-card">
-                {{-- <div class="icon-circle" style="background: #4a90e2;"> --}}
                 <div class="icon-circle">
                     <i class="ri-bookmark-line"></i>
                 </div>
@@ -303,7 +275,6 @@
         </div>
         <div class="col-xl-4 col-md-6">
             <div class="dashboard-card">
-                {{-- <div class="icon-circle" style="background: #27ae60;"> --}}
                 <div class="icon-circle">
                     <i class="ri-checkbox-circle-line"></i>
                 </div>
@@ -313,7 +284,6 @@
         </div>
         <div class="col-xl-4 col-md-6">
             <div class="dashboard-card">
-                {{-- <div class="icon-circle" style="background: #f39c12;"> --}}
                 <div class="icon-circle">
                     <i class="ri-time-line"></i>    
                 </div>
@@ -405,14 +375,16 @@
     <div class="row g-3 mb-4">
         <div class="col-12">
             <div class="book-search-card">
-                <div class="section-header">
-                    <h5>Search & Reserve Books</h5>
-                </div>
+                <h4 class="card-title mb-3">Search & Reserve Books</h4>
                 
                 <div class="d-flex justify-content-end mb-3">
-                    <div class="search-control">
-                        <input type="text" placeholder="Search by title, author, ISBN..." style="width: 400px;">
-                        <i class="ri-search-line"></i>
+                    <div class="col-md-4">
+                        <form method="GET" action="#" class="custom_form" enctype="multipart/form-data">
+                            <div class="search">
+                                <input type="text" class="form-control" placeholder="Search by title, author, ISBN..." name="search" value="{{ request('search') }}"> 
+                                <button class="btn btn-sm btn-primary">Search</button>
+                            </div>
+                        </form>
                     </div>
                 </div>
 
@@ -485,116 +457,142 @@
     </div>
 
     <!-- My Reservations -->
-    <div class="row g-3 mb-4">
-        <div class="col-12">
-            <div class="table-responsive">
-                <div class="section-header">
-                    <h5>My Reservations</h5>
-                </div>
+    <div class="col-lg-12 grid-margin stretch-card">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title mb-3">My Reservations</h4>
                 
-                <div class="table-controls">
-                    <div class="entries-control">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <div class="d-flex align-items-center gap-2">
                         <span>Show</span>
-                        <select>
+                        <select class="form-select form-select-sm" style="width: auto;">
                             <option value="10">10</option>
                             <option value="25">25</option>
                             <option value="50">50</option>
+                            <option value="100">100</option>
                         </select>
                         <span>entries</span>
                     </div>
-                    <div class="search-control">
-                        <input type="text" placeholder="Search reservations...">
-                        <i class="ri-search-line"></i>
+                    <div class="col-md-4">
+                        <form method="GET" action="#" class="custom_form" enctype="multipart/form-data">
+                            <div class="search">
+                                <input type="text" class="form-control" placeholder="Search reservations..." name="search" value="{{ request('search') }}"> 
+                                <button class="btn btn-sm btn-primary">Search</button>
+                            </div>
+                        </form>
                     </div>
                 </div>
-                
-                <table class="table table-hover">
-                    <thead>
-                        <tr>
-                            <th>Reservation ID</th>
-                            <th>Book Title</th>
-                            <th>Reserved Date</th>
-                            <th>Pickup Deadline</th>
-                            <th>Status</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr style="background: #f0f9ff;">
-                            <td><strong>RSV-2025-00123</strong></td>
-                            <td>
-                                <div>
-                                    <div class="fw-bold">Design Patterns</div>
-                                    <small class="text-muted">by Gang of Four</small>
-                                </div>
-                            </td>
-                            <td>Oct 28, 2025</td>
-                            <td><strong class="text-primary">Nov 05, 2025</strong></td>
-                            <td><span class="status-badge status-ready">Ready for Pickup</span></td>
-                            <td>
-                                <button class="action-btn" title="View Details"><i class="ri-eye-line"></i></button>
-                                <button class="action-btn" title="Cancel"><i class="ri-close-line"></i></button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td><strong>RSV-2025-00124</strong></td>
-                            <td>
-                                <div>
-                                    <div class="fw-bold">Clean Code: A Handbook</div>
-                                    <small class="text-muted">by Robert C. Martin</small>
-                                </div>
-                            </td>
-                            <td>Oct 30, 2025</td>
-                            <td><em class="text-muted">Waiting for return</em></td>
-                            <td><span class="status-badge status-active">Active - In Queue</span></td>
-                            <td>
-                                <button class="action-btn" title="View Details"><i class="ri-eye-line"></i></button>
-                                <button class="action-btn" title="Cancel"><i class="ri-close-line"></i></button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td><strong>RSV-2025-00125</strong></td>
-                            <td>
-                                <div>
-                                    <div class="fw-bold">Refactoring</div>
-                                    <small class="text-muted">by Martin Fowler</small>
-                                </div>
-                            </td>
-                            <td>Nov 01, 2025</td>
-                            <td><em class="text-muted">Waiting for return</em></td>
-                            <td><span class="status-badge status-active">Active - Position #2</span></td>
-                            <td>
-                                <button class="action-btn" title="View Details"><i class="ri-eye-line"></i></button>
-                                <button class="action-btn" title="Cancel"><i class="ri-close-line"></i></button>
-                            </td>
-                        </tr>
-                        <tr style="background: #f8f9fa;">
-                            <td><strong>RSV-2025-00098</strong></td>
-                            <td>
-                                <div>
-                                    <div class="fw-bold">The Pragmatic Programmer</div>
-                                    <small class="text-muted">by Andy Hunt</small>
-                                </div>
-                            </td>
-                            <td>Oct 20, 2025</td>
-                            <td>Oct 27, 2025</td>
-                            <td><span class="status-badge status-expired">Expired</span></td>
-                            <td>
-                                <button class="action-btn" title="View Details"><i class="ri-eye-line"></i></button>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-                
-                <div class="table-footer">
+
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Actions</th>
+                                <th>Reservation ID</th>
+                                <th>Book Title</th>
+                                <th>Reserved Date</th>
+                                <th>Pickup Deadline</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr style="background: #f0f9ff;">
+                                <td>
+                                    <button class="btn btn-outline-info btn-sm" title="View Details">
+                                        <i class="mdi mdi-eye"></i>
+                                    </button>
+                                    <button class="btn btn-outline-danger btn-sm" title="Cancel">
+                                        <i class="mdi mdi-close"></i>
+                                    </button>
+                                </td>
+                                <td><strong>RSV-2025-00123</strong></td>
+                                <td>
+                                    <div>
+                                        <div class="fw-bold">Design Patterns</div>
+                                        <small class="text-muted">by Gang of Four</small>
+                                    </div>
+                                </td>
+                                <td>Oct 28, 2025</td>
+                                <td><strong class="text-primary">Nov 05, 2025</strong></td>
+                                <td><span class="status-badge status-ready">Ready for Pickup</span></td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <button class="btn btn-outline-info btn-sm" title="View Details">
+                                        <i class="mdi mdi-eye"></i>
+                                    </button>
+                                    <button class="btn btn-outline-danger btn-sm" title="Cancel">
+                                        <i class="mdi mdi-close"></i>
+                                    </button>
+                                </td>
+                                <td><strong>RSV-2025-00124</strong></td>
+                                <td>
+                                    <div>
+                                        <div class="fw-bold">Clean Code: A Handbook</div>
+                                        <small class="text-muted">by Robert C. Martin</small>
+                                    </div>
+                                </td>
+                                <td>Oct 30, 2025</td>
+                                <td><em class="text-muted">Waiting for return</em></td>
+                                <td><span class="status-badge status-active">Active - In Queue</span></td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <button class="btn btn-outline-info btn-sm" title="View Details">
+                                        <i class="mdi mdi-eye"></i>
+                                    </button>
+                                    <button class="btn btn-outline-danger btn-sm" title="Cancel">
+                                        <i class="mdi mdi-close"></i>
+                                    </button>
+                                </td>
+                                <td><strong>RSV-2025-00125</strong></td>
+                                <td>
+                                    <div>
+                                        <div class="fw-bold">Refactoring</div>
+                                        <small class="text-muted">by Martin Fowler</small>
+                                    </div>
+                                </td>
+                                <td>Nov 01, 2025</td>
+                                <td><em class="text-muted">Waiting for return</em></td>
+                                <td><span class="status-badge status-active">Active - Position #2</span></td>
+                            </tr>
+                            <tr style="background: #f8f9fa;">
+                                <td>
+                                    <button class="btn btn-outline-info btn-sm" title="View Details">
+                                        <i class="mdi mdi-eye"></i>
+                                    </button>
+                                </td>
+                                <td><strong>RSV-2025-00098</strong></td>
+                                <td>
+                                    <div>
+                                        <div class="fw-bold">The Pragmatic Programmer</div>
+                                        <small class="text-muted">by Andy Hunt</small>
+                                    </div>
+                                </td>
+                                <td>Oct 20, 2025</td>
+                                <td>Oct 27, 2025</td>
+                                <td><span class="status-badge status-expired">Expired</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Pagination -->
+                <div class="pagination-wrapper">
                     <div class="pagination-info">
                         Showing 1 to 4 of 4 entries
                     </div>
                     <nav>
-                        <ul class="pagination mb-0">
-                            <li class="page-item disabled"><a class="page-link" href="#">‹</a></li>
-                            <li class="page-item active"><a class="page-link" href="#">1</a></li>
-                            <li class="page-item"><a class="page-link" href="#">›</a></li>
+                        <ul class="pagination">
+                            <li class="page-item disabled">
+                                <a class="page-link" href="#" tabindex="-1">Previous</a>
+                            </li>
+                            <li class="page-item active">
+                                <a class="page-link" href="#">1</a>
+                            </li>
+                            <li class="page-item">
+                                <a class="page-link" href="#">Next</a>
+                            </li>
                         </ul>
                     </nav>
                 </div>

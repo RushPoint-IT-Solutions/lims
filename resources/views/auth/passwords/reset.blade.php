@@ -13,20 +13,20 @@
     .back-button {
         position: absolute;
         top: 30px;
-        right: 0;
+        left: 0;
         padding: 10px 30px;
         background: white;
         color: #6b1a1a;
         border: 2px solid #6b1a1a;
-        border-right: none;
+        border-left: none;
         font-size: 14px;
         font-weight: 600;
         cursor: pointer;
         transition: all 0.3s;
         text-decoration: none;
         z-index: 10;
-        border-bottom-left-radius: 20px;
-        border-top-left-radius: 20px;
+        border-bottom-right-radius: 20px;
+        border-top-right-radius: 20px;
     }
 
     .back-button:hover {
@@ -37,6 +37,16 @@
     
     .reset-left {
         flex: 1;
+        background: #ffffff;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        padding: 40px;
+    }
+    
+    .reset-right {
+        flex: 1;
         background: linear-gradient(135deg, #6b1a1a 0%, #4a0e0e 100%);
         display: flex;
         flex-direction: column;
@@ -44,18 +54,8 @@
         align-items: center;
         padding: 40px;
         color: white;
-        border-top-right-radius: 50px;
-        border-bottom-right-radius: 50px;
-    }
-    
-    .reset-right {
-        flex: 1;
-        background: #ffffff;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        padding: 40px;
+        border-top-left-radius: 50px;
+        border-bottom-left-radius: 50px;
     }
     
     .left-logo-placeholder {
@@ -177,7 +177,7 @@
             flex-direction: column;
         }
         
-        .reset-left {
+        .reset-right {
             order: -1;
             min-height: 300px;
             border-radius: 0;
@@ -208,17 +208,6 @@
     </a>
     
     <div class="reset-left">
-        <div class="left-logo-placeholder">
-            <img src="{{asset('assets/images/marsu-logo.png')}}" alt="" height="120">
-        </div>
-        
-        <h2 class="system-title">MARSU</h2>
-        <h3 class="system-subtitle">Library Management System</h3>
-        
-        <p class="system-description">"Your premier digital library <br> for borrowing and reading <br> books"</p>
-    </div>
-    
-    <div class="reset-right">
         <div class="logo-placeholder">
             <img src="{{asset('assets/images/marsu-logo.png')}}" alt="" height="100">
         </div>
@@ -261,6 +250,17 @@
                 Reset Password
             </button>
         </form>
+    </div>
+    
+    <div class="reset-right">
+        <div class="left-logo-placeholder">
+            <img src="{{asset('assets/images/marsu-logo.png')}}" alt="" height="120">
+        </div>
+        
+        <h2 class="system-title">MARSU</h2>
+        <h3 class="system-subtitle">Library Management System</h3>
+        
+        <p class="system-description">"Your premier digital library <br> for borrowing and reading <br> books"</p>
     </div>
 </div>
 @endsection
