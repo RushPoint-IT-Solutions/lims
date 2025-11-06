@@ -39,22 +39,31 @@ class RoomController extends Controller
         $request->validate([
             'name' => 'required|string|max:255',
             'floor' => 'required|string|max:255',
+            'description' => 'nullable|string',
         ]);
 
-        if (Room::where('name', $request->name)->where('deleted_at', NULL)->exists()) {
-            Alert::error('Duplicate Entry', 'Room Name with this name already exists!')->persistent('Dismiss');
+        if (Room::where('name', $request->name)->whereNull('deleted_at')->exists()) {
+            Alert::error('Duplicate Entry', 'Room with this name already exists!')->persistent('Dismiss');
             return back();
         }
 
         $room = new Room();
         $room->name = $request->name;
-        $room->floor  = $request->floor;
+        $room->floor = $request->floor;
         $room->description = $request->description;
+        if ($request->hasFile('image')) {
+            $file = $request->file('image');
+            $filename = time() . '_' . $file->getClientOriginalName();
+            $file->move(public_path('uploads/rooms'), $filename);
+            $room->image = 'uploads/rooms/' . $filename;
+        }
+
         $room->save();
 
         Alert::success('Success', 'Successfully Saved!')->persistent('Dismiss');
         return back();
     }
+
 
     public function update(Request $request, $id)
     {
