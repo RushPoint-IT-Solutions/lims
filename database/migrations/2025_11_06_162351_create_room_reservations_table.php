@@ -17,13 +17,13 @@ class CreateRoomReservationsTable extends Migration
             $table->increments('id');
             $table->string('reservation_id');
             $table->string('room_name'); 
-            $table->string('reserved_by');
-            $table->string('reserved_from');
-            $table->string('reserved_to');
+            $table->unsignedBigInteger('reserved_by'); 
+            $table->dateTime('reserved_from');
+            $table->dateTime('reserved_to');
             $table->string('purpose');
-            $table->string('other_remarks')->nullable();
+            $table->text('other_remarks')->nullable();
             $table->string('status');
-            $table->string('remarks')->nullable();
+            $table->text('remarks')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

@@ -252,7 +252,7 @@
         border-color: #dee2e6;
         cursor: not-allowed;
     }
-    .fc .fc-button-group>:first-child
+    /* .fc .fc-button-group>:first-child
     {
         background: #520000;
         color: #FFF;
@@ -260,7 +260,7 @@
     .fc .fc-button-group>* {
         color: #FFF;
         background: #520000;
-    }
+    } */
 </style>
 @endsection
 
@@ -293,29 +293,137 @@
         </div>
         <div class="col-8">
             <div class="book-search-card">
+                <div class="mb-2" align="right">
+                    <button type="button" class="btn btn-md btn-primary" data-bs-toggle="modal" data-bs-target="#roomReservationModal">
+                        <i class="ri-add-line"></i> Reserve Room
+                    </button>
+                </div>
                 <div class="calendar"></div>  
             </div>
         </div>
     </div>
     
+    <div class="modal fade select2-modal" id="roomReservationModal" tabindex="-1" role="dialog" aria-labelledby="addRoomReservationData" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Reserve Room</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form id="addRoomReservationForm" method="POST" action="{{ url('/new_room_reservation') }}" onsubmit="show()" enctype="multipart/form-data">
+                    @csrf
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-md-6 form-group mb-2">
+                                <label>Room&nbsp;<span class="text-danger">*</span></label>
+                                <select name="room_name" id="room_name" class="form-control select2" required>
+                                    <option value="">-- Select Room --</option>
+                                    @foreach ($rooms as $room)
+										<option value='{{ $room->name}}'>{{ $room->name }}</option>
+									@endforeach
+                                </select>
+                            </div>
+                            <div class="col-md-6 form-group mb-2">
+                                <label>Purpose&nbsp;<span class="text-danger">*</span></label>
+                                <select name="purpose" id="purpose" class="form-control select2" required>
+                                    <option value="">-- Select Purpose --</option>
+                                    <option value="Meeting">Meeting</option>
+                                    <option value="Session">Session</option>
+                                    <option value="Events">Events</option>
+                                    <option value="Other">Other</option>
+                                </select>
+                            </div>
+                            <div class="offset-md-6 col-md-6 form-group mb-2" id="remarks-container" style="display: none;">
+                                <label>Remarks</label>
+                                <textarea name="other_remarks" class="form-control" placeholder="Enter Remarks"></textarea>
+                            </div>
+                            <div class="col-md-6 form-group mb-2">
+                                <label>Date From&nbsp;<span class="text-danger">*</span></label>
+                                <input type="datetime-local" class="form-control" name="reserved_from">
+                            </div>
+                            <div class="col-md-6 form-group mb-2">
+                                <label>Date To&nbsp;<span class="text-danger">*</span></label>
+                                <input type="datetime-local" class="form-control" name="reserved_to">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary" onclick="submitBranch()">Submit</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="{{asset('/assets/js/moment.min.js')}}"></script>
     <script src="{{asset('/assets/js/fullcalendar.min.js')}}"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <script>
+        $(document).on('shown.bs.modal', '.select2-modal', function () {
+            const $modal = $(this);
+            $modal.find('.select2').select2({
+                dropdownParent: $modal
+            });
+        });
+
+        $(document).ready(function () {
+            $('#purpose').on('change', function () {
+                if ($(this).val() === 'Other') {
+                    $('#remarks-container').show();
+                } else {
+                    $('#remarks-container').hide(); 
+                    $('textarea[name="other_remarks"]').val(''); 
+                }
+            });
+        });
+
+        var room_reservation = {!! json_encode($room_reservations_array) !!};
+
         $('.calendar').fullCalendar({
-            header:
-            {
+            header: {
                 left: 'prev,next today',
                 center: 'title',
                 right: 'month,agendaWeek,agendaDay'
             },
             defaultView: 'month',
-            navLinks: true, // can click day/week names to navigate views
-            editable: true,
+            navLinks: true,
+            editable: false,            
+            eventStartEditable: false,  
+            eventDurationEditable: false, 
             eventLimit: true,
-            displayEventTime: false
+            displayEventTime: false, 
+            events: room_reservation,
+            eventClick: function(event) {
+                Swal.fire({
+                    title: '<b>Room Reservation Details</b>',
+                    html: `
+                        <div style="text-align:center;">
+                            <p><strong>Room:</strong> ${event.title.replace(/<br>/g, '<br>')}</p>
+                            <p><strong>From:</strong> ${moment(event.start).format('MMM D, YYYY h:mm A')}</p>
+                            <p><strong>To:</strong> ${moment(event.end).format('MMM D, YYYY h:mm A')}</p>
+                            ${event.reason ? `<p><strong>Purpose:</strong> ${event.reason}</p>` : ''}
+                        </div>
+                    `,
+                    icon: 'info',
+                    confirmButtonText: 'Close',
+                    confirmButtonColor: '#3085d6',
+                    width: 400,
+                    background: '#f9f9f9',
+                });
+            }
         });
+
+        function submitBranch() {
+            const form = document.getElementById('addRoomReservationForm');
+            if (form.checkValidity()) {
+                form.submit();
+            } else {
+                form.reportValidity();
+            }
+        }
     </script>
 @endsection
