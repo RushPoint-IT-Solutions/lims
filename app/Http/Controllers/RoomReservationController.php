@@ -29,7 +29,6 @@ class RoomReservationController extends Controller
             $object->title = $room_reservation->room_name . "\n" . $room_reservation->purpose;
             $object->start = date('Y-m-d h:i:s', strtotime($room_reservation->reserved_from));
             $object->end = date('Y-m-d h:i:s', strtotime($room_reservation->reserved_to));
-            $object->leave_calendar_id = $room_reservation->id;
             switch (strtolower($room_reservation->purpose)) {
                 case 'meeting':
                     $object->color = '#007bff'; 
