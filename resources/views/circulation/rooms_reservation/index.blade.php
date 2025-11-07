@@ -330,7 +330,7 @@
                         <span>entries</span>
                     </div>
                     <div class="col-md-4">
-                        <form method="GET" action="#" class="custom_form" enctype="multipart/form-data">
+                        <form method="GET" action="{{ route('rooms_reservation') }}" class="custom_form" enctype="multipart/form-data">
                             <div class="search">
                                 <input type="text" class="form-control" placeholder="Search reservations..." name="search" value="{{ request('search') }}"> 
                                 <button class="btn btn-sm btn-primary">Search</button>
@@ -343,44 +343,76 @@
                     <table class="table">
                         <thead>
                             <tr>
-                                <th width="10%">Actions</th>
+                                <th width="12%">Actions</th>
                                 <th width="12%">Reservation ID</th>
                                 <th width="17%">Room</th>
                                 <th width="20%">Purpose</th>
-                                <th width="15%">Reserved By</th>
+                                <th width="13%">Reserved By</th>
                                 <th width="18%">Reserved Date</th>
                                 <th width="8%">Status</th>
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach($datas as $data)
-                            <tr style="background: #f0f9ff;">
-                                <td>
-                                    <button class="btn btn-outline-info btn-sm" title="View Details">
-                                        <i class="mdi mdi-eye"></i>
-                                    </button>
-                                    <button class="btn btn-outline-danger btn-sm" title="Cancel">
-                                        <i class="mdi mdi-close"></i>
-                                    </button>
-                                </td>
-                                <td>{{ $data->reservation_id }}</td>
-                                <td>{{ $data->room_name }}</td>
-                                <td><strong>{{ $data->purpose }}</strong></td>
-                                <td>{{ $data->reservedBy->name }}</td>
-                                <td>
-                                    <strong class="text-primary">{{ date('Y-m-d', strtotime($data->reserved_from)) }} - {{ date('Y-m-d', strtotime($data->reserved_to)) }}</strong>
-                                </td>
-                                <td>
-                                    @if($data->status == 'Pending')
-                                        <span class="status-badge status-expired">Pending</span>
-                                    @elseif($data->status == 'Approved')
-                                        <span class="status-badge status-ready">Approved</span>
-                                    @else
-                                        <span class="status-badge status-cancelled">Rejected</span>
-                                    @endif
-                                </td>
-                            </tr>
-                            @endforeach
+                            @forelse ($datas as $data)
+                                <tr style="background: #f0f9ff;">
+                                    <td>
+                                        <button class="btn btn-outline-primary btn-sm" title="View Details" data-bs-toggle="modal" data-bs-target="#viewReservation{{$data->id}}">
+                                            <i class="mdi mdi-eye"></i>
+                                        </button>
+                                        <button class="btn btn-outline-success btn-sm" title="Approved">
+                                            <i class="mdi mdi-check"></i>
+                                        </button>
+                                        <form action="{{ url('room_reservation_approved/' . $data->id) }}" class="d-inline-block" method="POST">
+                                            @csrf
+                                            <button type="submit" class="btn btn-outline-success approvedBtn" title="Approved">
+                                                <i class="mdi mdi-check"></i>
+                                            </button>
+                                        </form>
+                                        <button class="btn btn-outline-danger btn-sm" title="Disapproved">
+                                            <i class="mdi mdi-close"></i>
+                                        </button>
+                                        <form method="POST" class="d-inline-block" action="{{url('delete_room_reservation/'.$data->id)}}" onsubmit="show()" enctype="multipart/form-data">
+                                            @csrf
+                                            <button type="button" class="btn btn-sm btn-outline-danger deleteBtn">
+                                                <i class="mdi mdi-trash-can"></i>
+                                            </button>
+                                        </form>
+                                    </td>
+                                    <td>{{ $data->reservation_id }}</td>
+                                    <td>{{ $data->room_name }}</td>
+                                    <td>
+                                        <div>
+                                            @if($data->purpose == 'Others')
+                                                <div class="fw-bold">{{ $data->purpose }}</div>
+                                                <small class="text-muted">{{ $data->other_remarks }}</small>
+                                            @else
+                                                <div class="fw-bold">{{ $data->purpose }}</div>
+                                            @endif
+                                        </div>
+                                    </td>
+                                    <td>{{ $data->reservedBy->name }}</td>
+                                    <td>
+                                        <strong class="text-primary">{{ date('Y-m-d', strtotime($data->reserved_from)) }} - {{ date('Y-m-d', strtotime($data->reserved_to)) }}</strong>
+                                    </td>
+                                    <td>
+                                        @if($data->status == 'Pending')
+                                            <span class="status-badge status-expired">Pending</span>
+                                        @elseif($data->status == 'Approved')
+                                            <span class="status-badge status-ready">Approved</span>
+                                        @else
+                                            <span class="status-badge status-cancelled">Disapproved</span>
+                                        @endif
+                                    </td>
+                                </tr>
+                                @include('circulation.rooms_reservation.view')
+                            @empty
+                                <tr>
+                                    <td colspan="7" class="text-center py-4">
+                                        <i class="ri-inbox-line" style="font-size: 48px; color: #ccc;"></i>
+                                        <p class="text-muted mt-2">No Room Reservation Found</p>
+                                    </td>
+                                </tr>
+                            @endforelse
                         </tbody>
                     </table>
                 </div>
@@ -388,21 +420,11 @@
                 <!-- Pagination -->
                 <div class="pagination-wrapper">
                     <div class="pagination-info">
-                        Showing 1 to 4 of 4 entries
+                        Showing {{ $datas->firstItem() ?? 0 }} to {{ $datas->lastItem() ?? 0 }} of {{ $datas->total() }} entries
                     </div>
-                    <nav>
-                        <ul class="pagination">
-                            <li class="page-item disabled">
-                                <a class="page-link" href="#" tabindex="-1">Previous</a>
-                            </li>
-                            <li class="page-item active">
-                                <a class="page-link" href="#">1</a>
-                            </li>
-                            <li class="page-item">
-                                <a class="page-link" href="#">Next</a>
-                            </li>
-                        </ul>
-                    </nav>
+                    <div>
+                        {{ $datas->appends(request()->query())->links() }}
+                    </div>
                 </div>
             </div>
         </div>
@@ -435,7 +457,7 @@
                                     <option value="Meeting">Meeting</option>
                                     <option value="Session">Session</option>
                                     <option value="Events">Events</option>
-                                    <option value="Other">Other</option>
+                                    <option value="Other">Others</option>
                                 </select>
                             </div>
                             <div class="offset-md-6 col-md-6 form-group mb-2" id="remarks-container" style="display: none;">
@@ -484,6 +506,42 @@
                     $('textarea[name="other_remarks"]').val(''); 
                 }
             });
+
+            $(".approvedBtn").on('click', function() {
+                var form = $(this).closest('form')
+
+                Swal.fire({
+                    title: "Accept Reservation?",
+                    text: "Are you sure you want to accept this reservation?",
+                    icon: "question",
+                    showCancelButton: true,
+                    confirmButtonColor: "#3085d6",
+                    cancelButtonColor: "#d33",
+                    confirmButtonText: "Yes, delete it!"
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        form.submit()
+                    }
+                });
+            })
+
+            $(".deleteBtn").on('click', function() {
+                var form = $(this).closest('form')
+
+                Swal.fire({
+                    title: "Are you sure?",
+                    text: "You won't be able to revert this!",
+                    icon: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#3085d6",
+                    cancelButtonColor: "#d33",
+                    confirmButtonText: "Yes, delete it!"
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        form.submit()
+                    }
+                });
+            })
         });
 
         var room_reservation = {!! json_encode($room_reservations_array) !!};

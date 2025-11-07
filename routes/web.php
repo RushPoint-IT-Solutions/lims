@@ -59,6 +59,8 @@ Route::group(['middleware' => ['auth']], function () {
     // Rooms Reservation
     Route::get('/rooms_reservation', 'RoomReservationController@index')->name('rooms_reservation');
     Route::post('/new_room_reservation', 'RoomReservationController@store')->name('new_room_reservation.store');
+    Route::post('room_reservation_approved/{id}', 'RoomReservationController@approved');
+    Route::post('delete_room_reservation/{id}', 'RoomReservationController@destroy')->name('delete_room_reservation');
 });
 
 

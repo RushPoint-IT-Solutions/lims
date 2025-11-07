@@ -136,15 +136,22 @@ class RoomReservationController extends Controller
     {
         //
     }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\RoomReservation  $roomReservation
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(RoomReservation $roomReservation)
+    public function approved($id)
     {
-        //
+        $data = RoomReservation::findOrFail($id);        
+        $data->status = 'Approved';
+        $data->save();
+
+        Alert::success('Successfully Approved')->persistent('Dismiss');
+        return back();
+
+    }
+    public function destroy(Request $request)
+    {
+        $data = RoomReservation::findOrFail($request->id);
+        $data->delete();
+
+        Alert::success('Successfully Deleted')->persistent('Dismiss');
+        return back();
     }
 }
