@@ -4,8 +4,9 @@ namespace App\Http\Controllers;
 
 use App\RoomReservation;
 use App\Room;
-use RealRashid\SweetAlert\Facades\Alert;
 use stdClass;
+use Carbon\Carbon;
+use RealRashid\SweetAlert\Facades\Alert;
 use Illuminate\Http\Request;
 
 class RoomReservationController extends Controller
@@ -21,38 +22,52 @@ class RoomReservationController extends Controller
             });
         }
 
+        $today = Carbon::today();
+
+        $availableRooms = Room::whereNotIn('name', function($query) use ($today) {
+            $query->select('room_name')
+                ->from('room_reservations')
+                ->whereDate('reserved_from', '<=', $today)
+                ->whereDate('reserved_to', '>=', $today)
+                ->where('status', 'Approved');
+        })->get();
+        
+        // dd($availableRooms);
         $room_reservations_array = [];
-        $room_reservations = RoomReservation::get();
-        foreach($room_reservations as $room_reservation)
-        {
+        $room_reservations = RoomReservation::where('status', 'Approved')->get();
+
+        foreach ($room_reservations as $room_reservation) {
             $object = new stdClass;
-            $object->title = $room_reservation->room_name . "\n" . $room_reservation->purpose;
-            $object->start = date('Y-m-d h:i:s', strtotime($room_reservation->reserved_from));
-            $object->end = date('Y-m-d h:i:s', strtotime($room_reservation->reserved_to));
+            $object->title  = $room_reservation->room_name;
+            $object->start  = date('Y-m-d\TH:i:s', strtotime($room_reservation->reserved_from));
+            $object->end    = date('Y-m-d\TH:i:s', strtotime($room_reservation->reserved_to));
+            $object->id     = $room_reservation->id;
+            $object->reason = $room_reservation->purpose;
             switch (strtolower($room_reservation->purpose)) {
                 case 'meeting':
-                    $object->color = '#007bff'; 
+                    $object->color = '#007bff';
                     break;
                 case 'session':
-                    $object->color = '#28a745'; 
+                    $object->color = '#28a745';
                     break;
                 case 'events':
-                    $object->color = '#ffc107'; 
+                    $object->color = '#ffc107';
+                    $object->textColor = '#000'; 
                     break;
                 case 'other':
-                    $object->color = '#dc3545'; 
+                    $object->color = '#dc3545';
                     break;
                 default:
-                    $object->color = '#6c757d'; 
+                    $object->color = '#6c757d';
                     break;
             }
-            // $object->date_from = $leave_plan->date_from;
-            // $object->date_to = $leave_plan->date_to;
+
             $room_reservations_array[] = $object;
         }
 
-        $data = $query->paginate(10)->appends($request->all()); 
-        return view('circulation.rooms_reservation.index', compact('data', 'rooms', 'room_reservations_array'));
+
+        $datas = $query->paginate(10)->appends($request->all()); 
+        return view('circulation.rooms_reservation.index', compact('datas', 'rooms', 'room_reservations_array', 'availableRooms'));
     }    
     
     public function store(Request $request)
@@ -66,16 +81,18 @@ class RoomReservationController extends Controller
 
         $year = date('Y');
 
-        $lastReservation = RoomReservation::where('reservation_id', 'LIKE', 'RSV-%')
+        $lastReservation = RoomReservation::where('reservation_id', 'LIKE', "RSV-$year-%")
             ->orderBy('id', 'desc')
             ->first();
 
-        $nextNumber = 1;
-        if ($lastReservation && preg_match('/RSV-\d{2}-00(\d+)/', $lastReservation->reservation_id, $matches)) {
-            $nextNumber = intval($matches[1]) + 1;
+        if ($lastReservation) {
+            preg_match('/RSV-\d{4}-00(\d+)/', $lastReservation->reservation_id, $matches);
+            $nextNumber = isset($matches[1]) ? intval($matches[1]) + 1 : 1;
+        } else {
+            $nextNumber = 1;
         }
 
-        $reservationId = sprintf("RSV-%s-00%d", $year, $nextNumber);
+        $reservationId = sprintf("RSV-%s-%03d", $year, $nextNumber);
 
         $data = new RoomReservation();
         $data->reservation_id = $reservationId;
@@ -92,13 +109,6 @@ class RoomReservationController extends Controller
         return back();
     }
 
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\RoomReservation  $roomReservation
-     * @return \Illuminate\Http\Response
-     */
     public function show(RoomReservation $roomReservation)
     {
         //

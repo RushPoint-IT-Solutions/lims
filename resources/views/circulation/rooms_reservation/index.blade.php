@@ -276,19 +276,29 @@
             <div class="book-search-card">
                 <h4 class="card-title">Available Room Today</h4>
                 <hr>
-                <div class="row">
-                    <div class="col-sm-8">
-                        <small>Room Name</small>
-                        <span></span>
-                        <br>
-                        <small>Floor</small>
-                        <span></span>
-                    </div>
-                    <div class="col-sm-4">
-                        <span class="availability-badge avail-available">5 Available</span>
-                    </div>
-                </div>
-                <hr>
+                @if(count($availableRooms) > 0)
+                    @foreach ($availableRooms as $available)
+                        <div class="row">
+                            <div class="col-sm-8">
+                                <b>Room Name:</b>
+                                <span>{{ $available->name }}</span>
+                                <br>
+                                <b>Floor: </b>
+                                <span>{{ $available->floor }}</span>
+                            </div>
+                            <div class="col-sm-4">
+                                @if(!empty($available->image) && file_exists(public_path($available->image)))
+                                    <img src="{{ asset($available->image) }}" alt="Room Image" width="50" height="50">
+                                @else
+                                    -
+                                @endif
+                            </div>
+                        </div>
+                        <hr>
+                    @endforeach
+                @else
+                    <div style="font-style: italic;" class="text-secondary">All rooms are occupied</div>
+                @endif
             </div>
         </div>
         <div class="col-8">
@@ -299,6 +309,101 @@
                     </button>
                 </div>
                 <div class="calendar"></div>  
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-12 grid-margin stretch-card">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title mb-3">My Reservations</h4>
+                
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <div class="d-flex align-items-center gap-2">
+                        <span>Show</span>
+                        <select class="form-select form-select-sm" style="width: auto;">
+                            <option value="10">10</option>
+                            <option value="25">25</option>
+                            <option value="50">50</option>
+                            <option value="100">100</option>
+                        </select>
+                        <span>entries</span>
+                    </div>
+                    <div class="col-md-4">
+                        <form method="GET" action="#" class="custom_form" enctype="multipart/form-data">
+                            <div class="search">
+                                <input type="text" class="form-control" placeholder="Search reservations..." name="search" value="{{ request('search') }}"> 
+                                <button class="btn btn-sm btn-primary">Search</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th width="10%">Actions</th>
+                                <th width="12%">Reservation ID</th>
+                                <th width="17%">Room</th>
+                                <th width="20%">Purpose</th>
+                                <th width="15%">Reserved By</th>
+                                <th width="18%">Reserved Date</th>
+                                <th width="8%">Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach($datas as $data)
+                            <tr style="background: #f0f9ff;">
+                                <td>
+                                    <button class="btn btn-outline-info btn-sm" title="View Details">
+                                        <i class="mdi mdi-eye"></i>
+                                    </button>
+                                    <button class="btn btn-outline-danger btn-sm" title="Cancel">
+                                        <i class="mdi mdi-close"></i>
+                                    </button>
+                                </td>
+                                <td>{{ $data->reservation_id }}</td>
+                                <td>{{ $data->room_name }}</td>
+                                <td><strong>{{ $data->purpose }}</strong></td>
+                                <td>{{ $data->reservedBy->name }}</td>
+                                <td>
+                                    <strong class="text-primary">{{ date('Y-m-d', strtotime($data->reserved_from)) }} - {{ date('Y-m-d', strtotime($data->reserved_to)) }}</strong>
+                                </td>
+                                <td>
+                                    @if($data->status == 'Pending')
+                                        <span class="status-badge status-expired">Pending</span>
+                                    @elseif($data->status == 'Approved')
+                                        <span class="status-badge status-ready">Approved</span>
+                                    @else
+                                        <span class="status-badge status-cancelled">Rejected</span>
+                                    @endif
+                                </td>
+                            </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Pagination -->
+                <div class="pagination-wrapper">
+                    <div class="pagination-info">
+                        Showing 1 to 4 of 4 entries
+                    </div>
+                    <nav>
+                        <ul class="pagination">
+                            <li class="page-item disabled">
+                                <a class="page-link" href="#" tabindex="-1">Previous</a>
+                            </li>
+                            <li class="page-item active">
+                                <a class="page-link" href="#">1</a>
+                            </li>
+                            <li class="page-item">
+                                <a class="page-link" href="#">Next</a>
+                            </li>
+                        </ul>
+                    </nav>
+                </div>
             </div>
         </div>
     </div>
@@ -339,11 +444,11 @@
                             </div>
                             <div class="col-md-6 form-group mb-2">
                                 <label>Date From&nbsp;<span class="text-danger">*</span></label>
-                                <input type="datetime-local" class="form-control" name="reserved_from">
+                                <input type="datetime-local" class="form-control" name="reserved_from" required>
                             </div>
                             <div class="col-md-6 form-group mb-2">
                                 <label>Date To&nbsp;<span class="text-danger">*</span></label>
-                                <input type="datetime-local" class="form-control" name="reserved_to">
+                                <input type="datetime-local" class="form-control" name="reserved_to" required>
                             </div>
                         </div>
                     </div>
@@ -391,31 +496,31 @@
             },
             defaultView: 'month',
             navLinks: true,
-            editable: false,            
-            eventStartEditable: false,  
-            eventDurationEditable: false, 
-            eventLimit: true,
-            displayEventTime: false, 
+            editable: false,
+            eventStartEditable: false,
+            eventDurationEditable: false,
+            eventLimit: false,
+            displayEventTime: false,
             events: room_reservation,
+
             eventClick: function(event) {
                 Swal.fire({
                     title: '<b>Room Reservation Details</b>',
                     html: `
-                        <div style="text-align:center;">
-                            <p><strong>Room:</strong> ${event.title.replace(/<br>/g, '<br>')}</p>
-                            <p><strong>From:</strong> ${moment(event.start).format('MMM D, YYYY h:mm A')}</p>
-                            <p><strong>To:</strong> ${moment(event.end).format('MMM D, YYYY h:mm A')}</p>
+                        <div style="text-align:left;">
+                            <p><strong>Room:</strong>&nbsp;${event.title}</p>
+                            <p><strong>From:</strong>&nbsp;${moment(event.start).format('MMM D, YYYY h:mm A')}</p>
+                            <p><strong>To:</strong>&nbsp;${moment(event.end).format('MMM D, YYYY h:mm A')}</p>
                             ${event.reason ? `<p><strong>Purpose:</strong> ${event.reason}</p>` : ''}
                         </div>
                     `,
                     icon: 'info',
                     confirmButtonText: 'Close',
-                    confirmButtonColor: '#3085d6',
-                    width: 400,
-                    background: '#f9f9f9',
+                    width: 420,
                 });
             }
         });
+
 
         function submitBranch() {
             const form = document.getElementById('addRoomReservationForm');
