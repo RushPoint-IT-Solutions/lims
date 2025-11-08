@@ -35,16 +35,42 @@
                                 <input type="text" readonly class="form-control-plaintext" value="{{ date('Y-m-d h:i:s', strtotime($data->reserved_to)) }}">
                             </div>
                         </div>
-                        <div class="form-group row">
+                        <div class="form-group row mb-2">
                             <label class="col-sm-2 col-form-label">Status</label>
                             <div class="col-sm-4">
                                 <input type="text" readonly class="form-control-plaintext" value="{{ $data->status }}">
                             </div>
-                            <label class="col-sm-2 col-form-label">Remarks</label>
-                            <div class="col-sm-4">
-                                <input type="text" readonly class="form-control-plaintext" value="{{ $data->remarks }}">
-                            </div>
+                            @if($data->status == 'Disapproved')
+                                <label class="col-sm-2 col-form-label">Remarks</label>
+                                <div class="col-sm-4">
+                                    <input type="text" readonly class="form-control-plaintext" value="{{ $data->remarks  ?? '' }}">
+                                </div>
+                            @endif
                         </div>
+                        @if($data->status == 'Approved')
+                            <div class="form-group row">
+                                <label class="col-sm-2 col-form-label">Approved By</label>
+                                <div class="col-sm-4">
+                                    <input type="text" readonly class="form-control-plaintext" value="{{ $data->approvedBy->name ?? '' }}">
+                                </div>
+                                <label class="col-sm-2 col-form-label">Approved Date</label>
+                                <div class="col-sm-4">
+                                    <input type="text" readonly class="form-control-plaintext" value="{{ date('Y-m-d h:i:s', strtotime($data->approved_date)) }}">
+                                </div>
+                            </div>
+                        @endif
+                        @if($data->status == 'Disapproved')
+                            <div class="form-group row">
+                                <label class="col-sm-2 col-form-label">Disapproved By</label>
+                                <div class="col-sm-4">
+                                    <input type="text" readonly class="form-control-plaintext" value="{{ $data->disapprovedBy->name ?? '' }}">
+                                </div>
+                                <label class="col-sm-2 col-form-label">dispproved Date</label>
+                                <div class="col-sm-4">
+                                    <input type="text" readonly class="form-control-plaintext" value="{{ date('Y-m-d h:i:s', strtotime($data->disapproved_date)) }}">
+                                </div>
+                            </div>
+                        @endif
                     </div>
                 </div> 
                 <div class="modal-footer">
