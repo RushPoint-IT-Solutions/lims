@@ -186,6 +186,7 @@
                         <div class="col-md-12 form-group mb-2">
                             <label>Image</label>
                             <input type="file" name="image" class="form-control">
+                            <p class="text-muted mb-0">or drag and drop</p>
                         </div>
                     </div>
                 </div>

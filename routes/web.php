@@ -62,6 +62,10 @@ Route::group(['middleware' => ['auth']], function () {
     Route::post('room_reservation_approved/{id}', 'RoomReservationController@approved');
     Route::post('room_reservation_disapproved/{id}', 'RoomReservationController@disapproved');
     Route::post('delete_room_reservation/{id}', 'RoomReservationController@destroy')->name('delete_room_reservation');
+
+    // E Books
+    Route::get('/e_books', 'EBookController@index')->name('e_books');
+    Route::post('/new_ebook', 'EBookController@store')->name('e_books.store');
 });
 
 
@@ -116,6 +120,6 @@ Route::get('/reports', 'ReportsController@index')->name('reports');
 Route::get('/e_resources', 'EResourcesController@index')->name('e_resources');
 
 //e-resources
-Route::get('/e-books', 'EBooksController@index')->name('e-books');
+
 
 

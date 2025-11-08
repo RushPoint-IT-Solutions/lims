@@ -756,9 +756,25 @@
                         </li>
 
                         <li class="nav-item">
+                            <a class="nav-link menu-link collapsed" href="#sidebarDigital" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarDigital">
+                                <i class="ri-book-2-line"></i><span data-key="t-resources">Digital Resource</span>
+                            </a>
+                            <div class="menu-dropdown collapse" id="sidebarDigital">
+                                <ul class="nav nav-sm flex-column">
+                                    <li class="nav-item">
+                                        <a href="{{ url('e_books') }}" class="nav-link" data-key="t-ebooks">E-Books</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="{{ url('e_resources') }}" class="nav-link" data-key="t-e-access">E-Resources Access</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </li>
+
+                        <li class="nav-item">
                             <a class="nav-link menu-link" href="{{ url('users') }}">
                                 <i class="ri-team-line"></i>
-                                <span data-key="t-dashboards">User Management</span>
+                                <span data-key="t-dashboards">Member Management</span>
                             </a>
                         </li>
 
@@ -769,7 +785,7 @@
                             </a>
                         </li>
 
-                       <li class="nav-item">
+                        {{-- <li class="nav-item">
                             <a class="nav-link menu-link" href="{{ url('e-books') }}">
                                 <i class="ri-book-open-line"></i>
                                 <span data-key="t-dashboards">E-Books</span>
@@ -781,7 +797,7 @@
                                 <i class="ri-book-2-line"></i>
                                 <span data-key="t-dashboards">E-Resources Access</span>
                             </a>
-                        </li>
+                        </li> --}}
                     
 
                         @if(auth()->user()->role == "Admin")
