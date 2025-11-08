@@ -519,14 +519,140 @@
 
 @section('content')
     <div class="page-header mt-5">
-        <h4>E-Resources</h4>
+        <h4>E Books</h4>
         <div class="header-actions">
-            <a href="#" class="add-book-btn" data-bs-toggle="modal" data-bs-target="#addBookModal">
-                <i class="ri-add-circle-line"></i> Add Book
+            <a href="#" class="add-book-btn" data-bs-toggle="modal" data-bs-target="#addEBookModal">
+                <i class="ri-add-circle-line"></i> Add E Book
             </a>
             <input type="text" class="search-input" placeholder="Search by title or author" id="searchInput">
         </div>
     </div>
+
+    <div class="modal fade select2-modal" id="addEBookModal" tabindex="-1" role="dialog" aria-labelledby="addEBookData" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Add New E Book</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form id="addEBookForm" method="POST" action="{{ url('/new_ebook') }}" onsubmit="show()" enctype="multipart/form-data">
+                    @csrf
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-md-6 form-group mb-2">
+                                <label>Type&nbsp;<span class="text-danger">*</span></label>
+                                <select name="type" id="type" class="form-control select2" required>
+                                    <option value="">-- Select Type --</option>
+                                    <option value="New">New</option>
+                                    <option value="Existing">Existing</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6 form-group mb-2">
+                                <label>Book Title&nbsp;<span class="text-danger">*</span></label>
+                                <input type="text" name="book_title" class="form-control" placeholder="Enter Book Title" required>
+                            </div>
+                            <div class="col-md-6 form-group mb-2">
+                                <label>ISBN&nbsp;<span class="text-danger">*</span></label>
+                                <input type="text" name="isbn" class="form-control" placeholder="978-XXXXXXXXXX" required>
+                            </div>
+                            <div class="col-md-6 form-group mb-2">
+                                <label>Author&nbsp;<span class="text-danger">*</span></label>
+                                <input type="text" name="author_name" class="form-control" placeholder="Enter Author Name" required>
+                            </div>
+                            <div class="col-md-6 form-group mb-2">
+                                <label>Publisher</label>
+                                <input type="text" name="publisher" class="form-control" placeholder="Enter Publisher Name">
+                            </div>
+                            <div class="col-md-6 form-group mb-2">
+                                <label>Publication Year</label>
+                                <input type="number" name="publication_year" class="form-control" placeholder="2025" min="1900" max="2100">
+                            </div>
+                            <div class="col-md-6 form-group mb-2">
+                                <label>Pages</label>
+                                <input type="number" name="page_count" class="form-control" placeholder="500" min="1">
+                            </div>
+                            <div class="col-md-12 form-group mb-2">
+                                <label>Cover Image</label>
+                                <input type="file" class="form-control" accept="image/*" id="coverUpload" name="cover_image_path">
+                            </div>
+                            <div class="col-md-12 form-group mb-2">
+                                <label>Upload PDF&nbsp;<span class="text-danger">*</span></label>
+                                <div class="upload-area" onclick="document.getElementById('pdfUpload').click()">
+                                    <i class="ri-file-pdf-line"></i>
+                                    <h5>Click to upload PDF</h5>
+                                    <p class="text-muted mb-0 text-center">or drag and drop</p>
+                                    <small class="text-muted" id="fileName"></small>
+                                </div>
+                                <input type="file" name="file_path" id="pdfUpload" accept=".pdf" style="display: none;" required>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary" onclick="submitEbook()">Submit</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="addBookModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Add New Book</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="addBookForm">
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Book Title *</label>
+                                <input type="text" class="form-control" placeholder="Enter book title" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Author *</label>
+                                <input type="text" class="form-control" placeholder="Enter author name" required>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-4 mb-3">
+                                <label class="form-label">ISBN</label>
+                                <input type="text" class="form-control" placeholder="978-XXXXXXXXXX">
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label class="form-label">Year</label>
+                                <input type="number" class="form-control" placeholder="2024" min="1900" max="2100">
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label class="form-label">Pages</label>
+                                <input type="number" class="form-control" placeholder="500" min="1">
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Cover Image</label>
+                            <input type="file" class="form-control" accept="image/*" id="coverUpload">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Upload PDF *</label>
+                            <div class="upload-area" onclick="document.getElementById('pdfUpload').click()">
+                                <i class="ri-file-pdf-line"></i>
+                                <h5>Click to upload PDF</h5>
+                                <p class="text-muted mb-0">or drag and drop</p>
+                                <small class="text-muted" id="fileName"></small>
+                            </div>
+                            <input type="file" id="pdfUpload" accept=".pdf" style="display: none;" required>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary" onclick="submitBook()">Add Book</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
 
     <div class="books-grid" id="booksGrid">
         <div class="book-item-card">
@@ -668,67 +794,33 @@
         </div>
     </div>
 
-    <div class="modal fade" id="addBookModal" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Add New Book</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                </div>
-                <div class="modal-body">
-                    <form id="addBookForm">
-                        <div class="row">
-                            <div class="col-md-6 mb-3">
-                                <label class="form-label">Book Title *</label>
-                                <input type="text" class="form-control" placeholder="Enter book title" required>
-                            </div>
-                            <div class="col-md-6 mb-3">
-                                <label class="form-label">Author *</label>
-                                <input type="text" class="form-control" placeholder="Enter author name" required>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-4 mb-3">
-                                <label class="form-label">ISBN</label>
-                                <input type="text" class="form-control" placeholder="978-XXXXXXXXXX">
-                            </div>
-                            <div class="col-md-4 mb-3">
-                                <label class="form-label">Year</label>
-                                <input type="number" class="form-control" placeholder="2024" min="1900" max="2100">
-                            </div>
-                            <div class="col-md-4 mb-3">
-                                <label class="form-label">Pages</label>
-                                <input type="number" class="form-control" placeholder="500" min="1">
-                            </div>
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label">Cover Image</label>
-                            <input type="file" class="form-control" accept="image/*" id="coverUpload">
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label">Upload PDF *</label>
-                            <div class="upload-area" onclick="document.getElementById('pdfUpload').click()">
-                                <i class="ri-file-pdf-line"></i>
-                                <h5>Click to upload PDF</h5>
-                                <p class="text-muted mb-0">or drag and drop</p>
-                                <small class="text-muted" id="fileName"></small>
-                            </div>
-                            <input type="file" id="pdfUpload" accept=".pdf" style="display: none;" required>
-                        </div>
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                    <button type="button" class="btn btn-primary" onclick="submitBook()">Add Book</button>
-                </div>
-            </div>
-        </div>
-    </div>
+    
 
 @endsection
 
 @section('js')
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 <script>
+    function submitEbook() {
+        const form = document.getElementById('addRoomForm');
+        if (form.checkValidity()) {
+            form.submit();
+        } else {
+            form.reportValidity();
+        }
+    }
+
+    $(document).on('shown.bs.modal', '.select2-modal', function () {
+        const $modal = $(this);
+        $modal.find('.select2').select2({
+            dropdownParent: $modal
+        });
+    });
+
 let currentPage = 1;
 let totalPages = 0;
 let currentBook = {};
