@@ -13,7 +13,9 @@ class RoomReservationController extends Controller
 {
     public function index(Request $request)
     {
-        $rooms = Room::get();
+        $today = Carbon::today();
+        $rooms = Room::all();
+
         $query = RoomReservation::query();
         if ($request->filled('search')) {
             $searchTerm = $request->input('search');
@@ -22,25 +24,23 @@ class RoomReservationController extends Controller
             });
         }
 
-        $today = Carbon::today();
+        $reservedRoomNames = RoomReservation::where('status', 'Approved')
+            ->whereDate('reserved_from', '<=', $today)
+            ->whereDate('reserved_to', '=', $today)
+            ->pluck('room_name')
+            ->unique();
 
-        $availableRooms = Room::whereNotIn('name', function($query) use ($today) {
-            $query->select('room_name')
-                ->from('room_reservations')
-                ->whereDate('reserved_from', '<=', $today)
-                ->whereDate('reserved_to', '>=', $today)
-                ->where('status', 'Approved');
-        })->get();
+        $availableRooms = Room::whereNotIn('name', $reservedRoomNames)->get();
         
-        // dd($availableRooms);
         $room_reservations_array = [];
         $room_reservations = RoomReservation::where('status', 'Approved')->get();
 
         foreach ($room_reservations as $room_reservation) {
             $object = new stdClass;
             $object->title  = $room_reservation->room_name;
-            $object->start  = date('Y-m-d\TH:i:s', strtotime($room_reservation->reserved_from));
-            $object->end    = date('Y-m-d\TH:i:s', strtotime($room_reservation->reserved_to));
+            $object->start  = date('Y-m-d H:i:s', strtotime($room_reservation->reserved_from));
+            $object->end    = date('Y-m-d H:i:s', strtotime($room_reservation->reserved_to));
+           
             $object->id     = $room_reservation->id;
             $object->reason = $room_reservation->purpose;
             switch (strtolower($room_reservation->purpose)) {
@@ -136,16 +136,32 @@ class RoomReservationController extends Controller
     {
         //
     }
-    public function approved($id)
+    
+    public function approved(Request $request)
     {
-        $data = RoomReservation::findOrFail($id);        
+        $data = RoomReservation::findOrFail($request->id);        
         $data->status = 'Approved';
+        $data->approved_by = auth()->user()->id;
+        $data->approved_date = Carbon::now();
         $data->save();
 
         Alert::success('Successfully Approved')->persistent('Dismiss');
         return back();
-
     }
+
+    public function disapproved(Request $request, $id)
+    {
+        $data = RoomReservation::findOrFail($id);
+        $data->status = 'Disapproved';
+        $data->disapproved_by = auth()->user()->id;
+        $data->disapproved_date = Carbon::now();
+        $data->remarks = $request->remarks; 
+        $data->save();
+        
+        Alert::success('Successfully Disapproved!')->persistent('Dismiss');
+        return back();
+    }
+
     public function destroy(Request $request)
     {
         $data = RoomReservation::findOrFail($request->id);

@@ -252,15 +252,27 @@
         border-color: #dee2e6;
         cursor: not-allowed;
     }
-    /* .fc .fc-button-group>:first-child
-    {
-        background: #520000;
-        color: #FFF;
+    .fc-legend {
+        display: flex;
+        gap: 15px;
+        margin-top: 15px;
+        font-size: 13px;
+        align-items: center;
+        flex-wrap: wrap;
     }
-    .fc .fc-button-group>* {
-        color: #FFF;
-        background: #520000;
-    } */
+
+    .fc-legend-item {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+    }
+
+    .fc-legend-color {
+        width: 14px;
+        height: 14px;
+        border-radius: 3px;
+        display: inline-block;
+    }
 </style>
 @endsection
 
@@ -276,28 +288,25 @@
             <div class="book-search-card">
                 <h4 class="card-title">Available Room Today</h4>
                 <hr>
-                @if(count($availableRooms) > 0)
+                @if($availableRooms->count() > 0)
                     @foreach ($availableRooms as $available)
-                        <div class="row">
+                        <div class="row align-items-center mb-2">
                             <div class="col-sm-8">
-                                <b>Room Name:</b>
-                                <span>{{ $available->name }}</span>
-                                <br>
-                                <b>Floor: </b>
-                                <span>{{ $available->floor }}</span>
+                                <b>Room Name:</b> {{ $available->name }}<br>
+                                <b>Floor:</b> {{ $available->floor }}
                             </div>
-                            <div class="col-sm-4">
+                            <div class="col-sm-4 text-end">
                                 @if(!empty($available->image) && file_exists(public_path($available->image)))
-                                    <img src="{{ asset($available->image) }}" alt="Room Image" width="50" height="50">
+                                    <img src="{{ asset($available->image) }}" alt="Room Image" width="50" height="50" style="object-fit: cover; border-radius: 4px;">
                                 @else
-                                    -
+                                    <span class="text-muted">No Image</span>
                                 @endif
                             </div>
                         </div>
-                        <hr>
+                        <hr class="my-2">
                     @endforeach
                 @else
-                    <div style="font-style: italic;" class="text-secondary">All rooms are occupied</div>
+                    <div class="text-secondary fst-italic">All rooms are currently reserved.</div>
                 @endif
             </div>
         </div>
@@ -309,6 +318,21 @@
                     </button>
                 </div>
                 <div class="calendar"></div>  
+
+                <div class="fc-legend">
+                    <div class="fc-legend-item">
+                        <span class="fc-legend-color" style="background-color: #007bff;"></span> Meeting
+                    </div>
+                    <div class="fc-legend-item">
+                        <span class="fc-legend-color" style="background-color: #28a745;"></span> Session
+                    </div>
+                    <div class="fc-legend-item">
+                        <span class="fc-legend-color" style="background-color: #ffc107;"></span> Events 
+                    </div>
+                     <div class="fc-legend-item">
+                        <span class="fc-legend-color" style="background-color: #dc3545;"></span> Others 
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -359,16 +383,13 @@
                                         <button class="btn btn-outline-primary btn-sm" title="View Details" data-bs-toggle="modal" data-bs-target="#viewReservation{{$data->id}}">
                                             <i class="mdi mdi-eye"></i>
                                         </button>
-                                        <button class="btn btn-outline-success btn-sm" title="Approved">
-                                            <i class="mdi mdi-check"></i>
-                                        </button>
-                                        <form action="{{ url('room_reservation_approved/' . $data->id) }}" class="d-inline-block" method="POST">
+                                        <form action="{{ url('room_reservation_approved/' . $data->id) }}" class="d-inline-block" method="POST" enctype="multipart/form-data">
                                             @csrf
-                                            <button type="submit" class="btn btn-outline-success approvedBtn" title="Approved">
+                                            <button type="button" class="btn btn-sm btn-outline-success approvedBtn" title="Approved">
                                                 <i class="mdi mdi-check"></i>
                                             </button>
                                         </form>
-                                        <button class="btn btn-outline-danger btn-sm" title="Disapproved">
+                                        <button class="btn btn-outline-danger btn-sm" title="Disapproved Reservation" data-bs-toggle="modal" data-bs-target="#disapprovedReservation{{$data->id}}">
                                             <i class="mdi mdi-close"></i>
                                         </button>
                                         <form method="POST" class="d-inline-block" action="{{url('delete_room_reservation/'.$data->id)}}" onsubmit="show()" enctype="multipart/form-data">
@@ -405,6 +426,7 @@
                                     </td>
                                 </tr>
                                 @include('circulation.rooms_reservation.view')
+                                @include('circulation.rooms_reservation.disapproved')
                             @empty
                                 <tr>
                                     <td colspan="7" class="text-center py-4">
@@ -457,7 +479,7 @@
                                     <option value="Meeting">Meeting</option>
                                     <option value="Session">Session</option>
                                     <option value="Events">Events</option>
-                                    <option value="Other">Others</option>
+                                    <option value="Others">Others</option>
                                 </select>
                             </div>
                             <div class="offset-md-6 col-md-6 form-group mb-2" id="remarks-container" style="display: none;">
@@ -499,7 +521,7 @@
 
         $(document).ready(function () {
             $('#purpose').on('change', function () {
-                if ($(this).val() === 'Other') {
+                if ($(this).val() === 'Others') {
                     $('#remarks-container').show();
                 } else {
                     $('#remarks-container').hide(); 
@@ -517,13 +539,15 @@
                     showCancelButton: true,
                     confirmButtonColor: "#3085d6",
                     cancelButtonColor: "#d33",
-                    confirmButtonText: "Yes, delete it!"
+                    confirmButtonText: "Yes, Approved!"
                 }).then((result) => {
                     if (result.isConfirmed) {
                         form.submit()
                     }
                 });
             })
+
+            
 
             $(".deleteBtn").on('click', function() {
                 var form = $(this).closest('form')
@@ -554,10 +578,7 @@
             },
             defaultView: 'month',
             navLinks: true,
-            editable: false,
-            eventStartEditable: false,
-            eventDurationEditable: false,
-            eventLimit: false,
+            eventLimit: true,
             displayEventTime: false,
             events: room_reservation,
 
@@ -567,8 +588,8 @@
                     html: `
                         <div style="text-align:left;">
                             <p><strong>Room:</strong>&nbsp;${event.title}</p>
-                            <p><strong>From:</strong>&nbsp;${moment(event.start).format('MMM D, YYYY h:mm A')}</p>
-                            <p><strong>To:</strong>&nbsp;${moment(event.end).format('MMM D, YYYY h:mm A')}</p>
+                            <p><strong>From:</strong>&nbsp;${moment(event.start).format('MMM. D, YYYY h:mm A')}</p>
+                            <p><strong>To:</strong>&nbsp;${moment(event.end).format('MMM. D, YYYY h:mm A')}</p>
                             ${event.reason ? `<p><strong>Purpose:</strong> ${event.reason}</p>` : ''}
                         </div>
                     `,
@@ -578,7 +599,6 @@
                 });
             }
         });
-
 
         function submitBranch() {
             const form = document.getElementById('addRoomReservationForm');

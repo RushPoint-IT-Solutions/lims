@@ -24,8 +24,10 @@ class CreateRoomReservationsTable extends Migration
             $table->text('other_remarks')->nullable();
             $table->string('status');
             $table->text('remarks')->nullable();
-            $table->string('approved_by');
-            $table->string('approved_date');
+            $table->string('approved_by')->nullable();
+            $table->string('approved_date')->nullable();
+            $table->string('disapproved_by')->nullable();
+            $table->string('disapproved_date')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

@@ -20,4 +20,14 @@ class RoomReservation extends Model implements Auditable
     {
        return $this->belongsTo(Room::class, 'room_name', 'name');  
     }
+
+    public function approvedBy()
+    {
+        return $this->belongsTo(User::class, 'approved_by', 'id'); 
+    }
+
+    public function disapprovedBy()
+    {
+        return $this->belongsTo(User::class, 'disapproved_by', 'id'); 
+    }
 }
