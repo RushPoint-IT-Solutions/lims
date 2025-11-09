@@ -547,8 +547,6 @@
                 });
             })
 
-            
-
             $(".deleteBtn").on('click', function() {
                 var form = $(this).closest('form')
 

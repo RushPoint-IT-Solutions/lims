@@ -153,22 +153,7 @@
         background: #b86d08;
     }
     
-    .edit-btn, .delete-btn {
-        background: #f8f9fa;
-        color: #6c757d;
-        border: 1px solid #dee2e6;
-        padding: 6px 12px;
-        border-radius: 5px;
-        font-size: 12px;
-        cursor: pointer;
-        transition: all 0.3s;
-    }
     
-    .edit-btn:hover {
-        background: #007bff;
-        color: white;
-        border-color: #007bff;
-    }
     
     .delete-btn:hover {
         background: #dc3545;
@@ -339,7 +324,7 @@
     }
     
     .page-content p {
-        margin-bottom: 15px;
+        margin-bottom: 5px;
         text-align: justify;
     }
     
@@ -549,7 +534,17 @@
                             </div>
                             <div class="col-md-6 form-group mb-2">
                                 <label>Book Title&nbsp;<span class="text-danger">*</span></label>
-                                <input type="text" name="book_title" class="form-control" placeholder="Enter Book Title" required>
+                                <div id="new_book_container">
+                                    <input type="text" name="new_book_title" class="form-control" placeholder="Enter Book Title">
+                                </div>
+                                <div id="existing_book_container">
+                                    <select name="existing_book_title" id="existing_book" class="form-control select2">
+                                        <option value="">-- Select Book --</option>
+                                        <option value="Book1">Book 1</option>
+                                        <option value="Book2">Book 2</option>
+                                        <option value="Book3">Book 3</option>
+                                    </select>
+                                </div>
                             </div>
                             <div class="col-md-6 form-group mb-2">
                                 <label>ISBN&nbsp;<span class="text-danger">*</span></label>
@@ -565,7 +560,7 @@
                             </div>
                             <div class="col-md-6 form-group mb-2">
                                 <label>Publication Year</label>
-                                <input type="number" name="publication_year" class="form-control" placeholder="2025" min="1900" max="2100">
+                                <input type="number" name="publication_year" class="form-control" placeholder="2025" min="1900" max="2500">
                             </div>
                             <div class="col-md-6 form-group mb-2">
                                 <label>Pages</label>
@@ -596,159 +591,55 @@
         </div>
     </div>
 
-    <div class="modal fade" id="addBookModal" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Add New Book</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+    <div class="books-grid" id="booksGrid">
+        @foreach ($ebooks as $ebook)
+        <div class="book-item-card">
+            <img src="{{ asset($ebook->cover_image_path ?? 'assets/images/lrc_logo.png') }}" alt="Book Cover">
+            <div class="book-item-info">
+                <h3 class="book-item-title">{{ $ebook->book_title }}</h3>
+                <p class="book-item-author">by {{ $ebook->author_name }}</p>
+                <div class="book-item-details">
+                    <div>Publisher: {{ $ebook->publsiher }} </div>
+                    <div>ISBN: {{ $ebook->isbn }} </div>
+                    <div>Pages: {{ $ebook->page_count }} • Year: {{ $ebook->publication_year }}</div>
                 </div>
-                <div class="modal-body">
-                    <form id="addBookForm">
-                        <div class="row">
-                            <div class="col-md-6 mb-3">
-                                <label class="form-label">Book Title *</label>
-                                <input type="text" class="form-control" placeholder="Enter book title" required>
-                            </div>
-                            <div class="col-md-6 mb-3">
-                                <label class="form-label">Author *</label>
-                                <input type="text" class="form-control" placeholder="Enter author name" required>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-4 mb-3">
-                                <label class="form-label">ISBN</label>
-                                <input type="text" class="form-control" placeholder="978-XXXXXXXXXX">
-                            </div>
-                            <div class="col-md-4 mb-3">
-                                <label class="form-label">Year</label>
-                                <input type="number" class="form-control" placeholder="2024" min="1900" max="2100">
-                            </div>
-                            <div class="col-md-4 mb-3">
-                                <label class="form-label">Pages</label>
-                                <input type="number" class="form-control" placeholder="500" min="1">
-                            </div>
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label">Cover Image</label>
-                            <input type="file" class="form-control" accept="image/*" id="coverUpload">
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label">Upload PDF *</label>
-                            <div class="upload-area" onclick="document.getElementById('pdfUpload').click()">
-                                <i class="ri-file-pdf-line"></i>
-                                <h5>Click to upload PDF</h5>
-                                <p class="text-muted mb-0">or drag and drop</p>
-                                <small class="text-muted" id="fileName"></small>
-                            </div>
-                            <input type="file" id="pdfUpload" accept=".pdf" style="display: none;" required>
-                        </div>
+                <div class="book-actions">
+                    <button class="read-btn" onclick="openBookReader('{{ $ebook->book_title }}', '{{ $ebook->author_name }}', {{ $ebook->page_count }}, '{{ asset($ebook->file_path) }}')">
+                        <i class="ri-book-open-line"></i>&nbsp;Read
+                    </button>
+                    <button class="btn btn-outline-info" title="Edit Ebook" data-bs-toggle="modal" data-bs-target="#editEbook{{$ebook->id}}">
+                        <i class="ri-edit-line"></i>&nbsp;Edit
+                    </button>
+                    <form method="POST" class="d-inline-block" action="{{url('delete_ebook/'.$ebook->id)}}" onsubmit="show()" enctype="multipart/form-data">
+                        @csrf
+                        <button type="button" class="btn btn-outline-danger deleteBtn">
+                            <i class="mdi mdi-trash-can"></i>
+                        </button>
                     </form>
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                    <button type="button" class="btn btn-primary" onclick="submitBook()">Add Book</button>
-                </div>
             </div>
+        </div>
+        @include('digital.ebooks.edit')
+        @endforeach
+    </div>
+    <div id="bookReader" class="book-reader-modal">
+        <div class="reader-header">
+            <h2 id="readerBookTitle"></h2>
+            <button onclick="closeBookReader()">×</button>
+        </div>
+        <div id="pdfViewerContainer" style="width:100%; height:80vh; overflow:auto; background:#f4f4f4; text-align:center;">
+            <canvas id="pdfCanvas"></canvas>
+        </div>
+
+        <div class="reader-controls">
+            <button onclick="prevPDFPage()">Previous</button>
+            <span id="pageNumDisplay"></span>
+            <button onclick="nextPDFPage()">Next</button>
         </div>
     </div>
 
-
-    <div class="books-grid" id="booksGrid">
-        <div class="book-item-card">
-            <img src="{{asset('assets/images/book1.jpg')}}" alt="Book Cover">
-            <div class="book-item-info">
-                <h3 class="book-item-title">Clean Code: A Handbook of Agile Software</h3>
-                <p class="book-item-author">by Robert C. Martin</p>
-                <div class="book-item-details">
-                    <div>ISBN: 978-0132350884</div>
-                    <div>Pages: 464 • Year: 2008</div>
-                </div>
-                <div class="book-actions">
-                    <button class="read-btn" onclick="openBookReader('Clean Code: A Handbook of Agile Software', 'Robert C. Martin', 464)">
-                        <i class="ri-book-open-line"></i> Read
-                    </button>
-                    <button class="edit-btn">
-                        <i class="ri-edit-line"></i> Edit
-                    </button>
-                    <button class="delete-btn">
-                        <i class="ri-delete-bin-line"></i>
-                    </button>
-                </div>
-            </div>
-        </div>
-
-        <div class="book-item-card">
-            <img src="{{asset('assets/images/book2.jpg')}}" alt="Book Cover">
-            <div class="book-item-info">
-                <h3 class="book-item-title">Introduction to Algorithms</h3>
-                <p class="book-item-author">by Thomas H. Cormen</p>
-                <div class="book-item-details">
-                    <div>ISBN: 978-0262033848</div>
-                    <div>Pages: 1312 • Year: 2009</div>
-                </div>
-                <div class="book-actions">
-                    <button class="read-btn" onclick="openBookReader('Introduction to Algorithms', 'Thomas H. Cormen', 1312)">
-                        <i class="ri-book-open-line"></i> Read
-                    </button>
-                    <button class="edit-btn">
-                        <i class="ri-edit-line"></i> Edit
-                    </button>
-                    <button class="delete-btn">
-                        <i class="ri-delete-bin-line"></i>
-                    </button>
-                </div>
-            </div>
-        </div>
-
-        <div class="book-item-card">
-            <img src="{{asset('assets/images/book3.jpg')}}" alt="Book Cover">
-            <div class="book-item-info">
-                <h3 class="book-item-title">Database System Concepts</h3>
-                <p class="book-item-author">by Abraham Silberschatz</p>
-                <div class="book-item-details">
-                    <div>ISBN: 978-0073523323</div>
-                    <div>Pages: 1376 • Year: 2010</div>
-                </div>
-                <div class="book-actions">
-                    <button class="read-btn" onclick="openBookReader('Database System Concepts', 'Abraham Silberschatz', 1376)">
-                        <i class="ri-book-open-line"></i> Read
-                    </button>
-                    <button class="edit-btn">
-                        <i class="ri-edit-line"></i> Edit
-                    </button>
-                    <button class="delete-btn">
-                        <i class="ri-delete-bin-line"></i>
-                    </button>
-                </div>
-            </div>
-        </div>
-
-        <div class="book-item-card">
-            <img src="{{asset('assets/images/book4.jpg')}}" alt="Book Cover">
-            <div class="book-item-info">
-                <h3 class="book-item-title">Design Patterns: Elements of Reusable Object-Oriented Software</h3>
-                <p class="book-item-author">by Gang of Four</p>
-                <div class="book-item-details">
-                    <div>ISBN: 978-0201633610</div>
-                    <div>Pages: 395 • Year: 1994</div>
-                </div>
-                <div class="book-actions">
-                    <button class="read-btn" onclick="openBookReader('Design Patterns: Elements of Reusable Object-Oriented Software', 'Gang of Four', 395)">
-                        <i class="ri-book-open-line"></i> Read
-                    </button>
-                    <button class="edit-btn">
-                        <i class="ri-edit-line"></i> Edit
-                    </button>
-                    <button class="delete-btn">
-                        <i class="ri-delete-bin-line"></i>
-                    </button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="book-reader-modal" id="bookReader">
+    
+    <!-- <div class="book-reader-modal" id="bookReader">
         <div class="reader-header">
             <h2 class="reader-title" id="readerBookTitle">Book Title</h2>
             <button class="close-reader" onclick="closeBookReader()" aria-label="Close reader">×</button>
@@ -792,13 +683,9 @@
                 Next <i class="ri-arrow-right-line"></i>
             </button>
         </div>
-    </div>
+    </div> -->
 
-    
-
-@endsection
-
-@section('js')
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.min.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
@@ -806,7 +693,7 @@
 
 <script>
     function submitEbook() {
-        const form = document.getElementById('addRoomForm');
+        const form = document.getElementById('addEBookForm');
         if (form.checkValidity()) {
             form.submit();
         } else {
@@ -821,214 +708,313 @@
         });
     });
 
-let currentPage = 1;
-let totalPages = 0;
-let currentBook = {};
-let isFlipping = false;
+    $(document).ready(function () {
+        $('#existing_book').select2();
 
-const sampleContent = {
-    chapters: [
-        {
-            title: "Introduction",
-            content: "Welcome to this comprehensive guide. This book aims to provide you with deep insights and practical knowledge that you can apply in your field. Throughout these pages, you'll discover concepts, techniques, and best practices that have been refined over years of experience."
-        },
-        {
-            title: "Core Concepts",
-            content: "Understanding the fundamentals is crucial for building a strong foundation. In this chapter, we explore the essential principles that underpin everything else. These concepts form the bedrock upon which all advanced topics are built."
-        },
-        {
-            title: "Practical Applications",
-            content: "Theory meets practice in this section. Here we examine real-world scenarios and case studies that demonstrate how to apply what you've learned. Each example is carefully chosen to illustrate key points and provide actionable insights."
-        },
-        {
-            title: "Advanced Topics",
-            content: "Now that we've covered the basics, let's dive deeper into more complex subjects. This chapter challenges you to think critically and expand your understanding beyond conventional boundaries. We explore cutting-edge developments and emerging trends."
-        },
-        {
-            title: "Conclusion",
-            content: "As we reach the end of this journey, let's reflect on what we've learned and look ahead to future possibilities. The knowledge you've gained here is just the beginning. Continue to explore, question, and grow in your understanding."
-        }
-    ]
-};
+        $('#type').on('change', function () {
+            const type = $(this).val();
 
-function generatePageContent(pageNum) {
-    if (pageNum > totalPages || pageNum < 1) return '';
-    
-    const chapterIndex = Math.floor((pageNum - 1) / 2) % sampleContent.chapters.length;
-    const chapter = sampleContent.chapters[chapterIndex];
-    const isFirstPageOfChapter = (pageNum - 1) % 2 === 0;
-    
-    let content = '';
-    if (isFirstPageOfChapter) {
-        content = `<h2>${chapter.title}</h2><p>${chapter.content}</p>`;
-    } else {
-        content = `<p>${chapter.content}</p><p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>`;
-    }
-    
-    return content;
-}
+            if (type === 'Existing') {
+                $('#existing_book_container').show();
+                $('#new_book_container').hide();
+            } else if (type === 'New') {
+                $('#new_book_container').show();
+                $('#existing_book_container').hide();
+            } else {
+                $('#new_book_container, #existing_book_container').hide();
+            }
+        });
 
-function openBookReader(title, author, pages) {
-    currentBook = { title, author, pages };
-    totalPages = Math.ceil(pages / 2) * 2;
-    currentPage = 1;
-    
-    document.getElementById('readerBookTitle').textContent = title;
-    document.getElementById('totalPagesDisplay').textContent = totalPages;
-    document.getElementById('bookReader').classList.add('active');
-    document.body.style.overflow = 'hidden';
-    
-    const flipContainer = document.getElementById('flipContainer');
-    flipContainer.classList.remove('flipping');
-    flipContainer.style.transform = 'rotateY(0deg)';
-    
-    updatePages();
-    updateControls();
-}
+        $('#type').trigger('change');
 
-function closeBookReader() {
-    document.getElementById('bookReader').classList.remove('active');
-    document.body.style.overflow = '';
-}
+        $(".deleteBtn").on('click', function() {
+            var form = $(this).closest('form')
 
-function nextPage() {
-    if (isFlipping || currentPage >= totalPages - 1) return;
-    
-    isFlipping = true;
-    const flipContainer = document.getElementById('flipContainer');
-    
-    flipContainer.style.zIndex = '20';
-    flipContainer.style.transition = 'transform 0.8s cubic-bezier(0.645, 0.045, 0.355, 1)';
-    flipContainer.style.transform = 'rotateY(0deg)';
-    flipContainer.classList.remove('flipping');
-    
-    document.getElementById('frontContent').innerHTML = generatePageContent(currentPage + 1);
-    document.getElementById('frontNum').textContent = currentPage + 1;
-    
-    document.getElementById('backContent').innerHTML = generatePageContent(currentPage + 2);
-    document.getElementById('backNum').textContent = currentPage + 2;
-    
-    setTimeout(() => {
-        flipContainer.style.transform = 'rotateY(-180deg)';
-        flipContainer.classList.add('flipping');
-    }, 50);
-    
-    setTimeout(() => {
-        currentPage += 2;
-        
-        document.getElementById('leftStaticContent').innerHTML = generatePageContent(currentPage);
-        document.getElementById('leftStaticNum').textContent = currentPage;
-        
-        document.getElementById('rightStaticContent').innerHTML = generatePageContent(currentPage + 1);
-        document.getElementById('rightStaticNum').textContent = currentPage + 1;
-        
-        flipContainer.style.transition = 'none';
-        flipContainer.style.transform = 'rotateY(0deg)';
-        flipContainer.classList.remove('flipping');
-        flipContainer.style.zIndex = '10';
-        
-        setTimeout(() => {
-            flipContainer.style.transition = 'transform 0.8s cubic-bezier(0.645, 0.045, 0.355, 1)';
-            
-            document.getElementById('frontContent').innerHTML = generatePageContent(currentPage + 1);
-            document.getElementById('frontNum').textContent = currentPage + 1;
-            
-            document.getElementById('backContent').innerHTML = generatePageContent(currentPage + 2);
-            document.getElementById('backNum').textContent = currentPage + 2;
-            
-            updateControls();
-            updatePageDisplay();
-            isFlipping = false;
-        }, 50);
-    }, 850);
-}
-
-function previousPage() {
-    if (isFlipping || currentPage <= 1) return;
-    
-    isFlipping = true;
-    const flipContainer = document.getElementById('flipContainer');
-    
-    currentPage -= 2;
-    
-    document.getElementById('leftStaticContent').innerHTML = generatePageContent(currentPage);
-    document.getElementById('leftStaticNum').textContent = currentPage;
-    
-    document.getElementById('rightStaticContent').innerHTML = generatePageContent(currentPage + 1);
-    document.getElementById('rightStaticNum').textContent = currentPage + 1;
-    
-    document.getElementById('frontContent').innerHTML = generatePageContent(currentPage + 1);
-    document.getElementById('frontNum').textContent = currentPage + 1;
-    
-    document.getElementById('backContent').innerHTML = generatePageContent(currentPage + 2);
-    document.getElementById('backNum').textContent = currentPage + 2;
-    
-    flipContainer.style.transition = 'none';
-    flipContainer.style.transform = 'rotateY(-180deg)';
-    
-    setTimeout(() => {
-        flipContainer.style.transition = 'transform 0.8s cubic-bezier(0.645, 0.045, 0.355, 1)';
-        flipContainer.style.transform = 'rotateY(0deg)';
-        
-        setTimeout(() => {
-            updateControls();
-            updatePageDisplay();
-            isFlipping = false;
-        }, 800);
-    }, 50);
-}
-
-function updatePages() {
-    document.getElementById('leftStaticContent').innerHTML = generatePageContent(currentPage);
-    document.getElementById('leftStaticNum').textContent = currentPage;
-    
-    document.getElementById('rightStaticContent').innerHTML = generatePageContent(currentPage + 1);
-    document.getElementById('rightStaticNum').textContent = currentPage + 1;
-    
-    document.getElementById('frontContent').innerHTML = generatePageContent(currentPage + 1);
-    document.getElementById('frontNum').textContent = currentPage + 1;
-    
-    document.getElementById('backContent').innerHTML = generatePageContent(currentPage + 2);
-    document.getElementById('backNum').textContent = currentPage + 2;
-    
-    updatePageDisplay();
-}
-
-function updatePageDisplay() {
-    document.getElementById('currentPageDisplay').textContent = `${currentPage}-${currentPage + 1}`;
-}
-
-function updateControls() {
-    const prevBtn = document.getElementById('prevBtn');
-    const nextBtn = document.getElementById('nextBtn');
-    
-    prevBtn.disabled = currentPage <= 1;
-    nextBtn.disabled = currentPage >= totalPages - 1;
-}
-
-document.addEventListener('keydown', (e) => {
-    if (document.getElementById('bookReader').classList.contains('active')) {
-        if (e.key === 'ArrowRight') nextPage();
-        if (e.key === 'ArrowLeft') previousPage();
-        if (e.key === 'Escape') closeBookReader();
-    }
-});
-
-document.getElementById('searchInput').addEventListener('input', function(e) {
-    const searchTerm = e.target.value.toLowerCase();
-    const bookCards = document.querySelectorAll('.book-item-card');
-    
-    bookCards.forEach(card => {
-        const title = card.querySelector('.book-item-title').textContent.toLowerCase();
-        const author = card.querySelector('.book-item-author').textContent.toLowerCase();
-        
-        if (title.includes(searchTerm) || author.includes(searchTerm)) {
-            card.style.display = 'flex';
-        } else {
-            card.style.display = 'none';
-        }
+            Swal.fire({
+                title: "Are you sure?",
+                text: "You won't be able to revert this!",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Yes, delete it!"
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    form.submit()
+                }
+            });
+        })
     });
-});
+
+    let pdfDoc = null;
+    let currentPage = 1;
+    let pdfFilePath = '';
+
+    async function openBookReader(title, author, pages, filePath) {
+        document.getElementById('readerBookTitle').textContent = title;
+        document.getElementById('bookReader').classList.add('active');
+        document.body.style.overflow = 'hidden';
+
+        pdfFilePath = filePath;
+        await loadPDF(pdfFilePath);
+    }
+
+    function closeBookReader() {
+        document.getElementById('bookReader').classList.remove('active');
+        document.body.style.overflow = '';
+    }
+
+    async function loadPDF(url) {
+        try {
+            const loadingTask = pdfjsLib.getDocument(url);
+            pdfDoc = await loadingTask.promise;
+            currentPage = 1;
+            renderPage(currentPage);
+        } catch (err) {
+            alert('Error loading PDF: ' + err.message);
+        }
+    }
+
+    async function renderPage(num) {
+        const page = await pdfDoc.getPage(num);
+        const viewport = page.getViewport({ scale: 1.5 });
+        const canvas = document.getElementById('pdfCanvas');
+        const context = canvas.getContext('2d');
+        canvas.height = viewport.height;
+        canvas.width = viewport.width;
+
+        const renderContext = {
+            canvasContext: context,
+            viewport: viewport
+        };
+        await page.render(renderContext);
+    }
+
+    async function nextPDFPage() {
+        if (currentPage < pdfDoc.numPages) {
+            currentPage++;
+            renderPage(currentPage);
+            document.getElementById('pageNumDisplay').textContent = `${currentPage} / ${pdfDoc.numPages}`;
+        }
+    }
+
+    async function prevPDFPage() {
+        if (currentPage > 1) {
+            currentPage--;
+            renderPage(currentPage);
+            document.getElementById('pageNumDisplay').textContent = `${currentPage} / ${pdfDoc.numPages}`;
+        }
+    }
+
+
+    // let currentPage = 1;
+    // let totalPages = 0;
+    // let currentBook = {};
+    // let isFlipping = false;
+
+    // const sampleContent = {
+    //     chapters: [
+    //         {
+    //             title: "Introduction",
+    //             content: "Welcome to this comprehensive guide. This book aims to provide you with deep insights and practical knowledge that you can apply in your field. Throughout these pages, you'll discover concepts, techniques, and best practices that have been refined over years of experience."
+    //         },
+    //         {
+    //             title: "Core Concepts",
+    //             content: "Understanding the fundamentals is crucial for building a strong foundation. In this chapter, we explore the essential principles that underpin everything else. These concepts form the bedrock upon which all advanced topics are built."
+    //         },
+    //         {
+    //             title: "Practical Applications",
+    //             content: "Theory meets practice in this section. Here we examine real-world scenarios and case studies that demonstrate how to apply what you've learned. Each example is carefully chosen to illustrate key points and provide actionable insights."
+    //         },
+    //         {
+    //             title: "Advanced Topics",
+    //             content: "Now that we've covered the basics, let's dive deeper into more complex subjects. This chapter challenges you to think critically and expand your understanding beyond conventional boundaries. We explore cutting-edge developments and emerging trends."
+    //         },
+    //         {
+    //             title: "Conclusion",
+    //             content: "As we reach the end of this journey, let's reflect on what we've learned and look ahead to future possibilities. The knowledge you've gained here is just the beginning. Continue to explore, question, and grow in your understanding."
+    //         }
+    //     ]
+    // };
+
+// function generatePageContent(pageNum) {
+//     if (pageNum > totalPages || pageNum < 1) return '';
+    
+//     const chapterIndex = Math.floor((pageNum - 1) / 2) % sampleContent.chapters.length;
+//     const chapter = sampleContent.chapters[chapterIndex];
+//     const isFirstPageOfChapter = (pageNum - 1) % 2 === 0;
+    
+//     let content = '';
+//     if (isFirstPageOfChapter) {
+//         content = `<h2>${chapter.title}</h2><p>${chapter.content}</p>`;
+//     } else {
+//         content = `<p>${chapter.content}</p><p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>`;
+//     }
+    
+//     return content;
+// }
+
+// function openBookReader(title, author, pages) {
+//     currentBook = { title, author, pages };
+//     totalPages = Math.ceil(pages / 2) * 2;
+//     currentPage = 1;
+    
+//     document.getElementById('readerBookTitle').textContent = title;
+//     document.getElementById('totalPagesDisplay').textContent = totalPages;
+//     document.getElementById('bookReader').classList.add('active');
+//     document.body.style.overflow = 'hidden';
+    
+//     const flipContainer = document.getElementById('flipContainer');
+//     flipContainer.classList.remove('flipping');
+//     flipContainer.style.transform = 'rotateY(0deg)';
+    
+//     updatePages();
+//     updateControls();
+// }
+
+// function closeBookReader() {
+//     document.getElementById('bookReader').classList.remove('active');
+//     document.body.style.overflow = '';
+// }
+
+// function nextPage() {
+//     if (isFlipping || currentPage >= totalPages - 1) return;
+    
+//     isFlipping = true;
+//     const flipContainer = document.getElementById('flipContainer');
+    
+//     flipContainer.style.zIndex = '20';
+//     flipContainer.style.transition = 'transform 0.8s cubic-bezier(0.645, 0.045, 0.355, 1)';
+//     flipContainer.style.transform = 'rotateY(0deg)';
+//     flipContainer.classList.remove('flipping');
+    
+//     document.getElementById('frontContent').innerHTML = generatePageContent(currentPage + 1);
+//     document.getElementById('frontNum').textContent = currentPage + 1;
+    
+//     document.getElementById('backContent').innerHTML = generatePageContent(currentPage + 2);
+//     document.getElementById('backNum').textContent = currentPage + 2;
+    
+//     setTimeout(() => {
+//         flipContainer.style.transform = 'rotateY(-180deg)';
+//         flipContainer.classList.add('flipping');
+//     }, 50);
+    
+//     setTimeout(() => {
+//         currentPage += 2;
+        
+//         document.getElementById('leftStaticContent').innerHTML = generatePageContent(currentPage);
+//         document.getElementById('leftStaticNum').textContent = currentPage;
+        
+//         document.getElementById('rightStaticContent').innerHTML = generatePageContent(currentPage + 1);
+//         document.getElementById('rightStaticNum').textContent = currentPage + 1;
+        
+//         flipContainer.style.transition = 'none';
+//         flipContainer.style.transform = 'rotateY(0deg)';
+//         flipContainer.classList.remove('flipping');
+//         flipContainer.style.zIndex = '10';
+        
+//         setTimeout(() => {
+//             flipContainer.style.transition = 'transform 0.8s cubic-bezier(0.645, 0.045, 0.355, 1)';
+            
+//             document.getElementById('frontContent').innerHTML = generatePageContent(currentPage + 1);
+//             document.getElementById('frontNum').textContent = currentPage + 1;
+            
+//             document.getElementById('backContent').innerHTML = generatePageContent(currentPage + 2);
+//             document.getElementById('backNum').textContent = currentPage + 2;
+            
+//             updateControls();
+//             updatePageDisplay();
+//             isFlipping = false;
+//         }, 50);
+//     }, 850);
+// }
+
+// function previousPage() {
+//     if (isFlipping || currentPage <= 1) return;
+    
+//     isFlipping = true;
+//     const flipContainer = document.getElementById('flipContainer');
+    
+//     currentPage -= 2;
+    
+//     document.getElementById('leftStaticContent').innerHTML = generatePageContent(currentPage);
+//     document.getElementById('leftStaticNum').textContent = currentPage;
+    
+//     document.getElementById('rightStaticContent').innerHTML = generatePageContent(currentPage + 1);
+//     document.getElementById('rightStaticNum').textContent = currentPage + 1;
+    
+//     document.getElementById('frontContent').innerHTML = generatePageContent(currentPage + 1);
+//     document.getElementById('frontNum').textContent = currentPage + 1;
+    
+//     document.getElementById('backContent').innerHTML = generatePageContent(currentPage + 2);
+//     document.getElementById('backNum').textContent = currentPage + 2;
+    
+//     flipContainer.style.transition = 'none';
+//     flipContainer.style.transform = 'rotateY(-180deg)';
+    
+//     setTimeout(() => {
+//         flipContainer.style.transition = 'transform 0.8s cubic-bezier(0.645, 0.045, 0.355, 1)';
+//         flipContainer.style.transform = 'rotateY(0deg)';
+        
+//         setTimeout(() => {
+//             updateControls();
+//             updatePageDisplay();
+//             isFlipping = false;
+//         }, 800);
+//     }, 50);
+// }
+
+// function updatePages() {
+//     document.getElementById('leftStaticContent').innerHTML = generatePageContent(currentPage);
+//     document.getElementById('leftStaticNum').textContent = currentPage;
+    
+//     document.getElementById('rightStaticContent').innerHTML = generatePageContent(currentPage + 1);
+//     document.getElementById('rightStaticNum').textContent = currentPage + 1;
+    
+//     document.getElementById('frontContent').innerHTML = generatePageContent(currentPage + 1);
+//     document.getElementById('frontNum').textContent = currentPage + 1;
+    
+//     document.getElementById('backContent').innerHTML = generatePageContent(currentPage + 2);
+//     document.getElementById('backNum').textContent = currentPage + 2;
+    
+//     updatePageDisplay();
+// }
+
+// function updatePageDisplay() {
+//     document.getElementById('currentPageDisplay').textContent = `${currentPage}-${currentPage + 1}`;
+// }
+
+// function updateControls() {
+//     const prevBtn = document.getElementById('prevBtn');
+//     const nextBtn = document.getElementById('nextBtn');
+    
+//     prevBtn.disabled = currentPage <= 1;
+//     nextBtn.disabled = currentPage >= totalPages - 1;
+// }
+
+// document.addEventListener('keydown', (e) => {
+//     if (document.getElementById('bookReader').classList.contains('active')) {
+//         if (e.key === 'ArrowRight') nextPage();
+//         if (e.key === 'ArrowLeft') previousPage();
+//         if (e.key === 'Escape') closeBookReader();
+//     }
+// });
+
+// document.getElementById('searchInput').addEventListener('input', function(e) {
+//     const searchTerm = e.target.value.toLowerCase();
+//     const bookCards = document.querySelectorAll('.book-item-card');
+    
+//     bookCards.forEach(card => {
+//         const title = card.querySelector('.book-item-title').textContent.toLowerCase();
+//         const author = card.querySelector('.book-item-author').textContent.toLowerCase();
+        
+//         if (title.includes(searchTerm) || author.includes(searchTerm)) {
+//             card.style.display = 'flex';
+//         } else {
+//             card.style.display = 'none';
+//         }
+//     });
+// });
 
 document.getElementById('pdfUpload').addEventListener('change', function(e) {
     const fileName = e.target.files[0]?.name || '';
@@ -1070,17 +1056,6 @@ uploadArea.addEventListener('drop', function(e) {
     }
 });
 
-function submitBook() {
-    const form = document.getElementById('addBookForm');
-    if (form.checkValidity()) {
-        alert('Book added successfully!');
-        bootstrap.Modal.getInstance(document.getElementById('addBookModal')).hide();
-        form.reset();
-        document.getElementById('fileName').textContent = '';
-    } else {
-        form.reportValidity();
-    }
-}
 
 document.querySelectorAll('.delete-btn').forEach(btn => {
     btn.addEventListener('click', function(e) {
@@ -1089,11 +1064,9 @@ document.querySelectorAll('.delete-btn').forEach(btn => {
         }
     });
 });
-
-document.querySelectorAll('.edit-btn').forEach(btn => {
-    btn.addEventListener('click', function() {
-        alert('Edit functionality would open a modal with the book details for editing.');
-    });
-});
 </script>
+@endsection
+
+@section('js')
+
 @endsection
