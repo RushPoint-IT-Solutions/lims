@@ -186,3 +186,12 @@
         background-color: rgb(104, 0, 0) !important;
         color: #fff;
     }
+
+    .modal-header {
+        border-bottom: 2px solid #dee2e6;
+    }
+    
+    .modal-footer {
+        border-top: 2px solid #dee2e6;
+    }
+    
