@@ -2,6 +2,177 @@
 
 @section('css')
 <style>
+    .dashboard-card {
+        border-radius: 5px;
+        padding: 20px;
+        background: white;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .dashboard-card .icon-circle {
+        position: absolute;
+        right: 20px;
+        top: 20px;
+        width: 45px;
+        height: 45px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: #d07e0a;
+    }
+    
+    .dashboard-card .icon-circle i {
+        color: white;
+        font-size: 20px;
+    }
+    
+    .dashboard-card h2 {
+        font-size: 32px;
+        font-weight: 700;
+        margin-bottom: 5px;
+    }
+    
+    .dashboard-card p {
+        color: #6c757d;
+        margin: 0;
+        font-size: 14px;
+    }
+    
+    .section-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+    }
+    
+    .section-header h5 {
+        font-size: 18px;
+        font-weight: 600;
+        margin: 0;
+    }
+    
+    .view-all-btn {
+        color: #d07e0a;
+        text-decoration: none;
+        font-size: 14px;
+    }
+    
+    .view-all-btn:hover {
+        text-decoration: underline;
+    }
+    
+    .table-responsive {
+        background: white;
+        border-radius: 5px;
+        padding: 20px;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+
+    .book-table th,
+    .book-table td {
+        text-align: left;
+        vertical-align: middle;
+    }
+
+    .book-table tbody tr {
+        height: 55px;
+        background-color: #fff;
+        border-radius: 5px;
+    }
+    
+    .status-badge {
+        padding: 4px 12px;
+        border-radius: 20px;
+        font-size: 12px;
+        font-weight: 500;
+    }
+    
+    .status-overdue {
+        background: #ffe5e5;
+        color: #ff6b6b;
+    }
+
+    .status-due-soon {
+        background: #fff3cd;
+        color: #856404;
+    }
+
+    .status-active {
+        background: #e5f9e5;
+        color: #28a745;
+    }
+
+    .view-details {
+        background: #a3b8ff;
+        color: #ffffff;
+    }
+    
+    .status-returned {
+        background: #e5f9e5;
+        color: #28a745;
+    }
+    
+    .chart-container {
+        position: relative;
+        background: #fff;
+        border-radius: 5px;
+        padding: 20px;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        width: 100%;
+        height: 412px;
+        overflow: hidden;
+    }
+
+    .chart-container canvas {
+        width: 100% !important;
+        height: 90% !important;
+    }
+
+    .readchart-container {
+        position: relative;
+        background: #fff;
+        border-radius: 5px;
+        padding: 20px;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        width: 100%;
+        height: 470px;
+        overflow: hidden;
+    }
+
+    .readchart-container canvas {
+        width: 100% !important;
+        height: 90% !important;
+    }
+    
+    .add-new-btn {
+        background: #d07e0a;
+        color: white;
+        border: none;
+        padding: 8px 20px;
+        border-radius: 5px;
+        font-size: 14px;
+        text-decoration: none;
+        display: inline-block;
+    }
+    
+    .add-new-btn:hover {
+        background: #c17409;
+        color: white;
+    }
+
+    .btn-md, .btn-search {
+        background-color: rgb(136, 0, 0) !important;
+        color: #fff;
+    }
+
+    .btn-md:hover, .btn-search:hover {
+        background-color: rgb(104, 0, 0) !important;
+        color: #fff;
+    }
+
     /* Pagination Styles */
     .pagination-wrapper {
         display: flex;
@@ -65,466 +236,836 @@
         </div>
     </div>
 
-    <!-- Dashboard Cards -->
-    <div class="row g-3 mb-4">
-        <div class="col-xl-3 col-md-6">
-            <div class="dashboard-card">
-                <div class="icon-circle">
-                    <i class="ri-user-line"></i>
-                </div>
-                <h2>250</h2>
-                <p>Total Visitors</p>
-            </div>
-        </div>
-        <div class="col-xl-3 col-md-6">
-            <div class="dashboard-card">
-                <div class="icon-circle">
-                    <i class="ri-book-line"></i>
-                </div>
-                <h2>100</h2>
-                <p>Borrowed Books</p>
-            </div>
-        </div>
-        <div class="col-xl-3 col-md-6">
-            <div class="dashboard-card">
-                <div class="icon-circle">
-                    <i class="ri-alarm-warning-line"></i>
-                </div>
-                <h2>11</h2>
-                <p>Overdue Books</p>
-            </div>
-        </div>
-        <div class="col-xl-3 col-md-6">
-            <div class="dashboard-card">
-                <div class="icon-circle">
-                    <i class="ri-user-add-line"></i>
-                </div>
-                <h2>20</h2>
-                <p>New Members</p>
-            </div>
-        </div>
-    </div>
-
-    <!-- Users List and Books List -->
-    <div class="row g-3 mb-4">
-        <div class="col-xl-6">
-            <div class="table-responsive">
-                <div class="section-header">
-                    <h5>Users List</h5>
-                    <a href="#" class="add-new-btn">ADD NEW USER</a>
-                </div>
-                <table class="table table-hover">
-                    <thead>
-                        <tr>
-                            <th>User ID</th>
-                            <th>User Name</th>
-                            <th>Book Issued</th>
-                            <th>Department</th>
-                            <th>Action</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>10031</td>
-                            <td><img src="{{asset('assets/images/users/avatar-1.jpg')}}" class="rounded-circle me-2" width="30" height="30">Alex Roy</td>
-                            <td>12</td>
-                            <td>Civil Engg</td>
-                            <td><i class="ri-more-2-fill"></i></td>
-                        </tr>
-                        <tr>
-                            <td>10042</td>
-                            <td><img src="{{asset('assets/images/users/avatar-2.jpg')}}" class="rounded-circle me-2" width="30" height="30">Jenny</td>
-                            <td>25</td>
-                            <td>IT Assets</td>
-                            <td><i class="ri-more-2-fill"></i></td>
-                        </tr>
-                        <tr>
-                            <td>20001</td>
-                            <td><img src="{{asset('assets/images/users/avatar-3.jpg')}}" class="rounded-circle me-2" width="30" height="30">Jesus</td>
-                            <td>11</td>
-                            <td>Computer Science</td>
-                            <td><i class="ri-more-2-fill"></i></td>
-                        </tr>
-                        <tr>
-                            <td>10073</td>
-                            <td><img src="{{asset('assets/images/users/avatar-4.jpg')}}" class="rounded-circle me-2" width="30" height="30">Rena</td>
-                            <td>05</td>
-                            <td>Pharmacy</td>
-                            <td><i class="ri-more-2-fill"></i></td>
-                        </tr>
-                    </tbody>
-                </table>
-                <div class="text-end">
-                    <a href="#" class="view-all-btn">View All →</a>
-                </div>
-            </div>
-        </div>
+    @if(auth()->user()->role == 'Admin')
+        {{-- ADMIN DASHBOARD --}}
         
-        <div class="col-xl-6">
-            <div class="table-responsive">
-                <div class="section-header">
-                    <h5>Books List</h5>
-                    <a href="#" class="add-new-btn">ADD NEW BOOK</a>
-                </div>
-                <table class="table table-hover book-table">
-                    <thead>
-                        <tr>
-                            <th>Book ID</th>
-                            <th>Title</th>
-                            <th>Shelf No</th>
-                            <th>Available</th>
-                            <th>Action</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>BB-3125-13</td>
-                            <td>Attorney Toolkit</td>
-                            <td>Wood Haven</td>
-                            <td>32</td>
-                            <td><i class="ri-more-2-fill"></i></td>
-                        </tr>
-                        <tr>
-                            <td>BB-1245-14</td>
-                            <td>Life is Beautiful</td>
-                            <td>Yellow Book</td>
-                            <td>43</td>
-                            <td><i class="ri-more-2-fill"></i></td>
-                        </tr>
-                        <tr>
-                            <td>BB-0192-11</td>
-                            <td>Brooke</td>
-                            <td>Annaba Portch</td>
-                            <td>60</td>
-                            <td><i class="ri-more-2-fill"></i></td>
-                        </tr>
-                        <tr>
-                            <td>BB-17520-21</td>
-                            <td>The Newer Syllabus</td>
-                            <td>Yumonic D. Burnham</td>
-                            <td>01</td>
-                            <td><i class="ri-more-2-fill"></i></td>
-                        </tr>
-                    </tbody>
-                </table>
-                <div class="text-end">
-                    <a href="#" class="view-all-btn">View All →</a>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Top Choices -->
-    <div class="row mb-1">
-        <div class="col-12">
-            <div class="section-header">
-                <h5>Top Choices</h5>
-            </div>
-        </div>
-    </div>
-    <div class="row g-3 mb-4">
-        <div class="col-lg-2 col-md-4 col-6">
-            <div class="book-card">
-                <img src="{{asset('assets/images/book1.jpg')}}" alt="Book Cover">
-                <div class="book-info">
-                    <div class="book-title">The Cellar of Pure Reason</div>
-                    <div class="book-author">George Atwood</div>
-                </div>
-            </div>
-        </div>
-        <div class="col-lg-2 col-md-4 col-6">
-            <div class="book-card">
-                <img src="{{asset('assets/images/book2.jpg')}}" alt="Book Cover">
-                <div class="book-info">
-                    <div class="book-title">Scream</div>
-                    <div class="book-author">Robert Gaston</div>
-                </div>
-            </div>
-        </div>
-        <div class="col-lg-2 col-md-4 col-6">
-            <div class="book-card">
-                <img src="{{asset('assets/images/book3.jpg')}}" alt="Book Cover">
-                <div class="book-info">
-                    <div class="book-title">The Design of Everyday Things</div>
-                    <div class="book-author">Don Norman</div>
-                </div>
-            </div>
-        </div>
-        <div class="col-lg-2 col-md-4 col-6">
-            <div class="book-card">
-                <img src="{{asset('assets/images/book4.jpg')}}" alt="Book Cover">
-                <div class="book-info">
-                    <div class="book-title">Lean UX</div>
-                    <div class="book-author">Jeff Gothelf</div>
-                </div>
-            </div>
-        </div>
-        <div class="col-lg-2 col-md-4 col-6">
-            <div class="book-card">
-                <img src="{{asset('assets/images/book5.jpg')}}" alt="Book Cover">
-                <div class="book-info">
-                    <div class="book-title">The Republic</div>
-                    <div class="book-author">Plato</div>
-                </div>
-            </div>
-        </div>
-        <div class="col-lg-2 col-md-4 col-6">
-            <div class="book-card">
-                <img src="{{asset('assets/images/book6.jpg')}}" alt="Book Cover">
-                <div class="book-info">
-                    <div class="book-title">Ancestor Trouble</div>
-                    <div class="book-author">Maud Newton</div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Books Issued -->
-    <div class="row g-3 mb-4">
-        <div class="col-xl-7">
-            <div class="table-responsive">
-                <div class="section-header">
-                    <h5>Books Issued</h5>
-                    <a href="#" class="add-new-btn">ISSUE BOOK</a>
-                </div>
-                <table class="table table-hover">
-                    <thead>
-                        <tr>
-                            <th>User ID</th>
-                            <th>Book</th>
-                            <th>Issue Date</th>
-                            <th>Return Date</th>
-                            <th>Details</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>10021</td>
-                            <td>
-                                <div class="d-flex align-items-center">
-                                    <img src="{{asset('assets/images/book1.jpg')}}" width="30" height="35" class="me-2">
-                                    <div>
-                                        <div class="fw-bold">Attorney Toolkit</div>
-                                        <small class="text-muted">Robert Gaston</small>
-                                    </div>
-                                </div>
-                            </td>
-                            <td>29 Sep, 2023</td>
-                            <td>8 Oct, 2023</td>
-                            <td><span class="status-badge view-details">View Details</span></td>
-                        </tr>
-                        <tr>
-                            <td>10034</td>
-                            <td>
-                                <div class="d-flex align-items-center">
-                                    <img src="{{asset('assets/images/book2.jpg')}}" width="30" height="35" class="me-2">
-                                    <div>
-                                        <div class="fw-bold">49 to Consummate</div>
-                                        <small class="text-muted">by Don William</small>
-                                    </div>
-                                </div>
-                            </td>
-                            <td>21 Dec, 2023</td>
-                            <td>31 Dec, 2023</td>
-                            <td><span class="status-badge view-details">View Details</span></td>
-                        </tr>
-                        <tr>
-                            <td>20047</td>
-                            <td>
-                                <div class="d-flex align-items-center">
-                                    <img src="{{asset('assets/images/book3.jpg')}}" width="30" height="35" class="me-2">
-                                    <div>
-                                        <div class="fw-bold">Scream</div>
-                                        <small class="text-muted">by George William</small>
-                                    </div>
-                                </div>
-                            </td>
-                            <td>12 Dec, 2022</td>
-                            <td>30 Dec, 2022</td>
-                            <td><span class="status-badge view-details">View Details</span></td>
-                        </tr>
-                        <tr>
-                            <td>10021</td>
-                            <td>
-                                <div class="d-flex align-items-center">
-                                    <img src="{{asset('assets/images/book4.jpg')}}" width="30" height="35" class="me-2">
-                                    <div>
-                                        <div class="fw-bold">The Secret Missions</div>
-                                        <small class="text-muted">by Don William</small>
-                                    </div>
-                                </div>
-                            </td>
-                            <td>11 Sep, 2022</td>
-                            <td>3 Jan, 2023</td>
-                            <td><span class="status-badge view-details">View Details</span></td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-
-        <div class="col-xl-5">
-            <div class="chart-container">
-                <div class="section-header mb-3">
-                    <h5>Visitors & Borrowers Statistics</h5>
-                </div>
-                <canvas id="visitorsChart"></canvas>
-            </div>
-        </div>
-    </div>
-
-
-    <!-- Overdue Book List and Visitors Statistics -->
-    <div class="col-lg-12 grid-margin stretch-card">
-        <div class="card">
-            <div class="card-body">
-                <h4 class="card-title mb-3">Overdue Book List</h4>
-                
-                <div class="d-flex justify-content-between align-items-center mb-3">
-                    <div class="d-flex align-items-center gap-2">
-                        <span>Show</span>
-                        <select class="form-select form-select-sm" style="width: auto;">
-                            <option value="10">10</option>
-                            <option value="25">25</option>
-                            <option value="50">50</option>
-                            <option value="100">100</option>
-                        </select>
-                        <span>entries</span>
+        <!-- Dashboard Cards -->
+        <div class="row g-3 mb-4">
+            <div class="col-xl-3 col-md-6">
+                <div class="dashboard-card">
+                    <div class="icon-circle">
+                        <i class="ri-user-line"></i>
                     </div>
-                    <div class="col-md-4">
-                        <form method="GET" action="#" class="custom_form" enctype="multipart/form-data">
-                            <div class="search">
-                                <input type="text" class="form-control" placeholder="Search overdue books..." name="search" value="{{ request('search') }}"> 
-                                <button class="btn btn-sm btn-primary">Search</button>
-                            </div>
-                        </form>
-                    </div>
+                    <h2>250</h2>
+                    <p>Total Visitors</p>
                 </div>
+            </div>
+            <div class="col-xl-3 col-md-6">
+                <div class="dashboard-card">
+                    <div class="icon-circle">
+                        <i class="ri-book-line"></i>
+                    </div>
+                    <h2>100</h2>
+                    <p>Borrowed Books</p>
+                </div>
+            </div>
+            <div class="col-xl-3 col-md-6">
+                <div class="dashboard-card">
+                    <div class="icon-circle">
+                        <i class="ri-alarm-warning-line"></i>
+                    </div>
+                    <h2>11</h2>
+                    <p>Overdue Books</p>
+                </div>
+            </div>
+            <div class="col-xl-3 col-md-6">
+                <div class="dashboard-card">
+                    <div class="icon-circle">
+                        <i class="ri-user-add-line"></i>
+                    </div>
+                    <h2>20</h2>
+                    <p>New Members</p>
+                </div>
+            </div>
+        </div>
 
+        <!-- Users List and Books List -->
+        <div class="row g-3 mb-4">
+            <div class="col-xl-6">
                 <div class="table-responsive">
-                    <table class="table">
+                    <div class="section-header">
+                        <h5>Users List</h5>
+                        <a href="#" class="add-new-btn">ADD NEW USER</a>
+                    </div>
+                    <table class="table table-hover">
                         <thead>
                             <tr>
                                 <th>User ID</th>
                                 <th>User Name</th>
-                                <th>Book ID</th>
-                                <th>Title</th>
-                                <th>Author</th>
-                                <th>Schedule</th>
-                                <th>Status</th>
-                                <th>Fine</th>
+                                <th>Book Issued</th>
+                                <th>Department</th>
+                                <th>Action</th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr>
                                 <td>10031</td>
                                 <td><img src="{{asset('assets/images/users/avatar-1.jpg')}}" class="rounded-circle me-2" width="30" height="30">Alex Roy</td>
+                                <td>12</td>
+                                <td>Civil Engg</td>
+                                <td><i class="ri-more-2-fill"></i></td>
+                            </tr>
+                            <tr>
+                                <td>10042</td>
+                                <td><img src="{{asset('assets/images/users/avatar-2.jpg')}}" class="rounded-circle me-2" width="30" height="30">Jenny</td>
+                                <td>25</td>
+                                <td>IT Assets</td>
+                                <td><i class="ri-more-2-fill"></i></td>
+                            </tr>
+                            <tr>
+                                <td>20001</td>
+                                <td><img src="{{asset('assets/images/users/avatar-3.jpg')}}" class="rounded-circle me-2" width="30" height="30">Jesus</td>
+                                <td>11</td>
+                                <td>Computer Science</td>
+                                <td><i class="ri-more-2-fill"></i></td>
+                            </tr>
+                            <tr>
+                                <td>10073</td>
+                                <td><img src="{{asset('assets/images/users/avatar-4.jpg')}}" class="rounded-circle me-2" width="30" height="30">Rena</td>
+                                <td>05</td>
+                                <td>Pharmacy</td>
+                                <td><i class="ri-more-2-fill"></i></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div class="text-end">
+                        <a href="#" class="view-all-btn">View All →</a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-xl-6">
+                <div class="table-responsive">
+                    <div class="section-header">
+                        <h5>Books List</h5>
+                        <a href="#" class="add-new-btn">ADD NEW BOOK</a>
+                    </div>
+                    <table class="table table-hover book-table">
+                        <thead>
+                            <tr>
+                                <th>Book ID</th>
+                                <th>Title</th>
+                                <th>Shelf No</th>
+                                <th>Available</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
                                 <td>BB-3125-13</td>
-                                <td>Anabolic Tinder</td>
-                                <td>about blasters</td>
-                                <td>9 days</td>
-                                <td><span class="status-badge status-overdue">Returned Later</span></td>
-                                <td class="text-danger">₱25.00</td>
+                                <td>Attorney Toolkit</td>
+                                <td>Wood Haven</td>
+                                <td>32</td>
+                                <td><i class="ri-more-2-fill"></i></td>
+                            </tr>
+                            <tr>
+                                <td>BB-1245-14</td>
+                                <td>Life is Beautiful</td>
+                                <td>Yellow Book</td>
+                                <td>43</td>
+                                <td><i class="ri-more-2-fill"></i></td>
+                            </tr>
+                            <tr>
+                                <td>BB-0192-11</td>
+                                <td>Brooke</td>
+                                <td>Annaba Portch</td>
+                                <td>60</td>
+                                <td><i class="ri-more-2-fill"></i></td>
+                            </tr>
+                            <tr>
+                                <td>BB-17520-21</td>
+                                <td>The Newer Syllabus</td>
+                                <td>Yumonic D. Burnham</td>
+                                <td>01</td>
+                                <td><i class="ri-more-2-fill"></i></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div class="text-end">
+                        <a href="#" class="view-all-btn">View All →</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Top Choices -->
+        <div class="row mb-1">
+            <div class="col-12">
+                <div class="section-header">
+                    <h5>Top Choices</h5>
+                </div>
+            </div>
+        </div>
+        <div class="row g-3 mb-4">
+            <div class="col-lg-2 col-md-4 col-6">
+                <div class="book-card">
+                    <img src="{{asset('assets/images/book1.jpg')}}" alt="Book Cover">
+                    <div class="book-info">
+                        <div class="book-title">The Cellar of Pure Reason</div>
+                        <div class="book-author">George Atwood</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-2 col-md-4 col-6">
+                <div class="book-card">
+                    <img src="{{asset('assets/images/book2.jpg')}}" alt="Book Cover">
+                    <div class="book-info">
+                        <div class="book-title">Scream</div>
+                        <div class="book-author">Robert Gaston</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-2 col-md-4 col-6">
+                <div class="book-card">
+                    <img src="{{asset('assets/images/book3.jpg')}}" alt="Book Cover">
+                    <div class="book-info">
+                        <div class="book-title">The Design of Everyday Things</div>
+                        <div class="book-author">Don Norman</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-2 col-md-4 col-6">
+                <div class="book-card">
+                    <img src="{{asset('assets/images/book4.jpg')}}" alt="Book Cover">
+                    <div class="book-info">
+                        <div class="book-title">Lean UX</div>
+                        <div class="book-author">Jeff Gothelf</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-2 col-md-4 col-6">
+                <div class="book-card">
+                    <img src="{{asset('assets/images/book5.jpg')}}" alt="Book Cover">
+                    <div class="book-info">
+                        <div class="book-title">The Republic</div>
+                        <div class="book-author">Plato</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-2 col-md-4 col-6">
+                <div class="book-card">
+                    <img src="{{asset('assets/images/book6.jpg')}}" alt="Book Cover">
+                    <div class="book-info">
+                        <div class="book-title">Ancestor Trouble</div>
+                        <div class="book-author">Maud Newton</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Books Issued -->
+        <div class="row g-3 mb-4">
+            <div class="col-xl-7">
+                <div class="table-responsive">
+                    <div class="section-header">
+                        <h5>Books Issued</h5>
+                        <a href="#" class="add-new-btn">ISSUE BOOK</a>
+                    </div>
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>User ID</th>
+                                <th>Book</th>
+                                <th>Issue Date</th>
+                                <th>Return Date</th>
+                                <th>Details</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>10021</td>
+                                <td>
+                                    <div class="d-flex align-items-center">
+                                        <img src="{{asset('assets/images/book1.jpg')}}" width="30" height="35" class="me-2">
+                                        <div>
+                                            <div class="fw-bold">Attorney Toolkit</div>
+                                            <small class="text-muted">Robert Gaston</small>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>29 Sep, 2023</td>
+                                <td>8 Oct, 2023</td>
+                                <td><span class="status-badge view-details">View Details</span></td>
                             </tr>
                             <tr>
                                 <td>10034</td>
-                                <td><img src="{{asset('assets/images/users/avatar-2.jpg')}}" class="rounded-circle me-2" width="30" height="30">Sophia</td>
-                                <td>BB-2313-9</td>
-                                <td>49 ENTREPRENEURS</td>
-                                <td>Dave Kidl</td>
-                                <td>1 day</td>
-                                <td><span class="status-badge status-overdue">Delay</span></td>
-                                <td class="text-danger">₱21.00</td>
+                                <td>
+                                    <div class="d-flex align-items-center">
+                                        <img src="{{asset('assets/images/book2.jpg')}}" width="30" height="35" class="me-2">
+                                        <div>
+                                            <div class="fw-bold">49 to Consummate</div>
+                                            <small class="text-muted">by Don William</small>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>21 Dec, 2023</td>
+                                <td>31 Dec, 2023</td>
+                                <td><span class="status-badge view-details">View Details</span></td>
                             </tr>
                             <tr>
                                 <td>20047</td>
-                                <td><img src="{{asset('assets/images/users/avatar-3.jpg')}}" class="rounded-circle me-2" width="30" height="30">John</td>
-                                <td>BB-2852-25</td>
-                                <td>Kokab</td>
-                                <td>Amanda Perks</td>
-                                <td>5 days</td>
-                                <td><span class="status-badge status-returned">Returned</span></td>
-                                <td class="text-danger">₱23.211</td>
+                                <td>
+                                    <div class="d-flex align-items-center">
+                                        <img src="{{asset('assets/images/book3.jpg')}}" width="30" height="35" class="me-2">
+                                        <div>
+                                            <div class="fw-bold">Scream</div>
+                                            <small class="text-muted">by George William</small>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>12 Dec, 2022</td>
+                                <td>30 Dec, 2022</td>
+                                <td><span class="status-badge view-details">View Details</span></td>
                             </tr>
                             <tr>
                                 <td>10021</td>
-                                <td><img src="{{asset('assets/images/users/avatar-4.jpg')}}" class="rounded-circle me-2" width="30" height="30">Rose</td>
-                                <td>BB-7192-87</td>
-                                <td>The Secret Missions</td>
-                                <td>Tyrence D. Burnham</td>
-                                <td>3 days</td>
-                                <td><span class="status-badge status-returned">Returned</span></td>
-                                <td>-</td>
+                                <td>
+                                    <div class="d-flex align-items-center">
+                                        <img src="{{asset('assets/images/book4.jpg')}}" width="30" height="35" class="me-2">
+                                        <div>
+                                            <div class="fw-bold">The Secret Missions</div>
+                                            <small class="text-muted">by Don William</small>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>11 Sep, 2022</td>
+                                <td>3 Jan, 2023</td>
+                                <td><span class="status-badge view-details">View Details</span></td>
                             </tr>
                         </tbody>
                     </table>
                 </div>
+            </div>
 
-                <!-- Pagination -->
-                <div class="pagination-wrapper">
-                    <div class="pagination-info">
-                        Showing 1 to 4 of 11 entries
+            <div class="col-xl-5">
+                <div class="chart-container">
+                    <div class="section-header mb-3">
+                        <h5>Visitors & Borrowers Statistics</h5>
                     </div>
-                    <nav>
-                        <ul class="pagination">
-                            <li class="page-item disabled">
-                                <a class="page-link" href="#" tabindex="-1">Previous</a>
-                            </li>
-                            <li class="page-item active">
-                                <a class="page-link" href="#">1</a>
-                            </li>
-                            <li class="page-item">
-                                <a class="page-link" href="#">2</a>
-                            </li>
-                            <li class="page-item">
-                                <a class="page-link" href="#">3</a>
-                            </li>
-                            <li class="page-item">
-                                <a class="page-link" href="#">Next</a>
-                            </li>
-                        </ul>
-                    </nav>
+                    <canvas id="visitorsChart"></canvas>
                 </div>
             </div>
         </div>
-    </div>
+
+        <!-- Overdue Book List -->
+        <div class="col-lg-12 grid-margin stretch-card">
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="card-title mb-3">Overdue Book List</h4>
+                    
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <div class="d-flex align-items-center gap-2">
+                            <span>Show</span>
+                            <select class="form-select form-select-sm" style="width: auto;">
+                                <option value="10">10</option>
+                                <option value="25">25</option>
+                                <option value="50">50</option>
+                                <option value="100">100</option>
+                            </select>
+                            <span>entries</span>
+                        </div>
+                        <div class="col-md-4">
+                            <form method="GET" action="#" class="custom_form" enctype="multipart/form-data">
+                                <div class="search">
+                                    <input type="text" class="form-control" placeholder="Search overdue books..." name="search" value="{{ request('search') }}"> 
+                                    <button class="btn btn-sm btn-primary">Search</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>User ID</th>
+                                    <th>User Name</th>
+                                    <th>Book ID</th>
+                                    <th>Title</th>
+                                    <th>Author</th>
+                                    <th>Schedule</th>
+                                    <th>Status</th>
+                                    <th>Fine</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>10031</td>
+                                    <td><img src="{{asset('assets/images/users/avatar-1.jpg')}}" class="rounded-circle me-2" width="30" height="30">Alex Roy</td>
+                                    <td>BB-3125-13</td>
+                                    <td>Anabolic Tinder</td>
+                                    <td>about blasters</td>
+                                    <td>9 days</td>
+                                    <td><span class="status-badge status-overdue">Returned Later</span></td>
+                                    <td class="text-danger">₱25.00</td>
+                                </tr>
+                                <tr>
+                                    <td>10034</td>
+                                    <td><img src="{{asset('assets/images/users/avatar-2.jpg')}}" class="rounded-circle me-2" width="30" height="30">Sophia</td>
+                                    <td>BB-2313-9</td>
+                                    <td>49 ENTREPRENEURS</td>
+                                    <td>Dave Kidl</td>
+                                    <td>1 day</td>
+                                    <td><span class="status-badge status-overdue">Delay</span></td>
+                                    <td class="text-danger">₱21.00</td>
+                                </tr>
+                                <tr>
+                                    <td>20047</td>
+                                    <td><img src="{{asset('assets/images/users/avatar-3.jpg')}}" class="rounded-circle me-2" width="30" height="30">John</td>
+                                    <td>BB-2852-25</td>
+                                    <td>Kokab</td>
+                                    <td>Amanda Perks</td>
+                                    <td>5 days</td>
+                                    <td><span class="status-badge status-returned">Returned</span></td>
+                                    <td class="text-danger">₱23.211</td>
+                                </tr>
+                                <tr>
+                                    <td>10021</td>
+                                    <td><img src="{{asset('assets/images/users/avatar-4.jpg')}}" class="rounded-circle me-2" width="30" height="30">Rose</td>
+                                    <td>BB-7192-87</td>
+                                    <td>The Secret Missions</td>
+                                    <td>Tyrence D. Burnham</td>
+                                    <td>3 days</td>
+                                    <td><span class="status-badge status-returned">Returned</span></td>
+                                    <td>-</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Pagination -->
+                    <div class="pagination-wrapper">
+                        <div class="pagination-info">
+                            Showing 1 to 4 of 11 entries
+                        </div>
+                        <nav>
+                            <ul class="pagination">
+                                <li class="page-item disabled">
+                                    <a class="page-link" href="#" tabindex="-1">Previous</a>
+                                </li>
+                                <li class="page-item active">
+                                    <a class="page-link" href="#">1</a>
+                                </li>
+                                <li class="page-item">
+                                    <a class="page-link" href="#">2</a>
+                                </li>
+                                <li class="page-item">
+                                    <a class="page-link" href="#">3</a>
+                                </li>
+                                <li class="page-item">
+                                    <a class="page-link" href="#">Next</a>
+                                </li>
+                            </ul>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    @else
+        {{-- REGULAR USER DASHBOARD --}}
+        
+        <!-- Dashboard Cards -->
+        <div class="row g-3 mb-4">
+            <div class="col-xl-3 col-md-6">
+                <div class="dashboard-card">
+                    <div class="icon-circle">
+                        <i class="ri-book-open-line"></i>
+                    </div>
+                    <h2>3</h2>
+                    <p>Currently Borrowed</p>
+                </div>
+            </div>
+            <div class="col-xl-3 col-md-6">
+                <div class="dashboard-card">
+                    <div class="icon-circle">
+                        <i class="ri-time-line"></i>
+                    </div>
+                    <h2>1</h2>
+                    <p>Due Soon</p>
+                </div>
+            </div>
+            <div class="col-xl-3 col-md-6">
+                <div class="dashboard-card">
+                    <div class="icon-circle">
+                        <i class="ri-history-line"></i>
+                    </div>
+                    <h2>24</h2>
+                    <p>Total Books Read</p>
+                </div>
+            </div>
+            <div class="col-xl-3 col-md-6">
+                <div class="dashboard-card">
+                    <div class="icon-circle">
+                        <i class="ri-star-line"></i>
+                    </div>
+                    <h2>5</h2>
+                    <p>Favorite Books</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Currently Borrowed Books -->
+        <div class="row g-3 mb-4">
+            <div class="col-12">
+                <div class="table-responsive">
+                    <div class="section-header">
+                        <h5>My Borrowed Books</h5>
+                    </div>
+
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <div class="d-flex align-items-center gap-2">
+                            <span>Show</span>
+                            <select class="form-select form-select-sm" style="width: auto;">
+                                <option value="10">10</option>
+                                <option value="25">25</option>
+                                <option value="50">50</option>
+                                <option value="100">100</option>
+                            </select>
+                            <span>entries</span>
+                        </div>
+                        <div class="col-md-4">
+                            <form method="GET" action="#" class="custom_form" enctype="multipart/form-data">
+                                <div class="search">
+                                    <input type="text" class="form-control" placeholder="Search borrowed books..." name="search" value="{{ request('search') }}"> 
+                                    <button class="btn btn-sm btn-primary">Search</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>Book ID</th>
+                                <th>Book Details</th>
+                                <th>Borrowed Date</th>
+                                <th>Due Date</th>
+                                <th>Status</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>BB-3125-13</td>
+                                <td>
+                                    <div class="d-flex align-items-center">
+                                        <img src="{{asset('assets/images/book1.jpg')}}" width="30" height="35" class="me-2">
+                                        <div>
+                                            <div class="fw-bold">The Cellar of Pure Reason</div>
+                                            <small class="text-muted">by George Atwood</small>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>Oct 29, 2025</td>
+                                <td>Nov 15, 2025</td>
+                                <td><span class="status-badge status-active">Active</span></td>
+                                <td><i class="ri-more-2-fill"></i></td>
+                            </tr>
+                            <tr>
+                                <td>BB-2313-09</td>
+                                <td>
+                                    <div class="d-flex align-items-center">
+                                        <img src="{{asset('assets/images/book3.jpg')}}" width="30" height="35" class="me-2">
+                                        <div>
+                                            <div class="fw-bold">The Design of Everyday Things</div>
+                                            <small class="text-muted">by Don Norman</small>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>Oct 24, 2025</td>
+                                <td>Nov 10, 2025</td>
+                                <td><span class="status-badge status-due-soon">Due Soon</span></td>
+                                <td><i class="ri-more-2-fill"></i></td>
+                            </tr>
+                            <tr>
+                                <td>BB-0192-11</td>
+                                <td>
+                                    <div class="d-flex align-items-center">
+                                        <img src="{{asset('assets/images/book5.jpg')}}" width="30" height="35" class="me-2">
+                                        <div>
+                                            <div class="fw-bold">The Republic</div>
+                                            <small class="text-muted">by Plato</small>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>Nov 5, 2025</td>
+                                <td>Nov 20, 2025</td>
+                                <td><span class="status-badge status-active">Active</span></td>
+                                <td><i class="ri-more-2-fill"></i></td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <!-- Pagination -->
+                    <div class="pagination-wrapper">
+                        <div class="pagination-info">
+                            Showing 1 to 3 of 3 entries
+                        </div>
+                        <nav>
+                            <ul class="pagination">
+                                <li class="page-item disabled">
+                                    <a class="page-link" href="#" tabindex="-1">Previous</a>
+                                </li>
+                                <li class="page-item active">
+                                    <a class="page-link" href="#">1</a>
+                                </li>
+                                <li class="page-item disabled">
+                                    <a class="page-link" href="#">Next</a>
+                                </li>
+                            </ul>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Recommended for You -->
+        <div class="row g-3 mb-4">
+            <div class="col-12">
+                <div class="section-header">
+                    <h5>Recommended for You</h5>
+                </div>
+            </div>
+            <div class="col-lg-2 col-md-4 col-6">
+                <div class="book-card">
+                    <img src="{{asset('assets/images/book2.jpg')}}" alt="Book Cover">
+                    <div class="book-info">
+                        <div class="book-title">Scream</div>
+                        <div class="book-author">Robert Gaston</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-2 col-md-4 col-6">
+                <div class="book-card">
+                    <img src="{{asset('assets/images/book4.jpg')}}" alt="Book Cover">
+                    <div class="book-info">
+                        <div class="book-title">Lean UX</div>
+                        <div class="book-author">Jeff Gothelf</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-2 col-md-4 col-6">
+                <div class="book-card">
+                    <img src="{{asset('assets/images/book6.jpg')}}" alt="Book Cover">
+                    <div class="book-info">
+                        <div class="book-title">Ancestor Trouble</div>
+                        <div class="book-author">Maud Newton</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-2 col-md-4 col-6">
+                <div class="book-card">
+                    <img src="{{asset('assets/images/book1.jpg')}}" alt="Book Cover">
+                    <div class="book-info">
+                        <div class="book-title">The Cellar of Pure Reason</div>
+                        <div class="book-author">George Atwood</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-2 col-md-4 col-6">
+                <div class="book-card">
+                    <img src="{{asset('assets/images/book3.jpg')}}" alt="Book Cover">
+                    <div class="book-info">
+                        <div class="book-title">The Design of Everyday Things</div>
+                        <div class="book-author">Don Norman</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-2 col-md-4 col-6">
+                <div class="book-card">
+                    <img src="{{asset('assets/images/book5.jpg')}}" alt="Book Cover">
+                    <div class="book-info">
+                        <div class="book-title">The Republic</div>
+                        <div class="book-author">Plato</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Reading Statistics and Recent Activity -->
+        <div class="row g-3 mb-4">
+            <div class="col-xl-7">
+                <div class="readchart-container">
+                    <div class="section-header mb-3">
+                        <h5>My Reading Activity</h5>
+                    </div>
+                    <canvas id="readingChart"></canvas>
+                </div>
+            </div>
+
+            <div class="col-xl-5">
+                <div class="table-responsive">
+                    <div class="section-header">
+                        <h5>Recent Activity</h5>
+                    </div>
+
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <div class="d-flex align-items-center gap-2">
+                            <span>Show</span>
+                            <select class="form-select form-select-sm" style="width: auto;">
+                                <option value="5" selected>5</option>
+                                <option value="10">10</option>
+                                <option value="25">25</option>
+                            </select>
+                            <span>entries</span>
+                        </div>
+                        <div class="col-md-6">
+                            <form method="GET" action="#" class="custom_form" enctype="multipart/form-data">
+                                <div class="search">
+                                    <input type="text" class="form-control" placeholder="Search..." name="search" value="{{ request('search') }}"> 
+                                    <button class="btn btn-sm btn-primary">Search</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Activity</th>
+                                <th>Book</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Nov 5, 2025</td>
+                                <td><span class="status-badge status-active">Borrowed</span></td>
+                                <td>The Republic</td>
+                            </tr>
+                            <tr>
+                                <td>Nov 2, 2025</td>
+                                <td><span class="status-badge status-returned">Returned</span></td>
+                                <td>Lean UX</td>
+                            </tr>
+                            <tr>
+                                <td>Oct 29, 2025</td>
+                                <td><span class="status-badge status-active">Borrowed</span></td>
+                                <td>The Cellar of Pure Reason</td>
+                            </tr>
+                            <tr>
+                                <td>Oct 24, 2025</td>
+                                <td><span class="status-badge status-active">Borrowed</span></td>
+                                <td>The Design of Everyday Things</td>
+                            </tr>
+                            <tr>
+                                <td>Oct 20, 2025</td>
+                                <td><span class="status-badge status-returned">Returned</span></td>
+                                <td>Scream</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <!-- Pagination -->
+                    <div class="pagination-wrapper">
+                        <div class="pagination-info">
+                            Showing 1 to 5 of 24 entries
+                        </div>
+                        <nav>
+                            <ul class="pagination">
+                                <li class="page-item disabled">
+                                    <a class="page-link" href="#" tabindex="-1">Previous</a>
+                                </li>
+                                <li class="page-item active">
+                                    <a class="page-link" href="#">1</a>
+                                </li>
+                                <li class="page-item">
+                                    <a class="page-link" href="#">2</a>
+                                </li>
+                                <li class="page-item">
+                                    <a class="page-link" href="#">3</a>
+                                </li>
+                                <li class="page-item">
+                                    <a class="page-link" href="#">Next</a>
+                                </li>
+                            </ul>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+        </div>
+    @endif
 @endsection
 
 @section('js')
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
-    const ctx = document.getElementById('visitorsChart').getContext('2d');
-    const visitorsChart = new Chart(ctx, {
-        type: 'bar',
-        data: {
-            labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
-            datasets: [{
-                label: 'Visitors',
-                data: [45, 52, 38, 65, 48, 55, 42, 70, 58, 48, 45, 62],
-                backgroundColor: '#d07e0a',
-                borderRadius: 5
-            }, {
-                label: 'Borrowers',
-                data: [35, 42, 28, 55, 38, 45, 32, 60, 48, 38, 35, 52],
-                backgroundColor: '#95a5a6',
-                borderRadius: 5
-            }]
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            plugins: {
-                legend: {
-                    position: 'bottom',
-                }
+    // Visitors Chart (Admin only)
+    const visitorsChartEl = document.getElementById('visitorsChart');
+    if (visitorsChartEl) {
+        const ctx = visitorsChartEl.getContext('2d');
+        const visitorsChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+                datasets: [{
+                    label: 'Visitors',
+                    data: [45, 52, 38, 65, 48, 55, 42, 70, 58, 48, 45, 62],
+                    backgroundColor: '#d07e0a',
+                    borderRadius: 5
+                }, {
+                    label: 'Borrowers',
+                    data: [35, 42, 28, 55, 38, 45, 32, 60, 48, 38, 35, 52],
+                    backgroundColor: '#95a5a6',
+                    borderRadius: 5
+                }]
             },
-            scales: {
-                y: {
-                    beginAtZero: true,
-                    max: 80
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        max: 80
+                    }
                 }
             }
-        }
-    });
+        });
+    }
+
+    // Reading Chart (Regular User only)
+    const readingChartEl = document.getElementById('readingChart');
+    if (readingChartEl) {
+        const ctx2 = readingChartEl.getContext('2d');
+        const readingChart = new Chart(ctx2, {
+            type: 'line',
+            data: {
+                labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+                datasets: [{
+                    label: 'Books Read',
+                    data: [2, 3, 1, 4, 2, 3, 2, 5, 3, 2, 3, 4],
+                    backgroundColor: 'rgba(208, 126, 10, 0.1)',
+                    borderColor: '#d07e0a',
+                    borderWidth: 2,
+                    fill: true,
+                    tension: 0.4
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        display: false
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        max: 6,
+                        ticks: {
+                            stepSize: 1
+                        }
+                    }
+                }
+            }
+        });
+    }
 </script>
 @endsection

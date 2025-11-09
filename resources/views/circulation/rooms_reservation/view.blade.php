@@ -1,3 +1,50 @@
+<style>    
+    .detail-row {
+        display: flex;
+        padding: 12px 0;
+        border-bottom: 1px solid #e9ecef;
+    }
+    
+    .detail-row:last-child {
+        border-bottom: none;
+    }
+    
+    .detail-label {
+        font-weight: 600;
+        color: #6c757d;
+        min-width: 150px;
+        font-size: 14px;
+    }
+    
+    .detail-value {
+        color: #212529;
+        font-size: 14px;
+    }
+    
+    .status-badge {
+        display: inline-block;
+        padding: 4px 12px;
+        border-radius: 4px;
+        font-size: 13px;
+        font-weight: 500;
+    }
+    
+    .status-approved {
+        background: #d4edda;
+        color: #155724;
+    }
+    
+    .status-disapproved {
+        background: #f8d7da;
+        color: #721c24;
+    }
+    
+    .status-pending {
+        background: #fff3cd;
+        color: #856404;
+    }
+</style>
+
 <div class="modal fade" id="viewReservation{{$data->id}}" tabindex="-1" role="dialog" aria-labelledby="addRackData" aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
@@ -8,70 +55,70 @@
             <form method="POST" onsubmit="show()" enctype="multipart/form-data">
                 @csrf
                 <div class="modal-body">
-                    <div class="row">
-                        <div class="form-group row">
-                            <label class="col-sm-2 col-form-label">Reservation Id</label>
-                            <div class="col-sm-10">
-                                <input type="text" readonly class="form-control-plaintext" value="{{ $data->reservation_id }}">
-                            </div>
-                        </div>
-                        <div class="form-group row">
-                            <label class="col-sm-2 col-form-label">Room</label>
-                            <div class="col-sm-4">
-                                <input type="text" readonly class="form-control-plaintext" value="{{ $data->room_name }}">
-                            </div>
-                            <label class="col-sm-2 col-form-label">Purpose</label>
-                            <div class="col-sm-4">
-                                <input type="text" readonly class="form-control-plaintext" value="{{ $data->purpose == 'Others' ? $data->purpose . ' - ' . $data->other_remarks : $data->purpose }}">
-                            </div>
-                        </div>
-                        <div class="form-group row">
-                            <label class="col-sm-2 col-form-label">Reserved From</label>
-                            <div class="col-sm-4">
-                                <input type="text" readonly class="form-control-plaintext" value="{{ date('Y-m-d h:i:s', strtotime($data->reserved_from)) }}">
-                            </div>
-                            <label class="col-sm-2 col-form-label">Reserved To</label>
-                            <div class="col-sm-4">
-                                <input type="text" readonly class="form-control-plaintext" value="{{ date('Y-m-d h:i:s', strtotime($data->reserved_to)) }}">
-                            </div>
-                        </div>
-                        <div class="form-group row mb-2">
-                            <label class="col-sm-2 col-form-label">Status</label>
-                            <div class="col-sm-4">
-                                <input type="text" readonly class="form-control-plaintext" value="{{ $data->status }}">
-                            </div>
-                            @if($data->status == 'Disapproved')
-                                <label class="col-sm-2 col-form-label">Remarks</label>
-                                <div class="col-sm-4">
-                                    <input type="text" readonly class="form-control-plaintext" value="{{ $data->remarks  ?? '' }}">
-                                </div>
-                            @endif
-                        </div>
-                        @if($data->status == 'Approved')
-                            <div class="form-group row">
-                                <label class="col-sm-2 col-form-label">Approved By</label>
-                                <div class="col-sm-4">
-                                    <input type="text" readonly class="form-control-plaintext" value="{{ $data->approvedBy->name ?? '' }}">
-                                </div>
-                                <label class="col-sm-2 col-form-label">Approved Date</label>
-                                <div class="col-sm-4">
-                                    <input type="text" readonly class="form-control-plaintext" value="{{ date('Y-m-d h:i:s', strtotime($data->approved_date)) }}">
-                                </div>
-                            </div>
-                        @endif
-                        @if($data->status == 'Disapproved')
-                            <div class="form-group row">
-                                <label class="col-sm-2 col-form-label">Disapproved By</label>
-                                <div class="col-sm-4">
-                                    <input type="text" readonly class="form-control-plaintext" value="{{ $data->disapprovedBy->name ?? '' }}">
-                                </div>
-                                <label class="col-sm-2 col-form-label">dispproved Date</label>
-                                <div class="col-sm-4">
-                                    <input type="text" readonly class="form-control-plaintext" value="{{ date('Y-m-d h:i:s', strtotime($data->disapproved_date)) }}">
-                                </div>
-                            </div>
-                        @endif
+                    <div class="detail-row">
+                        <div class="detail-label">Reservation ID</div>
+                        <div class="detail-value">{{ $data->reservation_id }}</div>
                     </div>
+
+                    <div class="detail-row">
+                        <div class="detail-label">Room</div>
+                        <div class="detail-value">{{ $data->room_name }}</div>
+                    </div>
+
+                    <div class="detail-row">
+                        <div class="detail-label">Purpose</div>
+                        <div class="detail-value">{{ $data->purpose == 'Others' ? $data->purpose . ' - ' . $data->other_remarks : $data->purpose }}</div>
+                    </div>
+
+                    <div class="detail-row">
+                        <div class="detail-label">Reserved From</div>
+                        <div class="detail-value">{{ date('M d, Y h:i A', strtotime($data->reserved_from)) }}</div>
+                    </div>
+
+                    <div class="detail-row">
+                        <div class="detail-label">Reserved To</div>
+                        <div class="detail-value">{{ date('M d, Y h:i A', strtotime($data->reserved_to)) }}</div>
+                    </div>
+
+                    <div class="detail-row">
+                        <div class="detail-label">Status</div>
+                        <div class="detail-value">
+                            <span class="status-badge status-{{ strtolower($data->status) }}">
+                                {{ $data->status }}
+                            </span>
+                        </div>
+                    </div>
+
+                    @if($data->status == 'Disapproved' && $data->remarks)
+                        <div class="detail-row">
+                            <div class="detail-label">Remarks</div>
+                            <div class="detail-value">{{ $data->remarks }}</div>
+                        </div>
+                    @endif
+
+                    @if($data->status == 'Approved')
+                        <div class="detail-row">
+                            <div class="detail-label">Approved By</div>
+                            <div class="detail-value">{{ $data->approvedBy->name ?? '' }}</div>
+                        </div>
+
+                        <div class="detail-row">
+                            <div class="detail-label">Approved Date</div>
+                            <div class="detail-value">{{ date('M d, Y h:i A', strtotime($data->approved_date)) }}</div>
+                        </div>
+                    @endif
+
+                    @if($data->status == 'Disapproved')
+                        <div class="detail-row">
+                            <div class="detail-label">Disapproved By</div>
+                            <div class="detail-value">{{ $data->disapprovedBy->name ?? '' }}</div>
+                        </div>
+
+                        <div class="detail-row">
+                            <div class="detail-label">Disapproved Date</div>
+                            <div class="detail-value">{{ date('M d, Y h:i A', strtotime($data->disapproved_date)) }}</div>
+                        </div>
+                    @endif
                 </div> 
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
