@@ -20,7 +20,7 @@ class CreateEbooksTable extends Migration
             $table->string('isbn')->unique();
             $table->string('publisher')->nullable();
             $table->year('publication_year')->nullable();
-            $table->string('page_count')->nullable();
+            $table->string('page_count');
             $table->string('cover_image_path')->nullable();
             $table->string('file_path');
             $table->timestamps();

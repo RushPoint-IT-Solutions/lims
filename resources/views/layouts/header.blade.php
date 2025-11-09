@@ -728,7 +728,7 @@
                             <div class="menu-dropdown collapse" id="sidebarMetadata">
                                 <ul class="nav nav-sm flex-column">
                                     <li class="nav-item">
-                                        <a href="{{ url('catalog_metadata') }}" class="nav-link" data-key="t-cataloging">Cataloging</a>
+                                        <a href="{{ url('cataloging') }}" class="nav-link" data-key="t-cataloging">Cataloging</a>
                                     </li>
                                     <li class="nav-item">
                                         <a href="{{ url('frameworks') }}" class="nav-link" data-key="t-frameworks">MARC Frameworks</a>
