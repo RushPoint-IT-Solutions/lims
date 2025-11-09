@@ -73,10 +73,9 @@
     }
     
     .system-title {
-        font-size: 35px;
-        font-weight: 700;
-        letter-spacing: 2px;
-        margin-bottom: 35px;
+        font-size: 36px;
+        font-weight: 600;
+        margin-bottom: 15px;
         color: #333;
     }
     
@@ -102,7 +101,7 @@
         width: 100%;
         padding: 15px 20px;
         border: 2px solid #e0e0e0;
-        border-radius: 25px;
+        border-radius: 8px;
         margin-bottom: 25px;
         font-size: 14px;
         transition: border-color 0.3s;
@@ -151,7 +150,6 @@
         height: 120px;
         background: rgba(255, 255, 255, 0.1);
         border-radius: 50%;
-        margin-bottom: 30px;
         display: flex;
         align-items: center;
         justify-content: center;
@@ -161,23 +159,23 @@
     }
     
     .right-title {
-        font-size: 35px;
+        font-size: 32px;
         font-weight: 700;
-        margin-bottom: 35px;
         letter-spacing: 2px;
+        margin-bottom: 25px;
     }
     
     .right-subtitle {
-        font-size: 35px;
+        font-size: 32px;
         font-weight: 700;
-        margin-top: -30px;
+        margin-top: -20px;
     }
     
     .tagline {
-        font-size: 22px;
-        font-weight: 300;
+        font-size: 20px;
+        margin-bottom: 15px;
+        font-weight: 300 !important;
         text-align: center;
-        line-height: 1.6;
     }
     
     @media (max-width: 768px) {
@@ -216,7 +214,7 @@
     
     <div class="otp-left">
         <div class="logo-placeholder">
-            <img src="{{asset('assets/images/marsu-logo.png')}}" alt="MARSU Logo" height="100">
+            <img src="{{asset('assets/images/marsu-logo.png')}}" alt="MARSU Logo" height="120">
         </div>
         
         <h1 class="system-title">Verify OTP</h1>

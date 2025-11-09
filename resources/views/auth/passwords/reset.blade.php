@@ -72,23 +72,23 @@
     }
     
     .system-title {
-        font-size: 35px;
+        font-size: 32px;
         font-weight: 700;
         letter-spacing: 2px;
-        margin-bottom: 35px;
+        margin-bottom: 25px;
     }
     
     .system-subtitle {
-        font-size: 35px;
+        font-size: 32px;
         font-weight: 700;
-        margin-top: -30px;
+        margin-top: -20px;
     }
     
     .system-description {
-        font-size: 22px;
-        font-weight: 300;
+        font-size: 20px;
+        margin-bottom: 15px;
+        font-weight: 300 !important;
         text-align: center;
-        line-height: 1.6;
     }
     
     .logo-placeholder {
@@ -128,7 +128,7 @@
         width: 100%;
         padding: 15px 20px;
         border: 2px solid #e0e0e0;
-        border-radius: 25px;
+        border-radius: 8px;
         margin-bottom: 25px;
         font-size: 14px;
         transition: border-color 0.3s;
@@ -209,7 +209,7 @@
     
     <div class="reset-left">
         <div class="logo-placeholder">
-            <img src="{{asset('assets/images/marsu-logo.png')}}" alt="" height="100">
+            <img src="{{asset('assets/images/marsu-logo.png')}}" alt="" height="120">
         </div>
         
         <h1 class="reset-title">Reset Password</h1>
