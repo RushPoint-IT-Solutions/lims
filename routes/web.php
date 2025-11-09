@@ -66,6 +66,8 @@ Route::group(['middleware' => ['auth']], function () {
     // E Books
     Route::get('/e_books', 'EBookController@index')->name('e_books');
     Route::post('/new_ebook', 'EBookController@store')->name('e_books.store');
+    Route::post('update_ebook/{id}', 'EBookController@update');
+    Route::post('delete_ebook/{id}', 'EBookController@destroy')->name('delete_ebook');
 });
 
 
@@ -118,8 +120,3 @@ Route::get('/reports', 'ReportsController@index')->name('reports');
 
 //e-resources
 Route::get('/e_resources', 'EResourcesController@index')->name('e_resources');
-
-//e-resources
-
-
-
