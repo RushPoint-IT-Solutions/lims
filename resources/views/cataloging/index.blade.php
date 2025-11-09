@@ -142,7 +142,7 @@
                     Cataloging Records
                     <div>
                         <button type="button" class="btn btn-md btn-primary" data-bs-toggle="modal" data-bs-target="#newCatalogModal">
-                            <i class="ri-add-line"></i> New Catalog Entry
+                            <i class="ri-add-line"></i>&nbsp;New Catalog Entry
                         </button>
                         <button type="button" class="btn btn-md btn-success ms-2" data-bs-toggle="modal" data-bs-target="#barcodeModal">
                             <i class="ri-barcode-line"></i> Assign Barcode
@@ -308,7 +308,119 @@
         </div>
     </div>
 
-{{-- @include('modals/catalog_modal')
-@include('modals/barcode_modal') --}}
 
+    <div class="modal fade select2-modal" id="newCatalogModal" tabindex="-1" role="dialog" aria-labelledby="addCatalogData" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">New Catalog</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form id="addCatalogForm" method="POST" action="{{ url('/new_catalog') }}" onsubmit="show()" enctype="multipart/form-data">
+                    @csrf
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-md-6 form-group mb-2">
+                                <label>Framework&nbsp;<span class="text-danger">*</span></label>
+                                <select name="framework_id" id="framework_id" class="form-control select2" required>
+                                    <option value="">-- Select Framework --</option>
+                                    @foreach ($frameworks as $framework)
+										<option value='{{ $framework->id}}'>{{ $framework->description }}</option>
+									@endforeach
+                                </select>
+                            </div>
+                            <div class="col-md-6 form-group mb-2">
+                                <label>Item Type&nbsp;<span class="text-danger">*</span></label>
+                                <select name="type_id" id="type_id" class="form-control select2" required>
+                                    <option value="">-- Select Item Type --</option>
+                                    @foreach ($types as $type)
+										<option value='{{ $type->id}}'>{{ $type->name }}</option>
+									@endforeach
+                                </select>
+                            </div>
+                            <div class="col-md-6 form-group mb-2">
+                                <label>Book Title&nbsp;<span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" name="name" placeholder="Enter Book Title" required>
+                            </div>
+                            <div class="col-md-6 form-group mb-2">
+                                <label>Author&nbsp;<span class="text-danger">*</span></label>
+                                <select name="author_id" id="author_id" class="form-control select2" multiple required>
+                                    <option value="">-- Select Author --</option>
+                                    @foreach ($authors as $author)
+										<option value='{{ $author->id}}'>{{ $author->name }}</option>
+									@endforeach
+                                </select>
+                            </div>
+                            <div class="col-md-6 form-group mb-2">
+                                <label>ISBN&nbsp;<span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" name="isbn" placeholder="Enter ISBN" required>
+                            </div>
+                            <div class="col-md-6 form-group mb-2">
+                                <label>Publisher</label>
+                                <input type="text" class="form-control" name="publisher" placeholder="Enter Publisher">
+                            </div>
+                            <div class="col-md-6 form-group mb-2">
+                                <label>Publication Year</label>
+                                <input type="text" class="form-control" name="publication_year" placeholder="Enter Publication Year">
+                            </div>
+                            <div class="col-md-6 form-group mb-2">
+                                <label>Edition</label>
+                                <input type="text" class="form-control" name="edition" placeholder="Enter Edition">
+                            </div>
+                            <div class="col-md-6 form-group mb-2">
+                                <label>DDC/ Call Number</label>
+                                <input type="text" class="form-control" name="ddc" placeholder="Enter DDC/ Call Number">
+                            </div>
+                            <div class="col-md-6 form-group mb-2">
+                                <label>Rack</label>
+                                <select name="rack_id" id="rack_id" class="form-control select2">
+                                    <option value="">-- Select Rack --</option>
+                                    @foreach ($racks as $rack)
+										<option value='{{ $rack->id}}'>{{ $rack->name }}</option>
+									@endforeach
+                                </select>
+                            </div>
+                            <div class="col-md-6 form-group mb-2">
+                                <label>Branch&nbsp;<span class="text-danger">*</span></label>
+                                <select name="branch_id" id="branch_id" class="form-control select2" required>
+                                    <option value="">-- Select Branch --</option>
+                                    @foreach ($branches as $branch)
+										<option value='{{ $branch->id}}'>{{ $branch->branch_name }}</option>
+									@endforeach
+                                </select>
+                            </div>
+                            <div class="col-md-12 form-group mb-2">
+                                <label>Description</label>
+                                <textarea name="description" class="form-control" placeholder="Enter Description"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary" onclick="submitCatalog()">Submit</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+    function submitCatalog() {
+        const form = document.getElementById('addCatalogForm');
+        if (form.checkValidity()) {
+            form.submit();
+        } else {
+            form.reportValidity();
+        }
+    }
+
+    $(document).on('shown.bs.modal', '.select2-modal', function () {
+        const $modal = $(this);
+        $modal.find('.select2').select2({
+            dropdownParent: $modal
+        });
+    });
+</script>
 @endsection

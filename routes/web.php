@@ -68,6 +68,15 @@ Route::group(['middleware' => ['auth']], function () {
     Route::post('/new_ebook', 'EBookController@store')->name('e_books.store');
     Route::post('update_ebook/{id}', 'EBookController@update');
     Route::post('delete_ebook/{id}', 'EBookController@destroy')->name('delete_ebook');
+
+    // Cataloging
+    Route::get('/cataloging', 'CatalogMetadataController@index')->name('cataloging');
+    Route::post('/new_catalog', 'CatalogMetadataController@store')->name('cataloging.store');
+    // Route::post('update_ebook/{id}', 'EBookController@update');
+    // Route::post('delete_ebook/{id}', 'EBookController@destroy')->name('delete_ebook');
+
+    //cataloging and metadata
+    Route::get('/catalog_metadata', 'CatalogMetadataController@index')->name('catalog_metadata');
 });
 
 
@@ -94,8 +103,7 @@ Route::get('password/custom-reset', function () {
 //acquisition
 Route::get('/acquisition', 'AcquisitionController@index')->name('acquisition');
 
-//cataloging and metadata
-Route::get('/catalog_metadata', 'CatalogMetadataController@index')->name('catalog_metadata');
+
 
 //circulation
 Route::get('/circulation', 'CirculationController@index')->name('circulation');

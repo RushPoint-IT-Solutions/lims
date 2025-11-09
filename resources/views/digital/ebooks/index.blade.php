@@ -563,8 +563,8 @@
                                 <input type="number" name="publication_year" class="form-control" placeholder="2025" min="1900" max="2500">
                             </div>
                             <div class="col-md-6 form-group mb-2">
-                                <label>Pages</label>
-                                <input type="number" name="page_count" class="form-control" placeholder="500" min="1">
+                                <label>Pages&nbsp;<span class="text-danger">*</span></label>
+                                <input type="number" name="page_count" class="form-control" placeholder="500" min="1" required>
                             </div>
                             <div class="col-md-12 form-group mb-2">
                                 <label>Cover Image</label>
