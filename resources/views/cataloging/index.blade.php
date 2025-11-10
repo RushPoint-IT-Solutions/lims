@@ -114,7 +114,7 @@
                 <p>Total Cataloged Items</p>
             </div>
         </div>
-        <div class="col-xl-4 col-md-6">
+        <!-- <div class="col-xl-4 col-md-6">
             <div class="dashboard-card">
                 <div class="icon-circle">
                     <i class="ri-draft-line"></i>
@@ -131,7 +131,7 @@
                 <h2>32</h2>
                 <p>Today's Barcodes</p>
             </div>
-        </div>
+        </div> -->
     </div>
 
     <!-- Main Cataloging Section -->
@@ -143,9 +143,6 @@
                     <div>
                         <button type="button" class="btn btn-md btn-primary" data-bs-toggle="modal" data-bs-target="#newCatalogModal">
                             <i class="ri-add-line"></i>&nbsp;New Catalog Entry
-                        </button>
-                        <button type="button" class="btn btn-md btn-success ms-2" data-bs-toggle="modal" data-bs-target="#barcodeModal">
-                            <i class="ri-barcode-line"></i> Assign Barcode
                         </button>
                     </div>
                 </h4>
@@ -162,7 +159,7 @@
                         <span>entries</span>
                     </div>
                     <div class="col-md-4">
-                        <form method="GET" action="#" class="custom_form" enctype="multipart/form-data">
+                        <form method="GET" action="{{ route('cataloging') }}" class="custom_form" enctype="multipart/form-data">
                             <div class="search">
                                 <input type="text" class="form-control" placeholder="Search by title, ISBN, author..." name="search" value="{{ request('search') }}"> 
                                 <button class="btn btn-sm btn-primary">Search</button>
@@ -179,96 +176,41 @@
                                 <th>Barcode</th>
                                 <th>Title</th>
                                 <th>Author</th>
-                                <th>DDC/Call Number</th>
+                                <th>Rack</th>
                                 <th>Type</th>
-                                <th>Status</th>
+                                <th>Branch</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td>
-                                    <button class="btn btn-outline-info btn-sm" title="Edit">
-                                        <i class="mdi mdi-pencil"></i>
-                                    </button>
-                                    <button class="btn btn-outline-secondary btn-sm" title="View MARC">
-                                        <i class="mdi mdi-file-document"></i>
-                                    </button>
-                                </td>
-                                <td><strong>BC-2025-001247</strong></td>
-                                <td>
-                                    <div>
-                                        <div class="fw-bold">Clean Code: A Handbook</div>
-                                        <small class="text-muted">ISBN: 978-0132350884</small>
-                                    </div>
-                                </td>
-                                <td>Robert C. Martin</td>
-                                <td><span class="badge bg-secondary">005.1 MAR</span></td>
-                                <td><span class="resource-type-badge type-physical">Physical</span></td>
-                                <td><span class="status-badge status-cataloged">Cataloged</span></td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <button class="btn btn-outline-info btn-sm" title="Edit">
-                                        <i class="mdi mdi-pencil"></i>
-                                    </button>
-                                    <button class="btn btn-outline-secondary btn-sm" title="View MARC">
-                                        <i class="mdi mdi-file-document"></i>
-                                    </button>
-                                </td>
-                                <td><strong>BC-2025-001246</strong></td>
-                                <td>
-                                    <div>
-                                        <div class="fw-bold">Introduction to Algorithms</div>
-                                        <small class="text-muted">ISBN: 978-0262033848</small>
-                                    </div>
-                                </td>
-                                <td>Cormen, Leiserson</td>
-                                <td><span class="badge bg-secondary">005.1 COR</span></td>
-                                <td><span class="resource-type-badge type-physical">Physical</span></td>
-                                <td><span class="status-badge status-cataloged">Cataloged</span></td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <button class="btn btn-outline-info btn-sm" title="Edit">
-                                        <i class="mdi mdi-pencil"></i>
-                                    </button>
-                                    <button class="btn btn-outline-secondary btn-sm" title="View MARC">
-                                        <i class="mdi mdi-file-document"></i>
-                                    </button>
-                                </td>
-                                <td><strong>BC-2025-001245</strong></td>
-                                <td>
-                                    <div>
-                                        <div class="fw-bold">Digital Library Resources Collection</div>
-                                        <small class="text-muted">DOI: 10.1234/dlrc.2025</small>
-                                    </div>
-                                </td>
-                                <td>Various Authors</td>
-                                <td><span class="badge bg-secondary">020 DIG</span></td>
-                                <td><span class="resource-type-badge type-digital">Digital</span></td>
-                                <td><span class="status-badge status-cataloged">Cataloged</span></td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <button class="btn btn-outline-info btn-sm" title="Edit">
-                                        <i class="mdi mdi-pencil"></i>
-                                    </button>
-                                    <button class="btn btn-outline-warning btn-sm" title="Assign Barcode">
-                                        <i class="mdi mdi-barcode"></i>
-                                    </button>
-                                </td>
-                                <td><em class="text-muted">Pending</em></td>
-                                <td>
-                                    <div>
-                                        <div class="fw-bold">Database Systems Concepts</div>
-                                        <small class="text-muted">ISBN: 978-0073523323</small>
-                                    </div>
-                                </td>
-                                <td>Silberschatz, Korth</td>
-                                <td><em class="text-muted">Not assigned</em></td>
-                                <td><span class="resource-type-badge type-physical">Physical</span></td>
-                                <td><span class="status-badge status-pending">Pending</span></td>
-                            </tr>
+                            @foreach ($catalogings as $cataloging)
+                                <tr>
+                                    <td>
+                                        <button class="btn btn-outline-info btn-sm" title="Edit Catalog" data-bs-toggle="modal" data-bs-target="#editCatalog{{$cataloging->id}}">
+                                            <i class="mdi mdi-pencil"></i>
+                                        </button>
+                                        <button class="btn btn-outline-warning btn-sm" title="Assign Barcode">
+                                            <i class="mdi mdi-barcode"></i>
+                                        </button>
+                                    </td>
+                                    <td>{{ $cataloging->barcode_id }}</td>
+                                    <td>
+                                        <div>
+                                            <div class="fw-bold">{{ $cataloging->name }}</div>
+                                            <small class="text-muted">Publisher: {{ $cataloging->publisher ?? '-' }}</small><br>
+                                            <small class="text-muted">ISBN: {{ $cataloging->isbn }}</small>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        @foreach ($cataloging->authors as $author)
+                                            {{ $author->author_name }}<br>
+                                        @endforeach
+                                    </td>
+                                    <td><em class="text-muted">{{ $cataloging->racks->name ?? 'Not Assgined'}}</em></td>
+                                    <td><span class="resource-type-badge type-physical">{{ $cataloging->types->description }}</span></td>
+                                    <td>{{ $cataloging->branches->branch_name }}</td>
+                                </tr>
+                                @include('cataloging.edit')
+                            @endforeach 
                         </tbody>
                     </table>
                 </div>
@@ -276,31 +218,11 @@
                 <!-- Pagination -->
                 <div class="pagination-wrapper">
                     <div class="pagination-info">
-                        Showing 1 to 4 of 1,247 entries
+                        Showing {{ $catalogings->firstItem() ?? 0 }} to {{ $catalogings->lastItem() ?? 0 }} of {{ $catalogings->total() }} entries
                     </div>
                     <nav>
                         <ul class="pagination">
-                            <li class="page-item disabled">
-                                <a class="page-link" href="#" tabindex="-1">Previous</a>
-                            </li>
-                            <li class="page-item active">
-                                <a class="page-link" href="#">1</a>
-                            </li>
-                            <li class="page-item">
-                                <a class="page-link" href="#">2</a>
-                            </li>
-                            <li class="page-item">
-                                <a class="page-link" href="#">3</a>
-                            </li>
-                            <li class="page-item">
-                                <a class="page-link" href="#">4</a>
-                            </li>
-                            <li class="page-item">
-                                <a class="page-link" href="#">5</a>
-                            </li>
-                            <li class="page-item">
-                                <a class="page-link" href="#">Next</a>
-                            </li>
+                            {{ $catalogings->appends(request()->query())->links() }}
                         </ul>
                     </nav>
                 </div>
@@ -334,7 +256,7 @@
                                 <select name="type_id" id="type_id" class="form-control select2" required>
                                     <option value="">-- Select Item Type --</option>
                                     @foreach ($types as $type)
-										<option value='{{ $type->id}}'>{{ $type->name }}</option>
+										<option value='{{ $type->id}}'>{{ $type->description }}</option>
 									@endforeach
                                 </select>
                             </div>
@@ -344,10 +266,10 @@
                             </div>
                             <div class="col-md-6 form-group mb-2">
                                 <label>Author&nbsp;<span class="text-danger">*</span></label>
-                                <select name="author_id" id="author_id" class="form-control select2" multiple required>
+                                <select name="author_name[]" id="author_name" class="form-control select2" multiple required>
                                     <option value="">-- Select Author --</option>
                                     @foreach ($authors as $author)
-										<option value='{{ $author->id}}'>{{ $author->name }}</option>
+										<option value='{{ $author->name}}'>{{ $author->name }}</option>
 									@endforeach
                                 </select>
                             </div>
@@ -361,7 +283,7 @@
                             </div>
                             <div class="col-md-6 form-group mb-2">
                                 <label>Publication Year</label>
-                                <input type="text" class="form-control" name="publication_year" placeholder="Enter Publication Year">
+                                <input type="number" class="form-control" name="publication_year" placeholder="Enter Publication Year">
                             </div>
                             <div class="col-md-6 form-group mb-2">
                                 <label>Edition</label>
@@ -403,24 +325,25 @@
             </div>
         </div>
     </div>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-<script>
-    function submitCatalog() {
-        const form = document.getElementById('addCatalogForm');
-        if (form.checkValidity()) {
-            form.submit();
-        } else {
-            form.reportValidity();
-        }
-    }
 
-    $(document).on('shown.bs.modal', '.select2-modal', function () {
-        const $modal = $(this);
-        $modal.find('.select2').select2({
-            dropdownParent: $modal
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        function submitCatalog() {
+            const form = document.getElementById('addCatalogForm');
+            if (form.checkValidity()) {
+                form.submit();
+            } else {
+                form.reportValidity();
+            }
+        }
+
+        $(document).on('shown.bs.modal', '.select2-modal', function () {
+            const $modal = $(this);
+            $modal.find('.select2').select2({
+                dropdownParent: $modal
+            });
         });
-    });
-</script>
+    </script>
 @endsection

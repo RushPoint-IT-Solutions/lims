@@ -1,6 +1,7 @@
 <?php
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Controllers\CatalogMetadataController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -72,7 +73,9 @@ Route::group(['middleware' => ['auth']], function () {
     // Cataloging
     Route::get('/cataloging', 'CatalogMetadataController@index')->name('cataloging');
     Route::post('/new_catalog', 'CatalogMetadataController@store')->name('cataloging.store');
-    // Route::post('update_ebook/{id}', 'EBookController@update');
+    Route::post('update_catalog/{id}', 'CatalogMetadataController@update');
+    // Route::get('scan_book', 'CatalogMetadataController@barcode')->name('scan_book');
+    Route::get('/catalog/barcode/{barcode}', [CatalogMetadataController::class, 'barcode'])->name('catalog.barcode');
     // Route::post('delete_ebook/{id}', 'EBookController@destroy')->name('delete_ebook');
 
     //cataloging and metadata
