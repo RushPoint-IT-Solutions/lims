@@ -188,9 +188,14 @@
                                         <button class="btn btn-outline-info btn-sm" title="Edit Catalog" data-bs-toggle="modal" data-bs-target="#editCatalog{{$cataloging->id}}">
                                             <i class="mdi mdi-pencil"></i>
                                         </button>
-                                        <button class="btn btn-outline-warning btn-sm" title="Assign Barcode">
-                                            <i class="mdi mdi-barcode"></i>
-                                        </button>
+                                        <button class="btn btn-outline-warning btn-sm" 
+            title="Assign Barcode"
+            onclick="showBarcode(this, '{{ $cataloging->barcode_id }}')">
+        <i class="mdi mdi-barcode"></i>
+    </button>
+
+    <!-- Container for the barcode and download link -->
+    <div class="barcode-container mt-2" style="display:none;"></div>
                                     </td>
                                     <td>{{ $cataloging->barcode_id }}</td>
                                     <td>
@@ -345,5 +350,27 @@
                 dropdownParent: $modal
             });
         });
+
+        function showBarcode(button, barcode) {
+    const container = button.nextElementSibling; // The div right after the button
+
+    if (container.style.display === 'none' || container.innerHTML === '') {
+        // Generate barcode image URL
+        const barcodeUrl = `/catalog/barcode/${barcode}`;
+
+        // Add image and download link
+        container.innerHTML = `
+            <img src="${barcodeUrl}" alt="Barcode" style="max-width:200px; display:block; margin-bottom:5px;">
+            <a href="${barcodeUrl}" download="barcode-${barcode}.png" class="btn btn-sm btn-success">
+                Download
+            </a>
+        `;
+        container.style.display = 'block';
+    } else {
+        // Hide barcode if already visible
+        container.style.display = 'none';
+        container.innerHTML = '';
+    }
+}
     </script>
 @endsection

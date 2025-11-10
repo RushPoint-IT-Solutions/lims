@@ -136,17 +136,15 @@ class CatalogMetadataController extends Controller
     //     echo '<img src="data:image/png;base64,' . base64_encode($barcodeData) . '">';
     // }
 
-    public function downloadBarcode($barcode)
+    public function barcode($barcode)
     {
+        // Generate PNG barcode using Picqer Barcode
         $generator = new \Picqer\Barcode\BarcodeGeneratorPNG();
 
-        // Generate barcode PNG (Code128, width factor 2, height 50)
+        // Parameters: text, type, width factor, height
         $barcodeData = $generator->getBarcode($barcode, $generator::TYPE_CODE_128, 2, 50);
 
-        return response($barcodeData)
-            ->header('Content-Type', 'image/png')
-            ->header('Content-Disposition', "inline; filename=barcode-{$barcode}.png");
+        // Return PNG response
+        return response($barcodeData)->header('Content-Type', 'image/png');
     }
-
-
 }
