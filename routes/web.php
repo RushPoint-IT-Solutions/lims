@@ -68,6 +68,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::post('/new_ebook', 'EBookController@store')->name('e_books.store');
     Route::post('update_ebook/{id}', 'EBookController@update');
     Route::post('delete_ebook/{id}', 'EBookController@destroy')->name('delete_ebook');
+    Route::get('e_books/{id}', 'EBookController@show')->name('ebooks.show');
 
     // Cataloging
     Route::get('/cataloging', 'CatalogMetadataController@index')->name('cataloging');
