@@ -18,5 +18,21 @@ class DatabaseSeeder extends Seeder
             'password' => bcrypt('P@ssw0rd'),
             'role' => 'Admin',
         ]);
+
+        DB::table('types')->insert([
+            'code' => 'BK',
+            'description' => 'Book',
+        ]);
+
+        DB::table('frameworks')->insert([
+            'code' => 'BK',
+            'description' => 'Books',
+        ]);
+
+        DB::table('branches')->insert([
+            'branch_name' => 'LRC GASAN',
+            'contact_no' => '09614025574',
+            'location' => 'GASAN',
+        ]);
     }
 }

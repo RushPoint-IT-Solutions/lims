@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateBranchesTable extends Migration
+class CreateCatalogAuthorsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,13 +13,10 @@ class CreateBranchesTable extends Migration
      */
     public function up()
     {
-        Schema::create('branches', function (Blueprint $table) {
+        Schema::create('catalog_authors', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('branch_name')->unique();
-            $table->string('contact_no');
-            $table->string('location');
-            $table->string('contact_person')->nullable();
-            $table->string('address')->nullable();
+            $table->unsignedBigInteger('catalog_id');
+            $table->string('author_name')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });
@@ -32,6 +29,6 @@ class CreateBranchesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('branches');
+        Schema::dropIfExists('catalog_authors');
     }
 }

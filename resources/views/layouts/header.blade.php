@@ -779,12 +779,7 @@
                             </a>
                         </li>
 
-                        <li class="nav-item">
-                            <a class="nav-link menu-link" href="{{ url('admin_configuration') }}">
-                                <i class="ri-settings-3-line"></i>
-                                <span data-key="t-dashboards">Admin Configuration</span>
-                            </a>
-                        </li>
+                        
 
                         {{-- <li class="nav-item">
                             <a class="nav-link menu-link" href="{{ url('e-books') }}">
@@ -802,7 +797,13 @@
                     
 
                         @if(auth()->user()->role == "Admin")
-                            <li class="menu-title"><span data-key="t-menu">Admin</span></li>                            
+                            <li class="menu-title"><span data-key="t-menu">Admin</span></li>       
+                            <li class="nav-item">
+                                <a class="nav-link menu-link" href="{{ url('admin_configuration') }}">
+                                    <i class="ri-settings-3-line"></i>
+                                    <span data-key="t-dashboards">Admin Configuration</span>
+                                </a>
+                            </li>                     
                             <li class="nav-item">
                                 <a class="nav-link menu-link collapsed" href="#sidebarSettings" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarSettings">
                                     <i class="ri-rocket-line"></i> <span data-key="t-settings">Settings</span>

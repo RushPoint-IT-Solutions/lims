@@ -120,7 +120,7 @@
                                 </td>
                                 <td>{{ $branch->branch_name }}</td>
                                 <td>{{ $branch->contact_no }}</td>
-                                <td>{{ $branch->contact_person }}</td>
+                                <td>{{ $branch->contact_person ?? '-' }}</td>
                                 <td>{{ $branch->location }}</td>
                             </tr>
                             @include('settings.branches.edit')
