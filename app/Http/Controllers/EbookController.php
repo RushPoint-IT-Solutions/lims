@@ -24,6 +24,12 @@ class EbookController extends Controller
         return view('digital.ebooks.index', compact('ebooks'));
     }
 
+    public function show($id)
+    {
+        $ebook = Ebook::findOrFail($id);
+        return view('digital.ebooks.show', compact('ebook'));
+    }
+
     public function store(Request $request)
     {
         $request->validate([
