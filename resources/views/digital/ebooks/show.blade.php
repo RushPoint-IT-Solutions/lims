@@ -522,6 +522,28 @@
         border-radius: 8px;
     }
 
+    .flip-page.loading {
+        background: linear-gradient(135deg, #f5f5f5 0%, #e0e0e0 100%);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .flip-page.loading::after {
+        content: '';
+        width: 40px;
+        height: 40px;
+        border: 4px solid #f3f3f3;
+        border-top: 4px solid #d07e0a;
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
+
     @media (max-width: 768px) {
         .book-main-section {
             flex-direction: column;
@@ -915,27 +937,53 @@
         if (lastPageShown >= totalPages) return;
 
         isFlipping = true;
+        
+        nextBtn.disabled = true;
+        prevBtn.disabled = true;
+
+        currentSpread++;
+        
+        const newRightPageIndex = currentSpread * 2;
+        if (newRightPageIndex < pageCache.length) {
+            drawImageToCanvas(pageCache[newRightPageIndex], canvasRight);
+        }
+        
+        updateControls();
 
         flipContainer.className = 'flip-container flip-right';
         flipContainer.style.display = 'block';
 
-        if (currentSpread === 0) {
-            drawImageToCanvas(pageCache[0], flipCanvas);
-            drawImageToCanvas(pageCache[1], flipCanvasBack);
-        } else {
-            const currentRightPage = currentSpread * 2;
-            const nextLeftPage = currentSpread * 2 + 1;
-            drawImageToCanvas(pageCache[currentRightPage], flipCanvas);
-            drawImageToCanvas(pageCache[nextLeftPage], flipCanvasBack);
+        const flipPageBack = document.querySelector('.flip-page-back');
+        flipPageBack.classList.add('loading');
+        
+        const ctxBack = flipCanvasBack.getContext('2d');
+        ctxBack.clearRect(0, 0, flipCanvasBack.width, flipCanvasBack.height);
+
+        const oldRightPage = currentSpread === 1 ? 0 : (currentSpread - 1) * 2;
+        if (oldRightPage < pageCache.length) {
+            drawImageToCanvas(pageCache[oldRightPage], flipCanvas);
         }
 
         flipContainer.classList.add('flipping-forward');
 
         setTimeout(async () => {
-            currentSpread++;
-            await renderSpread();
+            const newLeftPage = currentSpread * 2 - 1;
+            if (newLeftPage < pageCache.length) {
+                drawImageToCanvas(pageCache[newLeftPage], flipCanvasBack);
+            }
+            
+            flipPageBack.classList.remove('loading');
+        }, 200);
+
+        setTimeout(async () => {
             flipContainer.classList.remove('flipping-forward');
             flipContainer.style.display = 'none';
+            
+            const newLeftPageIndex = currentSpread * 2 - 1;
+            if (newLeftPageIndex < pageCache.length) {
+                drawImageToCanvas(pageCache[newLeftPageIndex], canvasLeft);
+            }
+            
             isFlipping = false;
         }, 700);
     }
@@ -944,27 +992,57 @@
         if (isFlipping || !pdfDoc || currentSpread === 0) return;
 
         isFlipping = true;
+        
+        nextBtn.disabled = true;
+        prevBtn.disabled = true;
+
+        currentSpread--;
+        
+        if (currentSpread === 0) {
+            drawImageToCanvas(null, canvasLeft);
+        } else {
+            const newLeftPageIndex = currentSpread * 2 - 1;
+            if (newLeftPageIndex < pageCache.length) {
+                drawImageToCanvas(pageCache[newLeftPageIndex], canvasLeft);
+            }
+        }
+        
+        updateControls();
 
         flipContainer.className = 'flip-container flip-left';
         flipContainer.style.display = 'block';
 
-        if (currentSpread === 1) {
-            drawImageToCanvas(pageCache[1], flipCanvas);
-            drawImageToCanvas(pageCache[0], flipCanvasBack);
-        } else {
-            const currentLeftPage = currentSpread * 2 - 1;
-            const prevRightPage = currentSpread * 2 - 2;
-            drawImageToCanvas(pageCache[currentLeftPage], flipCanvas);
-            drawImageToCanvas(pageCache[prevRightPage], flipCanvasBack);
+        const flipPageBack = document.querySelector('.flip-page-back');
+        flipPageBack.classList.add('loading');
+        
+        const ctxBack = flipCanvasBack.getContext('2d');
+        ctxBack.clearRect(0, 0, flipCanvasBack.width, flipCanvasBack.height);
+
+        const oldLeftPage = (currentSpread + 1) * 2 - 1;
+        if (oldLeftPage < pageCache.length) {
+            drawImageToCanvas(pageCache[oldLeftPage], flipCanvas);
         }
 
         flipContainer.classList.add('flipping-backward');
 
         setTimeout(async () => {
-            currentSpread--;
-            await renderSpread();
+            const newRightPage = currentSpread === 0 ? 0 : currentSpread * 2;
+            if (newRightPage < pageCache.length) {
+                drawImageToCanvas(pageCache[newRightPage], flipCanvasBack);
+            }
+            
+            flipPageBack.classList.remove('loading');
+        }, 200);
+
+        setTimeout(async () => {
             flipContainer.classList.remove('flipping-backward');
             flipContainer.style.display = 'none';
+            
+            const newRightPageIndex = currentSpread === 0 ? 0 : currentSpread * 2;
+            if (newRightPageIndex < pageCache.length) {
+                drawImageToCanvas(pageCache[newRightPageIndex], canvasRight);
+            }
+            
             isFlipping = false;
         }, 700);
     }
