@@ -110,7 +110,7 @@
                 <div class="icon-circle">
                     <i class="ri-book-line"></i>
                 </div>
-                <h2>1,247</h2>
+                <h2>{{ $count_catalog }}</h2>
                 <p>Total Cataloged Items</p>
             </div>
         </div>
@@ -189,13 +189,12 @@
                                             <i class="mdi mdi-pencil"></i>
                                         </button>
                                         <button class="btn btn-outline-warning btn-sm" 
-            title="Assign Barcode"
-            onclick="showBarcode(this, '{{ $cataloging->barcode_id }}')">
-        <i class="mdi mdi-barcode"></i>
-    </button>
+                                                title="Assign Barcode"
+                                                onclick="showBarcode(this, '{{ $cataloging->barcode_id }}')">
+                                            <i class="mdi mdi-barcode"></i>
+                                        </button>
 
-    <!-- Container for the barcode and download link -->
-    <div class="barcode-container mt-2" style="display:none;"></div>
+                                        <div class="barcode-container mt-2" style="display:none;"></div>
                                     </td>
                                     <td>{{ $cataloging->barcode_id }}</td>
                                     <td>
@@ -247,6 +246,10 @@
                     @csrf
                     <div class="modal-body">
                         <div class="row">
+                            <div class="col-md-6 form-group mb-2">
+                                <label>Image</label>
+                                <input type="file" class="form-control" accept="image/*" id="coverUpload" name="image_path">
+                            </div>
                             <div class="col-md-6 form-group mb-2">
                                 <label>Framework&nbsp;<span class="text-danger">*</span></label>
                                 <select name="framework_id" id="framework_id" class="form-control select2" required>
