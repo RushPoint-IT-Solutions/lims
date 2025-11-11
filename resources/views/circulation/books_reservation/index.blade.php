@@ -293,7 +293,7 @@
         </div>
     </div>
 
-    <!-- Top Choices / Popular Books -->
+   
     <div class="row mb-1">
         <div class="col-12">
             <div class="section-header">
@@ -303,72 +303,27 @@
         </div>
     </div>
     <div class="row g-3 mb-4">
-        <div class="col-lg-2 col-md-4 col-6">
-            <div class="book-card">
-                <img src="{{asset('assets/images/book1.jpg')}}" alt="Book Cover">
-                <div class="book-info">
-                    <div class="book-title">Clean Code</div>
-                    <div class="book-author">Robert C. Martin</div>
-                    <div class="book-stats">★★★★★ • 156 borrows</div>
-                    <button class="book-reserve-btn"><i class="ri-bookmark-line"></i> Reserve</button>
+        @foreach($books as $book)
+            <div class="col-lg-2 col-md-4 col-6">
+                <div class="book-card">
+                    <!-- <img src="{{asset('assets/images/book1.jpg')}}" alt="Book Cover"> -->
+                    @if($book->image_path)
+                        <img src="{{ asset($book->image_path) }}" alt="{{ $book->name }}" class="book-card-img">
+                    @else
+                        <img src="https://www.klett-cotta.de/assets/default-image.jpg" alt="{{ $book->name }}" class="book-card-img">
+                    @endif
+                    <div class="book-info">
+                        <div class="book-title">{{ $book->name}}</div>
+                        <!-- <div class="book-author">Robert C. Martin</div> -->
+                        @foreach ($book->authors as $author)
+                            <div class="book-author">{{ $author->author_name }}</div>
+                        @endforeach
+                        <!-- <div class="book-stats">★★★★★ • 156 borrows</div> -->
+                        <button class="book-reserve-btn"><i class="ri-bookmark-line"></i> Reserve</button>
+                    </div>
                 </div>
             </div>
-        </div>
-        <div class="col-lg-2 col-md-4 col-6">
-            <div class="book-card">
-                <img src="{{asset('assets/images/book2.jpg')}}" alt="Book Cover">
-                <div class="book-info">
-                    <div class="book-title">Intro to Algorithms</div>
-                    <div class="book-author">Thomas H. Cormen</div>
-                    <div class="book-stats">★★★★★ • 142 borrows</div>
-                    <button class="book-reserve-btn"><i class="ri-bookmark-line"></i> Reserve</button>
-                </div>
-            </div>
-        </div>
-        <div class="col-lg-2 col-md-4 col-6">
-            <div class="book-card">
-                <img src="{{asset('assets/images/book3.jpg')}}" alt="Book Cover">
-                <div class="book-info">
-                    <div class="book-title">Database Systems</div>
-                    <div class="book-author">Silberschatz</div>
-                    <div class="book-stats">★★★★☆ • 138 borrows</div>
-                    <button class="book-reserve-btn"><i class="ri-bookmark-line"></i> Reserve</button>
-                </div>
-            </div>
-        </div>
-        <div class="col-lg-2 col-md-4 col-6">
-            <div class="book-card">
-                <img src="{{asset('assets/images/book4.jpg')}}" alt="Book Cover">
-                <div class="book-info">
-                    <div class="book-title">Design Patterns</div>
-                    <div class="book-author">Gang of Four</div>
-                    <div class="book-stats">★★★★★ • 125 borrows</div>
-                    <button class="book-reserve-btn"><i class="ri-bookmark-line"></i> Reserve</button>
-                </div>
-            </div>
-        </div>
-        <div class="col-lg-2 col-md-4 col-6">
-            <div class="book-card">
-                <img src="{{asset('assets/images/book5.jpg')}}" alt="Book Cover">
-                <div class="book-info">
-                    <div class="book-title">Refactoring</div>
-                    <div class="book-author">Martin Fowler</div>
-                    <div class="book-stats">★★★★★ • 118 borrows</div>
-                    <button class="book-reserve-btn"><i class="ri-bookmark-line"></i> Reserve</button>
-                </div>
-            </div>
-        </div>
-        <div class="col-lg-2 col-md-4 col-6">
-            <div class="book-card">
-                <img src="{{asset('assets/images/book6.jpg')}}" alt="Book Cover">
-                <div class="book-info">
-                    <div class="book-title">Pragmatic Programmer</div>
-                    <div class="book-author">Andy Hunt</div>
-                    <div class="book-stats">★★★★★ • 112 borrows</div>
-                    <button class="book-reserve-btn"><i class="ri-bookmark-line"></i> Reserve</button>
-                </div>
-            </div>
-        </div>
+        @endforeach
     </div>
 
     <!-- Search & Reserve Books -->
@@ -389,69 +344,35 @@
                 </div>
 
                 <!-- Available Books for Reservation -->
-                <div class="book-item">
-                    <img src="{{asset('assets/images/book1.jpg')}}" alt="Book Cover">
-                    <div class="book-item-info">
-                        <div class="book-item-title">Clean Code: A Handbook of Agile Software Craftsmanship</div>
-                        <div class="book-item-author">by Robert C. Martin</div>
-                        <div class="book-item-details">
-                            <span>ISBN: 978-0132350884</span> | 
-                            <span>Call No: 005.1 MAR</span> | 
-                            <span>Location: Computer Science Section</span>
+                @foreach($books as $book)
+                    <div class="book-item">
+                        @if($book->image_path)
+                            <img src="{{ asset($book->image_path) }}" alt="{{ $book->name }}" class="book-card-img">
+                        @else
+                            <img src="https://www.klett-cotta.de/assets/default-image.jpg" alt="{{ $book->name }}" class="book-card-img">
+                        @endif
+                        <div class="book-item-info">
+                            <div class="book-item-title">{{ $book->name}}</div>
+                            @foreach ($book->authors as $author)
+                                <div class="book-item-author">by {{ $author->author_name }}</div>
+                            @endforeach
+                            <div class="book-item-details">
+                                <span>ISBN: {{ $book->isbn }}</span> | 
+                                <span>Call No: {{ $book->ddc }}</span> | 
+                                <span>Location: {{ $book->branches->branch_name}}</span>
+                            </div>
+                            <div class="mt-2">
+                                <span class="availability-badge avail-available">Available (1 copy)</span>
+                                <small class="text-muted ms-2">Expected return: Nov 08, 2025</small>
+                            </div>
                         </div>
-                        <div class="mt-2">
-                            <span class="availability-badge avail-borrowed">Currently Borrowed</span>
-                            <small class="text-muted ms-2">Expected return: Nov 08, 2025</small>
-                        </div>
-                    </div>
-                    <div class="d-flex align-items-center">
-                        <button class="reserve-btn">
-                            <i class="ri-bookmark-line"></i> Reserve
-                        </button>
-                    </div>
-                </div>
-
-                <div class="book-item">
-                    <img src="{{asset('assets/images/book2.jpg')}}" alt="Book Cover">
-                    <div class="book-item-info">
-                        <div class="book-item-title">Introduction to Algorithms</div>
-                        <div class="book-item-author">by Thomas H. Cormen, Charles E. Leiserson</div>
-                        <div class="book-item-details">
-                            <span>ISBN: 978-0262033848</span> | 
-                            <span>Call No: 005.1 COR</span> | 
-                            <span>Location: Computer Science Section</span>
-                        </div>
-                        <div class="mt-2">
-                            <span class="availability-badge avail-available">Available (2 copies)</span>
+                        <div class="d-flex align-items-center">
+                            <button class="reserve-btn">
+                                <i class="ri-bookmark-line"></i> Reserve
+                            </button>
                         </div>
                     </div>
-                    <div class="d-flex align-items-center">
-                        <button class="reserve-btn">
-                            <i class="ri-bookmark-line"></i> Reserve
-                        </button>
-                    </div>
-                </div>
-
-                <div class="book-item">
-                    <img src="{{asset('assets/images/book3.jpg')}}" alt="Book Cover">
-                    <div class="book-item-info">
-                        <div class="book-item-title">Database System Concepts</div>
-                        <div class="book-item-author">by Abraham Silberschatz, Henry F. Korth</div>
-                        <div class="book-item-details">
-                            <span>ISBN: 978-0073523323</span> | 
-                            <span>Call No: 005.74 SIL</span> | 
-                            <span>Location: Computer Science Section</span>
-                        </div>
-                        <div class="mt-2">
-                            <span class="availability-badge avail-available">Available (1 copy)</span>
-                        </div>
-                    </div>
-                    <div class="d-flex align-items-center">
-                        <button class="reserve-btn">
-                            <i class="ri-bookmark-line"></i> Reserve
-                        </button>
-                    </div>
-                </div>
+                @endforeach
             </div>
         </div>
     </div>

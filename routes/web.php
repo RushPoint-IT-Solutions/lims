@@ -80,7 +80,10 @@ Route::group(['middleware' => ['auth']], function () {
     // Route::post('delete_ebook/{id}', 'EBookController@destroy')->name('delete_ebook');
 
     //cataloging and metadata
-    Route::get('/catalog_metadata', 'CatalogMetadataController@index')->name('catalog_metadata');
+    // Route::get('/catalog_metadata', 'CatalogMetadataController@index')->name('catalog_metadata');
+
+    // Books Reservation
+    Route::get('/reservation', 'BookReservationController@index')->name('reservation');
 });
 
 
@@ -121,8 +124,7 @@ Route::get('/report_analytics', 'ReportAnalyticsController@index')->name('report
 //penalty computation
 Route::get('/penalty_computation', 'PenaltyComputationController@index')->name('penalty_computation');
 
-//reservation
-Route::get('/reservation', 'ReservationController@index')->name('reservation');
+
 
 //admin configuration
 Route::get('/admin_configuration', 'AdminConfigurationController@index')->name('admin_configuration');
