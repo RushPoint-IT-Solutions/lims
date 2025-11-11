@@ -22,7 +22,9 @@ class CatalogMetadataController extends Controller
         $types = Type::all();
         $racks = Rack::all();
         $branches = Branch::all();
-        
+
+        $count_catalog = Cataloging::count();
+       
         if ($request->filled('search')) {
             $searchTerm = $request->input('search');
             $query->where(function ($q) use ($searchTerm) {
@@ -33,9 +35,9 @@ class CatalogMetadataController extends Controller
                 });
             });
         }
-
-        $catalogings  = $query->paginate(10)->appends($request->all()); 
-        return view('cataloging.index', compact('catalogings', 'frameworks', 'authors', 'types', 'racks', 'branches'));
+        
+        $catalogings = $query->paginate(10)->appends($request->all()); 
+        return view('cataloging.index', compact('catalogings', 'frameworks', 'authors', 'types', 'racks', 'branches', 'count_catalog'));
     }
 
     public function store(Request $request)
@@ -64,6 +66,12 @@ class CatalogMetadataController extends Controller
         $barcodeId = sprintf("BC-%s-%03d", $year, $nextNumber);
 
         $data = new Cataloging();
+        if ($request->hasFile('image_path')) {
+            $file = $request->file('image_path');
+            $filename = time() . '_' . $file->getClientOriginalName();
+            $file->move(public_path('uploads/books'), $filename);
+            $data->image_path = 'uploads/books/' . $filename;
+        }
         $data->barcode_id = $barcodeId;
         $data->name = $request->name;
         $data->framework_id = $request->framework_id;
@@ -92,7 +100,6 @@ class CatalogMetadataController extends Controller
     public function update(Request $request, $id)
     {
         $data = Cataloging::findOrFail($id);
-
         $data->update([
             'name' => $request->name,
             'framework_id' => $request->framework_id,
@@ -107,6 +114,18 @@ class CatalogMetadataController extends Controller
             'description' => $request->description,
         ]);
 
+        if ($request->hasFile('image_path')) {
+            if ($data->image_path && file_exists(public_path($data->image_path))) {
+                unlink(public_path($data->image_path));
+            }
+            $file = $request->file('image_path');
+            $filename = time() . '_' . $file->getClientOriginalName();
+            $file->move(public_path('uploads/books'), $filename);
+
+            $data->image_path = 'uploads/books/' . $filename;
+            $data->save();
+        }
+
         CatalogAuthor::where('catalog_id', $data->id)->delete();
 
         if ($request->has('author_name')) {
@@ -117,10 +136,11 @@ class CatalogMetadataController extends Controller
                 ]);
             }
         }
-        
+
         Alert::success('Success', 'Successfully Saved!')->persistent('Dismiss');
         return back();
     }
+
     
     // public function barcode(Request $request)
     // {
@@ -136,17 +156,15 @@ class CatalogMetadataController extends Controller
     //     echo '<img src="data:image/png;base64,' . base64_encode($barcodeData) . '">';
     // }
 
-    public function downloadBarcode($barcode)
+    public function barcode($barcode)
     {
+        // Generate PNG barcode using Picqer Barcode
         $generator = new \Picqer\Barcode\BarcodeGeneratorPNG();
 
-        // Generate barcode PNG (Code128, width factor 2, height 50)
+        // Parameters: text, type, width factor, height
         $barcodeData = $generator->getBarcode($barcode, $generator::TYPE_CODE_128, 2, 50);
 
-        return response($barcodeData)
-            ->header('Content-Type', 'image/png')
-            ->header('Content-Disposition', "inline; filename=barcode-{$barcode}.png");
+        // Return PNG response
+        return response($barcodeData)->header('Content-Type', 'image/png');
     }
-
-
 }

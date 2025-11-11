@@ -10,6 +10,13 @@
                 <div class="modal-body">
                     <div class="row">
                         <div class="col-md-6 form-group mb-2">
+                            <label>Image</label>
+                            <input type="file" class="form-control" accept="image/*" id="coverUpload" name="image_path">
+                            @if(!empty($cataloging->image_path))
+                                <img src="{{ asset($cataloging->image_path) }}" alt="Cover Image" class="mt-2 rounded" style="height: 50px;">
+                            @endif
+                        </div>
+                        <div class="col-md-6 form-group mb-2">
                             <label>Framework&nbsp;<span class="text-danger">*</span></label>
                             <select name="framework_id" id="framework_id" class="form-control select2" required>
                                 <option value="">-- Select Framework --</option>

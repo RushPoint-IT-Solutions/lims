@@ -110,7 +110,7 @@
                 <div class="icon-circle">
                     <i class="ri-book-line"></i>
                 </div>
-                <h2>1,247</h2>
+                <h2>{{ $count_catalog }}</h2>
                 <p>Total Cataloged Items</p>
             </div>
         </div>
@@ -188,9 +188,13 @@
                                         <button class="btn btn-outline-info btn-sm" title="Edit Catalog" data-bs-toggle="modal" data-bs-target="#editCatalog{{$cataloging->id}}">
                                             <i class="mdi mdi-pencil"></i>
                                         </button>
-                                        <button class="btn btn-outline-warning btn-sm" title="Assign Barcode">
+                                        <button class="btn btn-outline-warning btn-sm" 
+                                                title="Assign Barcode"
+                                                onclick="showBarcode(this, '{{ $cataloging->barcode_id }}')">
                                             <i class="mdi mdi-barcode"></i>
                                         </button>
+
+                                        <div class="barcode-container mt-2" style="display:none;"></div>
                                     </td>
                                     <td>{{ $cataloging->barcode_id }}</td>
                                     <td>
@@ -242,6 +246,10 @@
                     @csrf
                     <div class="modal-body">
                         <div class="row">
+                            <div class="col-md-6 form-group mb-2">
+                                <label>Image</label>
+                                <input type="file" class="form-control" accept="image/*" id="coverUpload" name="image_path">
+                            </div>
                             <div class="col-md-6 form-group mb-2">
                                 <label>Framework&nbsp;<span class="text-danger">*</span></label>
                                 <select name="framework_id" id="framework_id" class="form-control select2" required>
@@ -345,5 +353,27 @@
                 dropdownParent: $modal
             });
         });
+
+        function showBarcode(button, barcode) {
+    const container = button.nextElementSibling; // The div right after the button
+
+    if (container.style.display === 'none' || container.innerHTML === '') {
+        // Generate barcode image URL
+        const barcodeUrl = `/catalog/barcode/${barcode}`;
+
+        // Add image and download link
+        container.innerHTML = `
+            <img src="${barcodeUrl}" alt="Barcode" style="max-width:200px; display:block; margin-bottom:5px;">
+            <a href="${barcodeUrl}" download="barcode-${barcode}.png" class="btn btn-sm btn-success">
+                Download
+            </a>
+        `;
+        container.style.display = 'block';
+    } else {
+        // Hide barcode if already visible
+        container.style.display = 'none';
+        container.innerHTML = '';
+    }
+}
     </script>
 @endsection
