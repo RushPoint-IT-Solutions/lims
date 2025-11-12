@@ -333,7 +333,6 @@
         background: rgba(255, 255, 255, 0.1);
     }
 
-    /* Flipbook Container */
     .flipbook-viewer {
         flex: 1;
         perspective: 2500px;
@@ -455,6 +454,59 @@
         }
     }
 
+    .manga-viewer {
+        display: none;
+        flex: 1;
+        overflow-y: auto;
+        overflow-x: hidden;
+        background: #2a2a2a;
+        padding: 20px 10px;
+    }
+
+    .manga-container {
+        max-width: 100% !important;
+        margin: 0 auto;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .manga-page {
+        width: 100% !important;
+        background: white;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        margin-bottom: 10px;
+    }
+
+    .manga-page canvas {
+        width: 100% !important;
+        height: auto;
+        display: block;
+    }
+
+    .manga-page.loading {
+        min-height: 400px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: linear-gradient(135deg, #f5f5f5 0%, #e0e0e0 100%);
+    }
+
+    .manga-page.loading::after {
+        content: '';
+        width: 40px;
+        height: 40px;
+        border: 4px solid #f3f3f3;
+        border-top: 4px solid #d07e0a;
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
+
     .reader-controls {
         background: rgba(30, 30, 30, 0.95);
         padding: 20px 30px;
@@ -522,28 +574,6 @@
         border-radius: 8px;
     }
 
-    .flip-page.loading {
-        background: linear-gradient(135deg, #f5f5f5 0%, #e0e0e0 100%);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-    }
-
-    .flip-page.loading::after {
-        content: '';
-        width: 40px;
-        height: 40px;
-        border: 4px solid #f3f3f3;
-        border-top: 4px solid #d07e0a;
-        border-radius: 50%;
-        animation: spin 1s linear infinite;
-    }
-
-    @keyframes spin {
-        0% { transform: rotate(0deg); }
-        100% { transform: rotate(360deg); }
-    }
-
     @media (max-width: 768px) {
         .book-main-section {
             flex-direction: column;
@@ -563,19 +593,34 @@
             padding: 20px;
         }
 
-        .book {
-            width: 100%;
-            height: auto;
-            aspect-ratio: 12/7;
+        .flipbook-viewer {
+            display: none !important;
+        }
+
+        .manga-viewer {
+            display: block;
+        }
+
+        .reader-controls .control-group:first-child {
+            display: none;
         }
 
         .reader-controls {
             padding: 15px;
+            justify-content: center;
         }
 
         .control-btn {
             padding: 10px 16px;
             font-size: 12px;
+        }
+
+        .reader-title {
+            font-size: 14px;
+        }
+
+        .reader-header {
+            padding: 10px 15px;
         }
     }
 </style>
@@ -635,7 +680,6 @@
                     </p>
                 </div>
 
-                <!-- Action Buttons -->
                 <div class="action-buttons">
                     <button class="btn-action btn-read" id="openBookReader">
                         <i class="ri-book-open-line"></i> Read Now
@@ -705,6 +749,7 @@
             <button class="close-reader" onclick="closeBookReader()">×</button>
         </div>
         
+        <!-- Desktop Book View -->
         <div class="flipbook-viewer">
             <div class="book-wrapper">
                 <div class="book" id="book">
@@ -725,6 +770,13 @@
                         </div>
                     </div>
                 </div>
+            </div>
+        </div>
+
+        <!-- Mobile Manga View -->
+        <div class="manga-viewer" id="mangaViewer">
+            <div class="manga-container" id="mangaContainer">
+                <!-- Pages will be dynamically loaded here -->
             </div>
         </div>
 
@@ -759,6 +811,7 @@
     let zoom = 1;
     let isFlipping = false;
     let pageCache = [];
+    let isMangaMode = false;
     const pdfFilePath = "{{ asset($ebook->file_path) }}";
 
     const bookReader = document.getElementById('bookReader');
@@ -773,22 +826,41 @@
     const zoomIn = document.getElementById('zoomIn');
     const zoomOut = document.getElementById('zoomOut');
     const zoomDisplay = document.getElementById('zoomDisplay');
+    const mangaContainer = document.getElementById('mangaContainer');
+
+    function checkMangaMode() {
+        return window.innerWidth <= 768;
+    }
 
     document.getElementById('openBookReader').addEventListener('click', async function() {
         bookReader.classList.add('active');
         document.body.style.overflow = 'hidden';
+        isMangaMode = checkMangaMode();
         await loadPDF(pdfFilePath);
     });
 
     function closeBookReader() {
         bookReader.classList.remove('active');
         document.body.style.overflow = '';
+        mangaContainer.innerHTML = '';
     }
 
     prevBtn.addEventListener('click', flipBackward);
     nextBtn.addEventListener('click', flipForward);
     zoomIn.addEventListener('click', () => changeZoom(0.1));
     zoomOut.addEventListener('click', () => changeZoom(-0.1));
+
+    window.addEventListener('resize', function() {
+        const newMangaMode = checkMangaMode();
+        if (newMangaMode !== isMangaMode && pdfDoc) {
+            isMangaMode = newMangaMode;
+            if (isMangaMode) {
+                renderMangaView();
+            } else {
+                renderSpread();
+            }
+        }
+    });
 
     async function loadPDF(url) {
         try {
@@ -797,11 +869,75 @@
             currentSpread = 0;
             zoom = 1;
             pageCache = [];
-            await loadAllPages();
-            await renderSpread();
+            
+            if (isMangaMode) {
+                await renderMangaView();
+            } else {
+                await loadAllPages();
+                await renderSpread();
+            }
         } catch (err) {
             console.error('Error loading PDF:', err);
             alert('Error loading PDF: ' + err.message);
+        }
+    }
+
+    async function renderMangaView() {
+        mangaContainer.innerHTML = '';
+        const numPages = pdfDoc.numPages;
+        
+        pageInfo.textContent = `${numPages} pages`;
+        
+        for (let i = 1; i <= numPages; i++) {
+            const pageDiv = document.createElement('div');
+            pageDiv.className = 'manga-page loading';
+            pageDiv.dataset.pageNum = i;
+            mangaContainer.appendChild(pageDiv);
+        }
+
+        for (let i = 1; i <= numPages; i++) {
+            await renderMangaPage(i);
+        }
+    }
+
+    async function renderMangaPage(pageNum) {
+        const pageDiv = document.querySelector(`.manga-page[data-page-num="${pageNum}"]`);
+        if (!pageDiv) return;
+
+        try {
+            const page = await pdfDoc.getPage(pageNum);
+            
+            const containerWidth = mangaContainer.clientWidth - 20;
+            
+            const outputScale = window.devicePixelRatio || 1;
+            
+            const viewport = page.getViewport({ scale: 1 });
+            const scale = (containerWidth / viewport.width) * outputScale;
+            const scaledViewport = page.getViewport({ scale: scale });
+
+            const canvas = document.createElement('canvas');
+            const context = canvas.getContext('2d');
+            
+            canvas.width = scaledViewport.width;
+            canvas.height = scaledViewport.height;
+            
+            canvas.style.width = containerWidth + 'px';
+            canvas.style.height = (scaledViewport.height / outputScale) + 'px';
+
+            const renderContext = {
+                canvasContext: context,
+                viewport: scaledViewport
+            };
+
+            await page.render(renderContext).promise;
+            
+            pageDiv.classList.remove('loading');
+            pageDiv.innerHTML = '';
+            pageDiv.appendChild(canvas);
+        } catch (err) {
+            console.error(`Error rendering page ${pageNum}:`, err);
+            pageDiv.classList.remove('loading');
+            pageDiv.innerHTML = '<p style="color: white; text-align: center; padding: 20px;">Error loading page</p>';
         }
     }
 
@@ -907,6 +1043,23 @@
     function updateControls() {
         const totalPages = pdfDoc.numPages;
         
+        const zoomControls = document.querySelector('.reader-controls .control-group:last-child');
+        
+        if (isMangaMode) {
+            pageInfo.textContent = `${totalPages} pages`;
+            prevBtn.disabled = true;
+            nextBtn.disabled = true;
+            
+            if (zoomControls) {
+                zoomControls.style.display = 'none';
+            }
+            return;
+        }
+        
+        if (zoomControls) {
+            zoomControls.style.display = 'flex';
+        }
+        
         if (currentSpread === 0) {
             pageInfo.textContent = `Page 1 (Cover) of ${totalPages}`;
             prevBtn.disabled = true;
@@ -930,7 +1083,7 @@
     }
 
     async function flipForward() {
-        if (isFlipping || !pdfDoc) return;
+        if (isFlipping || !pdfDoc || isMangaMode) return;
         
         const totalPages = pdfDoc.numPages;
         const lastPageShown = currentSpread === 0 ? 1 : currentSpread * 2 + 1;
@@ -989,7 +1142,7 @@
     }
 
     async function flipBackward() {
-        if (isFlipping || !pdfDoc || currentSpread === 0) return;
+        if (isFlipping || !pdfDoc || currentSpread === 0 || isMangaMode) return;
 
         isFlipping = true;
         
@@ -1048,6 +1201,8 @@
     }
 
     async function changeZoom(delta) {
+        if (isMangaMode) return;
+        
         const newZoom = Math.max(0.5, Math.min(2, zoom + delta));
         if (newZoom === zoom) return;
         
@@ -1062,9 +1217,9 @@
         
         if (e.key === 'Escape') {
             closeBookReader();
-        } else if (e.key === 'ArrowRight') {
+        } else if (e.key === 'ArrowRight' && !isMangaMode) {
             flipForward();
-        } else if (e.key === 'ArrowLeft') {
+        } else if (e.key === 'ArrowLeft' && !isMangaMode) {
             flipBackward();
         }
     });
