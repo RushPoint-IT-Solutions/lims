@@ -24,11 +24,6 @@ class DatabaseSeeder extends Seeder
             'description' => 'Book',
         ]);
 
-        DB::table('frameworks')->insert([
-            'code' => 'BK',
-            'description' => 'Books',
-        ]);
-
         DB::table('branches')->insert([
             'branch_name' => 'LRC GASAN',
             'contact_no' => '09614025574',
