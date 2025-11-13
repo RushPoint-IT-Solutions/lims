@@ -54,6 +54,38 @@
         .navbar-menu {
             background: #420906 !important;
         }
+        
+        .nav-item:has(.menu-dropdown .nav-link.active) > .nav-link {
+            background-color: rgba(255, 193, 7, 0.1);
+            border-left: 3px solid #ffffff;
+        }
+
+        .nav-item.active > .nav-link.collapsed {
+            background-color: rgba(255, 193, 7, 0.15);
+            border-left: 4px solid #ffffff;
+        }
+
+        .nav-item.active > .nav-link:not(.collapsed) {
+            background-color: rgba(255, 193, 7, 0.15);
+            border-left: 4px solid #ffffff;
+        }
+
+        .menu-dropdown .nav-item a.nav-link.active {
+            color: #ffffff !important;
+            font-weight: 600;
+            background-color: rgba(255, 193, 7, 0.1);
+            border-left: 2px solid #ffffff;
+            padding-left: calc(0.75rem - 2px);
+        }
+
+        .menu-dropdown .nav-item a.nav-link:hover {
+            background-color: rgba(255, 255, 255, 0.03);
+            transition: all 0.3s ease;
+        }
+
+        .menu-dropdown .nav-item a.nav-link {
+            color: rgba(255, 255, 255, 0.8) !important;
+        }
 
         /* Library Card Button */
         .library-card-btn {
@@ -715,127 +747,136 @@
                     <ul class="navbar-nav" id="navbar-nav">
                         <li class="menu-title"><span data-key="t-menu">&emsp;Library Management System</span></li>
                         <li class="menu-title"><span data-key="t-menu">Menu</span></li>
-                        <li class="nav-item">
+                        
+                        <!-- Dashboard -->
+                        <li class="nav-item {{ Request::is('/') || Request::is('home') ? 'active' : '' }}">
                             <a class="nav-link menu-link" href="{{url('/')}}">
-                                <i class="ri-dashboard-2-line"></i> <span data-key="t-dashboards">Dashboard</span>
+                                <i class="ri-dashboard-2-line"></i> 
+                                <span data-key="t-dashboards">Dashboard</span>
                             </a>
                         </li>
-                        
-                        <li class="nav-item">
-                            <a class="nav-link menu-link collapsed" href="#sidebarMetadata" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarMetadata">
+
+                        <!-- Catalog Submenu -->
+                        <li class="nav-item {{ Request::is('frameworks*') || Request::is('cataloging*') ? 'active' : '' }}">
+                            <a class="nav-link menu-link {{ Request::is('frameworks*') || Request::is('cataloging*') ? '' : 'collapsed' }}" 
+                            href="#sidebarMetadata" data-bs-toggle="collapse" role="button" 
+                            aria-expanded="{{ Request::is('frameworks*') || Request::is('cataloging*') ? 'true' : 'false' }}" 
+                            aria-controls="sidebarMetadata">
                                 <i class="ri-folder-2-line"></i><span data-key="t-metadata">Catalog</span>
                             </a>
-                            <div class="menu-dropdown collapse" id="sidebarMetadata">
+                            <div class="menu-dropdown collapse {{ Request::is('frameworks*') || Request::is('cataloging*') ? 'show' : '' }}" id="sidebarMetadata">
                                 <ul class="nav nav-sm flex-column">
                                     <li class="nav-item">
-                                        <a href="{{ url('cataloging') }}" class="nav-link" data-key="t-cataloging">Cataloging</a>
+                                        <a href="{{ url('frameworks') }}" class="nav-link {{ Request::is('frameworks*') ? 'active' : '' }}" data-key="t-frameworks">MARC Frameworks</a>
                                     </li>
                                     <li class="nav-item">
-                                        <a href="{{ url('frameworks') }}" class="nav-link" data-key="t-frameworks">MARC Frameworks</a>
+                                        <a href="{{ url('cataloging') }}" class="nav-link {{ Request::is('cataloging*') ? 'active' : '' }}" data-key="t-cataloging">Cataloging</a>
                                     </li>
                                 </ul>
                             </div>
                         </li>
 
-                        <li class="nav-item">
-                            <a class="nav-link menu-link collapsed" href="#sidebarCirculation" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarCirculation">
+                        <!-- Circulation Submenu -->
+                        <li class="nav-item {{ Request::is('circulation*') || (Request::is('reservation*') && !Request::is('rooms_reservation*')) || Request::is('rooms_reservation*') ? 'active' : '' }}">
+                            <a class="nav-link menu-link {{ Request::is('circulation*') || (Request::is('reservation*') && !Request::is('rooms_reservation*')) || Request::is('rooms_reservation*') ? '' : 'collapsed' }}" 
+                            href="#sidebarCirculation" data-bs-toggle="collapse" role="button" 
+                            aria-expanded="{{ Request::is('circulation*') || (Request::is('reservation*') && !Request::is('rooms_reservation*')) || Request::is('rooms_reservation*') ? 'true' : 'false' }}" 
+                            aria-controls="sidebarCirculation">
                                 <i class="ri-folder-2-line"></i><span data-key="t-circulation">Circulation</span>
                             </a>
-                            <div class="menu-dropdown collapse" id="sidebarCirculation">
+                            <div class="menu-dropdown collapse {{ Request::is('circulation*') || (Request::is('reservation*') && !Request::is('rooms_reservation*')) || Request::is('rooms_reservation*') ? 'show' : '' }}" id="sidebarCirculation">
                                 <ul class="nav nav-sm flex-column">
                                     <li class="nav-item">
-                                        <a href="{{ url('circulation') }}" class="nav-link" data-key="t-borrowing">Borrowing</a>
+                                        <a href="{{ url('circulation') }}" class="nav-link {{ Request::is('circulation*') ? 'active' : '' }}" data-key="t-borrowing">Borrowing</a>
                                     </li>
                                     <li class="nav-item">
-                                        <a href="{{ url('reservation') }}" class="nav-link" data-key="t-reservation">Reserve Books</a>
+                                        <a href="{{ url('reservation') }}" class="nav-link {{ Request::is('reservation*') && !Request::is('rooms_reservation*') ? 'active' : '' }}" data-key="t-reservation">Reserve Books</a>
                                     </li>
                                     <li class="nav-item">
-                                        <a href="{{ url('rooms_reservation') }}" class="nav-link" data-key="t-room-reservation">Reserve Rooms</a>
+                                        <a href="{{ url('rooms_reservation') }}" class="nav-link {{ Request::is('rooms_reservation*') ? 'active' : '' }}" data-key="t-room-reservation">Reserve Rooms</a>
                                     </li>
                                 </ul>
                             </div>
                         </li>
 
-                        <li class="nav-item">
-                            <a class="nav-link menu-link collapsed" href="#sidebarDigital" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarDigital">
+                        <!-- Digital Resource Submenu -->
+                        <li class="nav-item {{ Request::is('e_books*') || Request::is('e_resources*') ? 'active' : '' }}">
+                            <a class="nav-link menu-link {{ Request::is('e_books*') || Request::is('e_resources*') ? '' : 'collapsed' }}" 
+                            href="#sidebarDigital" data-bs-toggle="collapse" role="button" 
+                            aria-expanded="{{ Request::is('e_books*') || Request::is('e_resources*') ? 'true' : 'false' }}" 
+                            aria-controls="sidebarDigital">
                                 <i class="ri-book-2-line"></i><span data-key="t-resources">Digital Resource</span>
                             </a>
-                            <div class="menu-dropdown collapse" id="sidebarDigital">
+                            <div class="menu-dropdown collapse {{ Request::is('e_books*') || Request::is('e_resources*') ? 'show' : '' }}" id="sidebarDigital">
                                 <ul class="nav nav-sm flex-column">
                                     <li class="nav-item">
-                                        <a href="{{ url('e_books') }}" class="nav-link" data-key="t-ebooks">E-Books</a>
+                                        <a href="{{ url('e_books') }}" class="nav-link {{ Request::is('e_books*') ? 'active' : '' }}" data-key="t-ebooks">E-Books</a>
                                     </li>
                                     <li class="nav-item">
-                                        <a href="{{ url('e_resources') }}" class="nav-link" data-key="t-e-access">E-Resources Access</a>
+                                        <a href="{{ url('e_resources') }}" class="nav-link {{ Request::is('e_resources*') ? 'active' : '' }}" data-key="t-e-access">E-Resources Access</a>
                                     </li>
                                 </ul>
                             </div>
                         </li>
 
-                        <li class="nav-item">
+                        <!-- Member Management -->
+                        <li class="nav-item {{ Request::is('users*') && !Request::is('admin_configuration*') ? 'active' : '' }}">
                             <a class="nav-link menu-link" href="{{ url('users') }}">
                                 <i class="ri-team-line"></i>
                                 <span data-key="t-dashboards">Member Management</span>
                             </a>
                         </li>
 
-                        
-
-                        {{-- <li class="nav-item">
-                            <a class="nav-link menu-link" href="{{ url('e-books') }}">
-                                <i class="ri-book-open-line"></i>
-                                <span data-key="t-dashboards">E-Books</span>
-                            </a>
-                        </li>
-
-                        <li class="nav-item">
-                            <a class="nav-link menu-link" href="{{ url('e_resources') }}">
-                                <i class="ri-book-2-line"></i>
-                                <span data-key="t-dashboards">E-Resources Access</span>
-                            </a>
-                        </li> --}}
-                    
-
+                        <!-- Admin Section -->
                         @if(auth()->user()->role == "Admin")
-                            <li class="menu-title"><span data-key="t-menu">Admin</span></li>       
-                            <li class="nav-item">
+                        <li class="menu-title"><span data-key="t-menu">Admin</span></li>
+                            <!-- Admin Configuration -->
+                            <li class="nav-item {{ Request::is('admin_configuration*') ? 'active' : '' }}">
                                 <a class="nav-link menu-link" href="{{ url('admin_configuration') }}">
                                     <i class="ri-settings-3-line"></i>
                                     <span data-key="t-dashboards">Admin Configuration</span>
                                 </a>
-                            </li>                     
-                            <li class="nav-item">
-                                <a class="nav-link menu-link collapsed" href="#sidebarSettings" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarSettings">
+                            </li>
+
+                            <!-- Settings Submenu -->
+                            <li class="nav-item {{ Request::is('branches*') || Request::is('types*') || (Request::is('rooms*') && !Request::is('rooms_reservation*')) || Request::is('racks*') || Request::is('authors*') ? 'active' : '' }}">
+                                <a class="nav-link menu-link {{ Request::is('branches*') || Request::is('types*') || (Request::is('rooms*') && !Request::is('rooms_reservation*')) || Request::is('racks*') || Request::is('authors*') ? '' : 'collapsed' }}" 
+                                href="#sidebarSettings" data-bs-toggle="collapse" role="button" 
+                                aria-expanded="{{ Request::is('branches*') || Request::is('types*') || (Request::is('rooms*') && !Request::is('rooms_reservation*')) || Request::is('racks*') || Request::is('authors*') ? 'true' : 'false' }}" 
+                                aria-controls="sidebarSettings">
                                     <i class="ri-rocket-line"></i> <span data-key="t-settings">Settings</span>
                                 </a>
-                                <div class="menu-dropdown collapse" id="sidebarSettings">
+                                <div class="menu-dropdown collapse {{ Request::is('branches*') || Request::is('types*') || (Request::is('rooms*') && !Request::is('rooms_reservation*')) || Request::is('racks*') || Request::is('authors*') ? 'show' : '' }}" id="sidebarSettings">
                                     <ul class="nav nav-sm flex-column">
                                         <li class="nav-item">
-                                            <a href="{{ url('branches') }}" class="nav-link" data-key="t-branches">Branches</a>
+                                            <a href="{{ url('branches') }}" class="nav-link {{ Request::is('branches*') ? 'active' : '' }}" data-key="t-branches">Branches</a>
                                         </li>
                                         <li class="nav-item">
-                                            <a href="{{ url('types') }}" class="nav-link" data-key="t-types">Item Types</a>
+                                            <a href="{{ url('types') }}" class="nav-link {{ Request::is('types*') ? 'active' : '' }}" data-key="t-types">Item Types</a>
                                         </li>
                                         <li class="nav-item">
-                                            <a href="{{url('/rooms')}}" class="nav-link" data-key="t-rooms">Rooms</a>
+                                            <a href="{{url('/rooms')}}" class="nav-link {{ Request::is('rooms*') && !Request::is('rooms_reservation*') ? 'active' : '' }}" data-key="t-rooms">Rooms</a>
                                         </li>
                                         <li class="nav-item">
-                                            <a href="{{url('/racks')}}" class="nav-link" data-key="t-racks">Racks</a>
+                                            <a href="{{url('/racks')}}" class="nav-link {{ Request::is('racks*') ? 'active' : '' }}" data-key="t-racks">Racks</a>
                                         </li>
                                         <li class="nav-item">
-                                            <a href="{{url('/authors')}}" class="nav-link" data-key="t-authors">Authors</a>
+                                            <a href="{{url('/authors')}}" class="nav-link {{ Request::is('authors*') ? 'active' : '' }}" data-key="t-authors">Authors</a>
                                         </li>
                                     </ul>
                                 </div>
                             </li>
-                            <li class="nav-item">
+
+                            <!-- Reports -->
+                            <li class="nav-item {{ Request::is('reports*') && !Request::is('report_analytics*') ? 'active' : '' }}">
                                 <a class="nav-link menu-link" href="{{ url('reports') }}">
                                     <i class="ri-file-chart-line"></i>
                                     <span data-key="t-dashboards">Reports</span>
                                 </a>
                             </li>
 
-                            <li class="nav-item">
+                            <!-- Report Analytics -->
+                            <li class="nav-item {{ Request::is('report_analytics*') ? 'active' : '' }}">
                                 <a class="nav-link menu-link" href="{{ url('report_analytics') }}">
                                     <i class="ri-bar-chart-2-line"></i>
                                     <span data-key="t-dashboards">Report Analytics</span>
