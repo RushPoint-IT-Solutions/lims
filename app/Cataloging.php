@@ -11,6 +11,9 @@ class Cataloging extends Model implements Auditable
     use SoftDeletes;
     use \OwenIt\Auditing\Auditable;
     protected $fillable = [
+        'acquire_type',
+        'acquire_by',
+        'donate_by',
         'barcode_id',
         'name',
         'framework_id',

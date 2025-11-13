@@ -10,6 +10,23 @@
                 <div class="modal-body">
                     <div class="row">
                         <div class="col-md-6 form-group mb-2">
+                            <label>Acquire Type&nbsp;<span class="text-danger">*</span></label>
+                            <select name="acquire_type" id="acquire_type_{{ $cataloging->id }}" class="form-control select2" required>
+                                <option value="">-- Select Acquire Type --</option>
+                                <option value="Acquired" {{ $cataloging->acquire_type == 'Acquired' ? 'selected' : '' }}>Acquired</option>
+                                <option value="Donated" {{ $cataloging->acquire_type == 'Donated' ? 'selected' : '' }}>Donated</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6 form-group mb-2" id="input_acquire_{{ $cataloging->id }}" style="display: none;">
+                            <label>Acquire By</label>
+                            <input type="text" class="form-control" name="acquire_by" placeholder="Enter Name" value="{{ $cataloging->acquire_by }}">
+                        </div>
+
+                        <div class="col-md-6 form-group mb-2" id="input_donate_{{ $cataloging->id }}" style="display: none;">
+                            <label>Donate By</label>
+                            <input type="text" class="form-control" name="donate_by" placeholder="Enter Name" value="{{ $cataloging->donate_by }}">
+                        </div>
+                        <div class="col-md-6 form-group mb-2">
                             <label>Image</label>
                             <input type="file" class="form-control" accept="image/*" id="coverUpload" name="image_path">
                             @if(!empty($cataloging->image_path))
@@ -111,3 +128,31 @@
         </div>
     </div>
 </div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $(document).on('change', '[id^="acquire_type_"]', function () {
+            const id = $(this).attr('id').split('_')[2]; 
+            const type = $(this).val();
+
+            const acquireInput = $('#input_acquire_' + id);
+            const donateInput = $('#input_donate_' + id);
+
+            if (type === 'Acquired') {
+                acquireInput.show();
+                donateInput.hide();
+            } else if (type === 'Donated') {
+                donateInput.show();
+                acquireInput.hide();
+            } else {
+                acquireInput.hide();
+                donateInput.hide();
+            }
+        });
+
+        $(document).on('shown.bs.modal', '.select2-modal', function () {
+            const select = $(this).find('[id^="acquire_type_"]');
+            select.trigger('change');
+        });
+    });
+</script>

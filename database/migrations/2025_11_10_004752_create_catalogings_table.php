@@ -15,6 +15,9 @@ class CreateCatalogingsTable extends Migration
     {
         Schema::create('catalogings', function (Blueprint $table) {
             $table->increments('id');
+            $table->string('acquire_type')->nullable();
+            $table->string('acquire_by')->nullable();
+            $table->string('donate_by')->nullable();
             $table->string('image_path')->nullable();
             $table->string('barcode_id');
             $table->string('name');

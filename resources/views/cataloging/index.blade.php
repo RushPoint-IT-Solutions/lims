@@ -247,6 +247,22 @@
                     <div class="modal-body">
                         <div class="row">
                             <div class="col-md-6 form-group mb-2">
+                                <label>Acquire Type&nbsp;<span class="text-danger">*</span></label>
+                                <select name="acquire_type" id="acquire_type" class="form-control select2" required>
+                                    <option value="">-- Select Acquire Type --</option>
+                                    <option value='Acquired'>Acquired</option>
+                                    <option value='Donated'>Donated</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6 form-group mb-2" id="input_acquire" style="display: none;">
+                                <label>Acquire By</label>
+                                <input type="text" class="form-control" name="acquire_by" placeholder="Enter Name">
+                            </div>
+                            <div class="col-md-6 form-group mb-2" id="input_donate" style="display: none;">
+                                <label>Donate By</label>
+                                <input type="text" class="form-control" name="donate_by" placeholder="Enter Name">
+                            </div>
+                            <div class="col-md-6 form-group mb-2">
                                 <label>Image</label>
                                 <input type="file" class="form-control" accept="image/*" id="coverUpload" name="image_path">
                             </div>
@@ -354,26 +370,42 @@
             });
         });
 
+        $(document).on('change', '#acquire_type', function () {
+            const type = $(this).val();
+            console.log('Type selected:', type);
+
+            if (type === 'Acquired') {
+                $('#input_acquire').show();
+                $('#input_donate').hide();                
+            } else if (type === 'Donated') {
+                $('#input_donate').show();
+                $('#input_acquire').hide();                
+            } else {
+                $('#input_donate').hide();
+                $('#input_acquire').hide();
+            }
+        });
+
         function showBarcode(button, barcode) {
-    const container = button.nextElementSibling; // The div right after the button
+            const container = button.nextElementSibling; // The div right after the button
 
-    if (container.style.display === 'none' || container.innerHTML === '') {
-        // Generate barcode image URL
-        const barcodeUrl = `/catalog/barcode/${barcode}`;
+            if (container.style.display === 'none' || container.innerHTML === '') {
+                // Generate barcode image URL
+                const barcodeUrl = `/catalog/barcode/${barcode}`;
 
-        // Add image and download link
-        container.innerHTML = `
-            <img src="${barcodeUrl}" alt="Barcode" style="max-width:200px; display:block; margin-bottom:5px;">
-            <a href="${barcodeUrl}" download="barcode-${barcode}.png" class="btn btn-sm btn-success">
-                Download
-            </a>
-        `;
-        container.style.display = 'block';
-    } else {
-        // Hide barcode if already visible
-        container.style.display = 'none';
-        container.innerHTML = '';
-    }
-}
+                // Add image and download link
+                container.innerHTML = `
+                    <img src="${barcodeUrl}" alt="Barcode" style="max-width:200px; display:block; margin-bottom:5px;">
+                    <a href="${barcodeUrl}" download="barcode-${barcode}.png" class="btn btn-sm btn-success">
+                        Download
+                    </a>
+                `;
+                container.style.display = 'block';
+            } else {
+                // Hide barcode if already visible
+                container.style.display = 'none';
+                container.innerHTML = '';
+            }
+        }
     </script>
 @endsection

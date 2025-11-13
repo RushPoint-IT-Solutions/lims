@@ -66,6 +66,9 @@ class CatalogMetadataController extends Controller
         $barcodeId = sprintf("BC-%s-%03d", $year, $nextNumber);
 
         $data = new Cataloging();
+        $data->acquire_type = $request->acquire_type;
+        $data->acquire_by = $request->acquire_by;
+        $data->donate_by = $request->donate_by;
         if ($request->hasFile('image_path')) {
             $file = $request->file('image_path');
             $filename = time() . '_' . $file->getClientOriginalName();
@@ -101,6 +104,9 @@ class CatalogMetadataController extends Controller
     {
         $data = Cataloging::findOrFail($id);
         $data->update([
+            'acquire_type' => $request->acquire_type,
+            'acquire_by' => $request->acquire_by,
+            'donate_by' => $request->donate_by,
             'name' => $request->name,
             'framework_id' => $request->framework_id,
             'type_id' => $request->type_id,
