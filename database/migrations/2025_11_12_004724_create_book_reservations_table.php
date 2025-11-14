@@ -16,11 +16,14 @@ class CreateBookReservationsTable extends Migration
         Schema::create('book_reservations', function (Blueprint $table) {
             $table->increments('id');
             $table->string('reservation_id');
-            $table->string('book_name'); 
+            $table->unsignedBigInteger('book_id');
             $table->unsignedBigInteger('reserved_by'); 
             $table->date('reserved_date');
-            $table->date('pickup_date');
+            $table->date('pickup_date')->nullabe();
             $table->string('status');
+            $table->string('cancelled_by')->nullable();
+            $table->string('cancelled_date')->nullable();
+            $table->string('remarks')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

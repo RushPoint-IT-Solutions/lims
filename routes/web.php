@@ -84,6 +84,8 @@ Route::group(['middleware' => ['auth']], function () {
 
     // Books Reservation
     Route::get('/reservation', 'BookReservationController@index')->name('reservation');
+    Route::post('/reserve/{id}', 'BookReservationController@reserve');
+
 });
 
 

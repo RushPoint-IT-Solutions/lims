@@ -319,7 +319,10 @@
                             <div class="book-author">{{ $author->author_name }}</div>
                         @endforeach
                         <!-- <div class="book-stats">★★★★★ • 156 borrows</div> -->
-                        <button class="book-reserve-btn"><i class="ri-bookmark-line"></i> Reserve</button>
+                        <form method="POST" action="{{url('reserve/'.$book->id)}}" onsubmit="show()" enctype="multipart/form-data">
+                            @csrf
+                            <button class="book-reserve-btn"><i class="ri-bookmark-line"></i> Reserve</button>
+                        </form>
                     </div>
                 </div>
             </div>
@@ -367,9 +370,13 @@
                             </div>
                         </div>
                         <div class="d-flex align-items-center">
-                            <button class="reserve-btn">
+                            <!-- <button class="reserve-btn">
                                 <i class="ri-bookmark-line"></i> Reserve
-                            </button>
+                            </button> -->
+                            <form method="POST" action="{{url('reserve/'.$book->id)}}" onsubmit="show()" enctype="multipart/form-data">
+                                @csrf
+                                <button class="reserve-btn"><i class="ri-bookmark-line"></i> Reserve</button>
+                            </form>
                         </div>
                     </div>
                 @endforeach
@@ -417,7 +424,49 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr style="background: #f0f9ff;">
+                            @forelse ($book_reservations as $data)
+                                <tr>
+                                    <td>
+                                        <button class="btn btn-outline-primary btn-sm" title="View Details" data-bs-toggle="modal" data-bs-target="#viewBookReservation{{$data->id}}">
+                                            <i class="mdi mdi-eye"></i>
+                                        </button>
+                                        <button class="btn btn-outline-danger btn-sm" title="Cancel">
+                                            <i class="mdi mdi-close"></i>
+                                        </button>
+                                    </td>
+                                    <td><strong>{{ $data->reservation_id }}</strong></td>
+                                    <td>
+                                        <div>
+                                            <div class="fw-bold">{{ $data->books->name }}</div>
+                                            @foreach ($data->authors as $author)
+                                                <small class="text-muted">{{ $author->author_name }}</small>
+                                            @endforeach
+                                        </div>
+                                    </td>
+                                    <td>{{ date('Y-m-d', strtotime($data->reserved_date)) }}</td>
+                                    <td>{{ optional($data->pickup_date)->format('Y-m-d') ?? '-' }}</td>
+                                    <td>
+                                        @if($data->status == 'Active - In Queue')
+                                            <span class="status-badge bg-primary text-white">Active - In Queue</span>
+                                        @elseif($data->status == 'Ready for Pickup')
+                                            <span class="status-badge bg-success text-white">Ready for Pickup</span>
+                                        @elseif($data->status == 'Cancelled')
+                                            <span class="status-badge bg-danger text-white">Cancelled</span>
+                                        @else
+                                            <span class="status-badge bg-light text-dark">Cancelled</span>
+                                        @endif
+                                    </td>
+                                </tr>
+                                @include('circulation.books_reservation.view')
+                            @empty
+                                <tr>
+                                    <td colspan="6" class="text-center py-4">
+                                        <i class="ri-inbox-line" style="font-size: 48px; color: #ccc;"></i>
+                                        <p class="text-muted mt-2">No Book Reservation Found</p>
+                                    </td>
+                                </tr>
+                            @endforelse
+                            <!-- <tr style="background: #f0f9ff;">
                                 <td>
                                     <button class="btn btn-outline-info btn-sm" title="View Details">
                                         <i class="mdi mdi-eye"></i>
@@ -493,7 +542,7 @@
                                 <td>Oct 20, 2025</td>
                                 <td>Oct 27, 2025</td>
                                 <td><span class="status-badge status-expired">Expired</span></td>
-                            </tr>
+                            </tr> -->
                         </tbody>
                     </table>
                 </div>
@@ -501,21 +550,11 @@
                 <!-- Pagination -->
                 <div class="pagination-wrapper">
                     <div class="pagination-info">
-                        Showing 1 to 4 of 4 entries
+                        Showing {{ $book_reservations->firstItem() ?? 0 }} to {{ $book_reservations->lastItem() ?? 0 }} of {{ $book_reservations->total() }} entries
                     </div>
-                    <nav>
-                        <ul class="pagination">
-                            <li class="page-item disabled">
-                                <a class="page-link" href="#" tabindex="-1">Previous</a>
-                            </li>
-                            <li class="page-item active">
-                                <a class="page-link" href="#">1</a>
-                            </li>
-                            <li class="page-item">
-                                <a class="page-link" href="#">Next</a>
-                            </li>
-                        </ul>
-                    </nav>
+                    <div>
+                        {{ $book_reservations->appends(request()->query())->links() }}
+                    </div>
                 </div>
             </div>
         </div>

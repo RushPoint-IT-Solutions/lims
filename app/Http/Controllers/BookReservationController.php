@@ -4,36 +4,69 @@ namespace App\Http\Controllers;
 
 use App\BookReservation;
 use App\Cataloging;
+use RealRashid\SweetAlert\Facades\Alert;
 use Illuminate\Http\Request;
 
 class BookReservationController extends Controller
 {
-    public function index(Request $request)
+   public function index(Request $request)
     {
-        $query = BookReservation::query();
+        $query = BookReservation::with(['books', 'authors', 'users']);
         $books = Cataloging::with(['authors', 'types', 'branches', 'racks'])->get();
-        // dd($books);
+
         if ($request->filled('search')) {
             $searchTerm = $request->input('search');
-            $query->where(function($q) use ($searchTerm) {
+
+            $query->whereHas('books', function ($q) use ($searchTerm) {
                 $q->where('name', 'LIKE', '%' . $searchTerm . '%')
-                    ->orWhere('floor', 'LIKE', '%' . $searchTerm . '%');
+                ->orWhere('floor', 'LIKE', '%' . $searchTerm . '%');
             });
         }
 
-        $book_reservations = $query->paginate(10)->appends($request->all()); 
+        $book_reservations = $query->paginate(10)->appends($request->all());
         return view('circulation.books_reservation.index', compact('book_reservations', 'books'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
+
+    public function reserve($bookId)
     {
-        //
+        $existingReservation = BookReservation::where('book_id', $bookId)
+            ->where('status', 'Ready for Pickup')
+            ->first();
+
+        if ($existingReservation) {
+            Alert::warning('Unavailable', 'This book is already reserved and ready for pickup.')
+                ->persistent('Dismiss');
+            return back();
+        }
+
+        $year = date('Y');
+
+        $lastReservation = BookReservation::where('reservation_id', 'LIKE', "RSV-$year-%")
+            ->orderBy('id', 'desc')
+            ->first();
+
+        if ($lastReservation) {
+            preg_match('/RSV-\d{4}-(\d+)/', $lastReservation->reservation_id, $matches);
+            $nextNumber = isset($matches[1]) ? intval($matches[1]) + 1 : 1;
+        } else {
+            $nextNumber = 1;
+        }
+
+        $reservationId = sprintf("RSV-%s-%03d", $year, $nextNumber);
+
+        BookReservation::create([
+            'reservation_id' => $reservationId,
+            'book_id' => $bookId,
+            'reserved_by' => auth()->id(),
+            'reserved_date' => now(),
+            'status' => 'Active - In Queue',
+        ]);
+
+        Alert::success('Success', 'Successfully Saved!')->persistent('Dismiss');
+        return back();
     }
+
 
     /**
      * Store a newly created resource in storage.
